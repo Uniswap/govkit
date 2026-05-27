@@ -11,46 +11,32 @@ type which encapsulates these actions more cleanly, as well as provide a functio
 into the input that `GovernorBravo` can accept.
 
 Each action requires contract addresses across networks for calling. At the time of writing, this is
-fragmented with no importable source of truth. In time, this will be defined in an external
-repository with stricter validation & uniformity checking. For now, we implement a collection of
-data types & constants which scope, by name, contracts across networks in the protocol; which gives
-us portability across proposals instead of re-hard coding them each proposal.
+fragmented with no importable source of truth. We implement a collection of data types and constants
+which scope, by name, contracts across networks in the protocol; which gives us portability across
+proposals instead of re-hard coding them each proposal.
 
 Each action that interacts with remote chains requires the target chain ID, the bridge used to send
 the message to the target chain, the target chain infrastructure to receive the message, and in some
 cases, it requires bridge-defined "chain identifier" values, which are unrelated to the "chain ID".
-At the time of writing, this is bespoke for every chain. We define constants and encoders (TODO) for
-each bridge type.
+We define constants and encoders (TODO) for each bridge type.
 
 Each action requires a handoff to Uniswap Foundation's "Governance Seatbelt" system, which performs
-rich multichain call validation. At the time of writing, this must be implemented independent of the
-proposal as written in Solidity and, at times, is the platform through which the proposal is
-executed to begin with. We implement an exporter (TODO) in JSON which can be imported into the
-seatbelt program to be interpreted in a more uniform & automated way.
+rich multichain call validation. We implement an exporter (TODO) in JSON which can be imported into
+the seatbelt program to be interpreted in a more uniform and automated way.
 
-Some actions require prerequisite deployments & configurations before the proposal can run. So far
+Some actions require prerequisite deployments and configurations before the proposal can run. So far
 we have primarily relied purely on Foundry's scripting output files (`broadcast/`) or Foundry's
-`console` logging contract to get newly deployed addresses. Foundry's scripting is fragile, it is
-difficult to recover from mid-flight RPC failures, logging is insufficient, and broadcast JSON
-outputs are infeasible to parse via its `Vm` JSON API, its cheatcode abstraction to read broadcast
-files is incompatible with its newest JSON structure, and referencing transactions by index is not
-consistent, as external libraries incur implicit transactions which break indices & library
-deployments are difficult to automate. So we implement a recorder data type which can record
-contract addresses, names, and chain ID's to disk in a clean and easy to interpret JSON file, stored
-in `.records/`. This is not perfect and is quite rudimentary, but can get us far with complex script
-dependency graphs, reporting new contract addresses, and automation for other inventory-related
-infrastructure.
-
-> While external libraries are anti-patterns and we generally avoid them, there have been cases
-> where we had to deploy bridge infrastructure using external teams' code which embedded external
-> libraries.
+`console` logging contract to get newly deployed addresses. In short, Foundry's native broadcast
+handling is fragile, unwieldy, and its internal API for interacting with it is broken. We implement
+a data type which can record contract addresses, names, and chain ID's to disk in a clean and easy
+to interpret JSON file, stored in `.records/`.
 
 Also, at times, proxy contracts must be used and dealt with, primarily those of ERC-1967. We provide
 a lightweight utility for handling these.
 
 ## ProposalAction
 
-Fairly straight forward, it encapsulates actions & allows them to generate governor bravo inputs.
+Fairly straight forward, it encapsulates actions and allows them to generate governor bravo inputs.
 This is a recurring abstraction in previous proposals.
 
 ```solidity
@@ -162,7 +148,7 @@ assertEq(
 ## Seatbelt Handoff
 
 This allows `ProposalAction` to be exported to JSON for interpretation by a seatbelt script. This
-deduplicates code & streamlines seatbelt usage.
+deduplicates code and streamlines seatbelt usage.
 
 Sketch of the JSON API:
 
@@ -184,8 +170,16 @@ vm.writeJson(seatbeltInputPath, actions.toJson());
 
 ## Contract Logging
 
-In short, Foundry's native broadcast handling is fragile, unwieldy, and its internal API for
-interacting with it is broken. So we're using `Recorder` to record addresses as they're deployed.
+Foundry's scripting is fragile, it is difficult to recover from mid-flight RPC failures, logging is
+insufficient, and broadcast JSON outputs are infeasible to parse via its `Vm` JSON API, its
+cheatcode abstraction to read broadcast files is incompatible with its newest JSON structure, and
+referencing transactions by index break with external library deployments.
+
+> While external libraries are anti-patterns and we generally avoid them, there have been cases
+> where we had to deploy bridge infrastructure using external teams' code which embedded external
+> libraries.
+
+So we're using `Recorder` to record addresses as they're deployed.
 
 ```solidity
 import {Recorder} from "lib/govkit/src/forge/Recorder.sol";
@@ -200,7 +194,7 @@ recorder.initialize({
     debugMode: true
 });
 
-// Deploy the contract & record it.
+// Deploy the contract and record it.
 //
 // `write` returns the address as a passthrough for ergonomics.
 address myContract = recorder.write(
@@ -254,11 +248,10 @@ The `ERC1967` library is independent of Foundry, it contains only the constants,
 
 ```solidity
 import {Protocol} from "lib/govkit/src/Protocol.sol";
+import {ERC1967Reader} from "lib/govkit/src/forge/ERC1967Reader.sol";
 
 Protocol internal uniswap;
 uniswap.loadLatest();
-
-import {ERC1967Reader} from "lib/govkit/src/forge/ERC1967Reader.sol";
 
 address proxy = uniswap.ethereum.bridge.bnbChain;
 
