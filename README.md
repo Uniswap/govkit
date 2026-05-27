@@ -45,6 +45,9 @@ infrastructure.
 > where we had to deploy bridge infrastructure using external teams' code which embedded external
 > libraries.
 
+Also, at times, proxy contracts must be used and dealt with, primarily those of ERC-1967. We provide
+a lightweight utility for handling these.
+
 ## ProposalAction
 
 Fairly straight forward, it encapsulates actions & allows them to generate governor bravo inputs.
@@ -242,6 +245,26 @@ if (!recorder.exists(ChainId.Ethereum, "MyContract")) {
         address(new MyContract())
     );
 }
+```
+
+## ERC1967 Proxy
+
+The `ERC1967` library is independent of Foundry, it contains only the constants, while
+`ERC1967Reader` is a Foundry-specific reader, using its Vm to load the relevant addresses.
+
+```solidity
+import {Protocol} from "lib/govkit/src/Protocol.sol";
+
+Protocol internal uniswap;
+uniswap.loadLatest();
+
+import {ERC1967Reader} from "lib/govkit/src/forge/ERC1967Reader.sol";
+
+address proxy = uniswap.ethereum.bridge.bnbChain;
+
+address admin = ERC1967Reader.admin(proxy);
+address beacon = ERC1967Reader.beacon(proxy);
+address implementation = ERC1967Reader.implementation(proxy);
 ```
 
 ## TODO's
