@@ -1,0 +1,21 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+optimizer = true
+optimizer_runs = 10_000_000
+# via_ir = true
+
+fs_permissions = [
+  { access = "read", path = "broadcast/"},
+  { access = "read-write", path = ".records/"}
+]
+
+[lint]
+exclude_lints = [
+  "mixed-case-function",
+  "mixed-case-variable",
+  "pascal-case-struct",
+  "screaming-snake-case-const"
+]
+
