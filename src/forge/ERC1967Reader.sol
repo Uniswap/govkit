@@ -2,7 +2,6 @@
 pragma solidity 0.8.34;
 
 import {vm} from "src/forge/Constants.sol";
-import {VmSafe} from "lib/forge-std/src/Vm.sol";
 import {ERC1967} from "src/constants/ERC1967.sol";
 
 library ERC1967Reader {
