@@ -150,6 +150,37 @@ library LibRecorder {
         }
     }
 
+    function exists(
+        Recorder storage recorder,
+        uint256 chainId,
+        string memory deploymentName
+    ) internal view returns (bool) {
+        require(
+            recorder.initialized,
+            "Recorder::Error: Recorder not initialized. "
+            "Has `recorder.initialize()` been called?"
+        );
+
+        string memory filePath = recorder.path();
+        string memory json;
+
+        try vm.readFile(filePath) returns (string memory innerJson) {
+            if (recorder.debugMode) {
+                console.log("Recorder::Debug:", filePath, "read");
+            }
+
+            json = innerJson;
+        } catch (bytes memory revertData) {
+            console.log("Recorder::Error: Unknown Forge Error.");
+
+            revert(string.concat("Forge VM Error: ", abi.decode(revertData, (string))));
+        }
+
+        string memory key = string.concat(".", vm.toString(chainId), ".", deploymentName);
+
+        return vm.keyExistsJson(json, key);
+    }
+
     function clear(Recorder storage recorder) internal {
         require(
             recorder.initialized,

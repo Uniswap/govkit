@@ -316,7 +316,7 @@ Output (`.records/MyScript.json`):
 }
 ```
 
-Conditional deployer sketch:
+Conditional deployment:
 
 ```solidity
 import {Recorder} from "lib/govkit/src/forge/Recorder.sol";
@@ -354,4 +354,3 @@ address implementation = ERC1967Reader.implementation(proxy);
 ## TODO's
 
 - Bridge Encoder
-- Conditional deployer
