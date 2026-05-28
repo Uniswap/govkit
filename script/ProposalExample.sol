@@ -52,8 +52,6 @@ contract ProposalExample is Script {
 
         vm.writeFile("./seatbelt-example.json", json);
 
-        return;
-
         // -----------------------------------------------------------------------------------------
         // Send proposal on GovernorBravo
         //
