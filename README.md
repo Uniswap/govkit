@@ -5,13 +5,13 @@ A lightweight kit for writing Uniswap Governance Proposals
 ## At a Glance
 
 ```solidity
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Initialize Uniswap protocol addresses.
 //
 Uniswap internal uniswap;
 uniswap.loadLatest();
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Build proposal.
 //
 Proposal memory proposal = LibProposal.newProposal(
@@ -38,7 +38,7 @@ Proposal memory proposal = LibProposal.newProposal(
     ]
 );
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Export proposal to Governance Seatbelt.
 //
 string memory json = GovernanceSeatbelt.toJson({
@@ -48,7 +48,7 @@ string memory json = GovernanceSeatbelt.toJson({
 
 vm.writeFile("./seatbelt-example.json", json);
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Send proposal on GovernorBravo.
 //
 (
@@ -58,7 +58,13 @@ vm.writeFile("./seatbelt-example.json", json);
     bytes[] memory datas,
 ) = proposal.toGovernorBravoInputs();
 
-IGovernorBravo(uniswap.ethereum.governorBravo).propose( targets, values, signatures, datas, description);
+IGovernorBravo(uniswap.ethereum.governorBravo).propose(
+    targets,
+    values,
+    signatures,
+    datas,
+    description
+);
 ```
 
 ## Guiding Principles
