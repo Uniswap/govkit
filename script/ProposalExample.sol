@@ -5,7 +5,7 @@ import {Script} from "lib/forge-std/src/Script.sol";
 
 import {LibProposal, Proposal, Action} from "src/types/Proposal.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
-import {Protocol} from "src/Protocol.sol";
+import {Uniswap} from "src/Uniswap.sol";
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";
 import {IGovernorBravo} from "src/interfaces/IGovernorBravo.sol";
@@ -13,7 +13,7 @@ import {IGovernorBravo} from "src/interfaces/IGovernorBravo.sol";
 string constant description = "# Example Description\n ...";
 
 contract ProposalExample is Script {
-    Protocol internal uniswap;
+    Uniswap internal uniswap;
 
     function run() external {
         uniswap.loadLatest();

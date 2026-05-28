@@ -2,6 +2,60 @@
 
 A lightweight kit for writing Uniswap Governance Proposals
 
+## At a Glance
+
+```solidity
+Uniswap internal uniswap;
+
+Proposal memory proposal = LibProposal.newProposal(
+    "# Activate Fee Switch V2+V3 on Ethereum ....",
+    [
+        Action({
+            target: uniswap.ethereum.v2Factory,
+            value: 0,
+            signature: "setFeeTo(address)",
+            data: abi.encodeCall(
+                IUniswapV2Factory.setFeeTo,
+                (uniswap.ethereum.tokenJar)
+            )
+        }),
+        Action({
+            target: uniswap.ethereum.v3Factory,
+            value: 0,
+            signature: "setOwner(address)",
+            data: abi.encodeCall(
+                IUniswapV3Factory.setOwner,
+                (uniswap.ethereum.v3OpenFeeAdapter)
+            )
+        })
+    ]
+);
+
+// -----------------------------------------------------------------------------------------
+// Export proposal to Governance Seatbelt
+//
+string memory json = GovernanceSeatbelt.toJson({
+    proposal: proposal,
+    governorBravo: uniswap.ethereum.governorBravo
+});
+
+vm.writeFile("./seatbelt-example.json", json);
+
+return;
+
+// -----------------------------------------------------------------------------------------
+// Send proposal on GovernorBravo
+//
+(
+    address[] memory targets,
+    uint256[] memory values,
+    string[] memory signatures,
+    bytes[] memory datas,
+) = proposal.toGovernorBravoInputs();
+
+IGovernorBravo(uniswap.ethereum.governorBravo).propose( targets, values, signatures, datas, description);
+```
+
 ## Guiding Principles
 
 Each proposal requires a series of actions, each containing a target, value, data, and "signature"
@@ -67,11 +121,11 @@ to ensure the particular account is on the given network.
 > The `WormholeChainId` will be explained in the next section.
 
 ```solidity
-import {Protocol} from "lib/govkit/src/Protocol.sol";
+import {Uniswap} from "lib/govkit/src/Uniswap.sol";
 import {ProposalAction} from "lib/govkit/src/types/ProposalAction.sol";
 import {WormholeChainId} from "lib/govkit/src/constants/WormholeChainId.sol";
 
-Protocol internal uniswap;
+Uniswap internal uniswap;
 
 uniswap.loadLatest();
 
@@ -98,13 +152,13 @@ actions[0] = ProposalAction({
 This also makes testing environments more flexible for protocol mocking.
 
 ```solidity
-import {Protocol} from "lib/govkit/src/Protocol.sol";
+import {Uniswap} from "lib/govkit/src/Uniswap.sol";
 
 contract MockGovernorBravo {
     // ...
 }
 
-Protocol internal uniswap;
+Uniswap internal uniswap;
 
 uniswap.ethereum.governorBravo = address(new MockGovernorBravo());
 ```
@@ -247,10 +301,10 @@ The `ERC1967` library is independent of Foundry, it contains only the constants,
 `ERC1967Reader` is a Foundry-specific reader, using its Vm to load the relevant addresses.
 
 ```solidity
-import {Protocol} from "lib/govkit/src/Protocol.sol";
+import {Uniswap} from "lib/govkit/src/Uniswap.sol";
 import {ERC1967Reader} from "lib/govkit/src/forge/ERC1967Reader.sol";
 
-Protocol internal uniswap;
+Uniswap internal uniswap;
 uniswap.loadLatest();
 
 address proxy = uniswap.ethereum.bridge.bnbChain;
