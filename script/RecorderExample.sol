@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity 0.8.34;
 
-import {Script, console, VmSafe} from "lib/forge-std/src/Script.sol";
+import {Script} from "lib/forge-std/src/Script.sol";
 
 import {Recorder} from "src/forge/Recorder.sol";
 import {ChainId} from "src/constants/ChainId.sol";
 
-// forge script script/Example.sol:Example
+// forge script script/RecorderExample.sol:RecorderExample
 
 contract Counter {
     uint256 public count;
@@ -16,7 +16,7 @@ contract Counter {
     }
 }
 
-contract Example is Script {
+contract RecorderExample is Script {
     Recorder internal recorder;
     function run() external {
 
