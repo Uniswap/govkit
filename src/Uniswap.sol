@@ -4,9 +4,9 @@ pragma solidity 0.8.34;
 import {Ethereum, EthereumBridgeSender, Arbitrum, Avalanche, Base, BNBChain, Celo, Optimism, Polygon, UniChain, WorldChain} from "src/types/Networks.sol";
 
 // -------------------------------------------------------------------------------------------------
-// The Protocol
+// The Uniswap Protocol
 //
-struct Protocol {
+struct Uniswap {
     Ethereum ethereum;
     Arbitrum arbitrum;
     Avalanche avalanche;
@@ -19,14 +19,14 @@ struct Protocol {
     WorldChain worldChain;
 }
 
-using LibProtocol for Protocol global;
+using LibUniswap for Uniswap global;
 
-library LibProtocol {
-    function loadLatest(Protocol storage protocol) internal {
+library LibUniswap {
+    function loadLatest(Uniswap storage uniswap) internal {
         // -----------------------------------------------------------------------------------------
         // Ethereum
         //
-        protocol.ethereum = Ethereum({
+        uniswap.ethereum = Ethereum({
             uni: 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984,
             governorBravo: 0x408ED6354d4973f66138C91495F2f2FCbd8724C3,
             timelock: 0x1a9C8182C09F50C8318d769245beA52c32BE35BC,
@@ -53,7 +53,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Arbitrum
         //
-        protocol.arbitrum = Arbitrum({
+        uniswap.arbitrum = Arbitrum({
             v2Factory: 0xf1D7CC64Fb4452F05c498126312eBE29f30Fbcf9,
             v3Factory: 0x1F98431c8aD98523631AE4a59f267346ea31F984,
             poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
@@ -66,7 +66,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Avalanche
         //
-        protocol.avalanche = Avalanche({
+        uniswap.avalanche = Avalanche({
             v2Factory: 0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C,
             v3Factory: 0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD,
             poolManager: 0x06380C0e0912312B5150364B9DC4542BA0DbBc85
@@ -75,7 +75,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Base
         //
-        protocol.base = Base({
+        uniswap.base = Base({
             v2Factory: 0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6,
             v3Factory: 0x33128a8fC17869897dcE68Ed026d694621f6FDfD,
             poolManager: 0x498581fF718922c3f8e6A244956aF099B2652b2b,
@@ -90,7 +90,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // BNB Chain
         //
-        protocol.bnbChain = BNBChain({
+        uniswap.bnbChain = BNBChain({
             v2Factory: 0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6,
             v3Factory: 0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7,
             poolManager: 0x28e2Ea090877bF75740558f6BFB36A5ffeE9e9dF,
@@ -105,7 +105,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Celo
         //
-        protocol.celo = Celo({
+        uniswap.celo = Celo({
             v2Factory: 0x114A43DF6C5f54EBB8A9d70Cd1951D3dD68004c7,
             v3Factory: 0xAfE208a311B21f13EF87E33A90049fC17A7acDEc,
             poolManager: 0x288dc841A52FCA2707c6947B3A777c5E56cd87BC,
@@ -120,7 +120,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Optimism
         //
-        protocol.optimism = Optimism({
+        uniswap.optimism = Optimism({
             v2Factory: 0x0c3c1c532F1e39EdF36BE9Fe0bE1410313E074Bf,
             v3Factory: 0x1F98431c8aD98523631AE4a59f267346ea31F984,
             poolManager: 0x9a13F98Cb987694C9F086b1F5eB990EeA8264Ec3,
@@ -135,7 +135,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // Polygon
         //
-        protocol.polygon = Polygon({
+        uniswap.polygon = Polygon({
             v2Factory: 0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C,
             v3Factory: 0x1F98431c8aD98523631AE4a59f267346ea31F984,
             poolManager: 0x67366782805870060151383F4BbFF9daB53e5cD6,
@@ -149,7 +149,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // UniChain
         //
-        protocol.uniChain = UniChain({
+        uniswap.uniChain = UniChain({
             v2Factory: 0x1F98400000000000000000000000000000000002,
             v3Factory: 0x1F98400000000000000000000000000000000003,
             poolManager: 0x1F98400000000000000000000000000000000004,
@@ -161,7 +161,7 @@ library LibProtocol {
         // -----------------------------------------------------------------------------------------
         // WorldChain
         //
-        protocol.worldChain = WorldChain({
+        uniswap.worldChain = WorldChain({
             v2Factory: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f,
             v3Factory: 0x7a5028BDa40e7B173C278C5342087826455ea25a,
             poolManager: 0xb1860D529182ac3BC1F51Fa2ABd56662b7D13f33,
