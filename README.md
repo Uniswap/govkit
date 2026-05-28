@@ -5,8 +5,15 @@ A lightweight kit for writing Uniswap Governance Proposals
 ## At a Glance
 
 ```solidity
+// -------------------------------------------------------------------------------------------------
+// Initialize Uniswap protocol addresses.
+//
 Uniswap internal uniswap;
+uniswap.loadLatest();
 
+// -------------------------------------------------------------------------------------------------
+// Build proposal.
+//
 Proposal memory proposal = LibProposal.newProposal(
     "# Activate Fee Switch V2+V3 on Ethereum ....",
     [
@@ -31,8 +38,8 @@ Proposal memory proposal = LibProposal.newProposal(
     ]
 );
 
-// -----------------------------------------------------------------------------------------
-// Export proposal to Governance Seatbelt
+// -------------------------------------------------------------------------------------------------
+// Export proposal to Governance Seatbelt.
 //
 string memory json = GovernanceSeatbelt.toJson({
     proposal: proposal,
@@ -41,10 +48,8 @@ string memory json = GovernanceSeatbelt.toJson({
 
 vm.writeFile("./seatbelt-example.json", json);
 
-return;
-
-// -----------------------------------------------------------------------------------------
-// Send proposal on GovernorBravo
+// -------------------------------------------------------------------------------------------------
+// Send proposal on GovernorBravo.
 //
 (
     address[] memory targets,
@@ -75,8 +80,8 @@ cases, it requires bridge-defined "chain identifier" values, which are unrelated
 We define constants and encoders (TODO) for each bridge type.
 
 Each action requires a handoff to Uniswap Foundation's "Governance Seatbelt" system, which performs
-rich multichain call validation. We implement an exporter (TODO) in JSON which can be imported into
-the seatbelt program to be interpreted in a more uniform and automated way.
+rich multichain call validation. We implement an exporter which produces JSON that can be imported
+into the seatbelt program to be interpreted in a more uniform and automated way.
 
 Some actions require prerequisite deployments and configurations before the proposal can run. So far
 we have primarily relied purely on Foundry's scripting output files (`broadcast/`) or Foundry's
@@ -88,22 +93,25 @@ to interpret JSON file, stored in `.records/`.
 Also, at times, proxy contracts must be used and dealt with, primarily those of ERC-1967. We provide
 a lightweight utility for handling these.
 
-## ProposalAction
+## Proposal
 
-Fairly straight forward, it encapsulates actions and allows them to generate governor bravo inputs.
-This is a recurring abstraction in previous proposals.
+Fairly straight forward, it encapsulates actions and a proposal description. This can then generate
+governor bravo inputs.
 
 ```solidity
-import {ProposalAction} from "lib/govkit/src/types/ProposalAction.sol";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
 
-ProposalAction[] memory actions = new ProposalAction[](1);
-
-actions[0] = ProposalAction({
-    target: token,
-    value: 0,
-    signature: "transfer(address,uint256)",
-    data: abi.encodeCall(ERC20.transfer, (receiver, amount))
-});
+Proposal memory proposal = LibProposal.newProposal(
+    "Transfer <token> to <receiver>.",
+    [
+        Action({
+            target: token,
+            value: 0,
+            signature: "transfer(address,uint256)",
+            data: abi.encodeCall(ERC20.transfer, (receiver, amount))
+        })
+    ]
+);
 
 (
     address[] memory targets,
@@ -122,31 +130,33 @@ to ensure the particular account is on the given network.
 
 ```solidity
 import {Uniswap} from "lib/govkit/src/Uniswap.sol";
-import {ProposalAction} from "lib/govkit/src/types/ProposalAction.sol";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
 import {WormholeChainId} from "lib/govkit/src/constants/WormholeChainId.sol";
 
 Uniswap internal uniswap;
 
 uniswap.loadLatest();
 
-
-ProposalAction[] memory actions = new ProposalAction[](1);
-
-actions[0] = ProposalAction({
-    target: uniswap.ethereum.bridge.bnbChain,
-    value: 0,
-    signature: "sendMessage(address[],uint256[],bytes[],address,uint16)",
-    data: abi.encodeCall(
-        IWormhole.sendMessage,
-        (
-            new address[](0),
-            new uint256[](0),
-            new bytes[](0),
-            uniswap.bnbChain.wormholeReceiver,
-            WormholeChainId.BNBChain
-        )
-    )
-});
+Proposal memory proposal = LibProposal.newProposal(
+    "Send Message over Wormhole to BNB Chain.",
+    [
+        Action({
+            target: uniswap.ethereum.bridge.bnbChain,
+            value: 0,
+            signature: "sendMessage(address[],uint256[],bytes[],address,uint16)",
+            data: abi.encodeCall(
+                IWormhole.sendMessage,
+                (
+                    new address[](0),
+                    new uint256[](0),
+                    new bytes[](0),
+                    uniswap.bnbChain.wormholeReceiver,
+                    WormholeChainId.BNBChain
+                )
+            )
+        })
+    ]
+);
 ```
 
 This also makes testing environments more flexible for protocol mocking.
@@ -204,22 +214,50 @@ assertEq(
 This allows `ProposalAction` to be exported to JSON for interpretation by a seatbelt script. This
 deduplicates code and streamlines seatbelt usage.
 
-Sketch of the JSON API:
-
 ```solidity
-import {ProposalAction} from "lib/govkit/src/types/ProposalAction.sol";
+import {Uniswap} from "lib/govkit/src/Uniswap.sol";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {GovernanceSeatbelt} from "lib/govkit/src/forge/GovernanceSeatbelt.sol";
 
-string memory seatbeltInputPath = "...";
-ProposalAction[] memory actions = new ProposalAction[](1);
+Uniswap internal uniswap;
+uniswap.loadLatest();
+Proposal memory proposal = LibProposal.newProposal(
+    "Burn 20 UNI.",
+    [
+        Action({
+            target: uniswap.ethereum.uni,
+            value: 0,
+            signature: "transfer(address,uint256)",
+            data: abi.encodeCall(ERC20.transfer, (address(0xdead), 20))
+        })
+    ]
+);
 
-actions[0] = ProposalAction({
-    target: token,
-    value: 0,
-    signature: "transfer(address,uint256)",
-    data: abi.encodeCall(ERC20.transfer, (receiver, amount))
-});
+vm.writeJson("./prop-100.json", GovernanceSeatbelt.toJson(proposal));
+```
 
-vm.writeJson(seatbeltInputPath, actions.toJson());
+Output (`./prop-100.json`):
+
+```json
+{
+    "type": "new",
+    "daoName": "Uniswap",
+    "governorAddress": "0x408ED6354d4973f66138C91495F2f2FCbd8724C3",
+    "governorType": "bravo",
+    "targets": [
+        "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+    ],
+    "values": [
+        0
+    ],
+    "signatures": [
+        "transfer(address,uint256)"
+    ],
+    "calldatas": [
+        "0xa9059cbb000000000000000000000000000000000000000000000000000000000000dead000000000000000000000000000000000000000000000001158e460913d00000"
+    ],
+    "description": "Burn 20 UNI.",
+}
 ```
 
 ## Contract Logging
@@ -268,10 +306,9 @@ address loadedMyContract = recorder.read(ChainId.Ethereum, "MyContract");
 recorder.clear();
 ```
 
-Output:
+Output (`.records/MyScript.json`):
 
 ```json
-// .records/MyScript.json
 {
     "1": {
         "MyContract": "0x.."
@@ -317,5 +354,4 @@ address implementation = ERC1967Reader.implementation(proxy);
 ## TODO's
 
 - Bridge Encoder
-- Proposal Exporter
 - Conditional deployer
