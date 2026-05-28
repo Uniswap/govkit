@@ -8,7 +8,8 @@ optimizer_runs = 10_000_000
 
 fs_permissions = [
   { access = "read", path = "broadcast/"},
-  { access = "read-write", path = ".records/"}
+  { access = "read-write", path = ".records/"},
+  { access = "write", path = "./seatbelt-example.json"}
 ]
 
 [lint]
