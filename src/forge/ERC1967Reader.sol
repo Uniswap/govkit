@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity 0.8.34;
+pragma solidity ^0.8.0;
 
 import {vm} from "src/forge/Constants.sol";
 import {ERC1967} from "src/constants/ERC1967.sol";
