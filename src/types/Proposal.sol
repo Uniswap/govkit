@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
+import {Action} from "src/types/Action.sol";
+
 struct Proposal {
     string description;
     Action[] actions;
 }
-
-struct Action {
-    address target;
-    uint256 value;
-    string signature;
-    bytes data;
-}
-
-// todo:
-// add actions checker to read target-data pair encoding
 
 using LibProposal for Proposal global;
 
