@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 import {Script} from "lib/forge-std/src/Script.sol";
 
-import {LibProposal, Proposal, Action} from "src/types/Proposal.sol";
+import {LibProposal, Proposal} from "src/types/Proposal.sol";
+import {Action} from "src/types/Action.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
 import {Uniswap} from "src/Uniswap.sol";
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
