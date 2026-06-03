@@ -19,9 +19,7 @@ library WormholeChainId {
     uint16 internal constant UniChain = 44;
     uint16 internal constant WorldChain = 45;
 
-    function chainIdToWormholeChainId(
-        uint256 chainId
-    ) internal pure returns (uint16) {
+    function chainIdToWormholeChainId(uint256 chainId) internal pure returns (uint16) {
         if (chainId == ChainId.Arbitrum) {
             return Arbitrum;
         } else if (chainId == ChainId.Avalanche) {
@@ -47,9 +45,7 @@ library WormholeChainId {
         revert UnknownWormholeChainId(chainId);
     }
 
-    function wormholeChainIdtoChainId(
-        uint16 wormholeChainId
-    ) internal pure returns (uint256) {
+    function wormholeChainIdtoChainId(uint16 wormholeChainId) internal pure returns (uint256) {
         if (wormholeChainId == Arbitrum) {
             return ChainId.Arbitrum;
         } else if (wormholeChainId == Avalanche) {

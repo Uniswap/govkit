@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 interface ITokenJar {
-
     // Events
     event OwnershipTransferred(address indexed user, address indexed newOwner);
 

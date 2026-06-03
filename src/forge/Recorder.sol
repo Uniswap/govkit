@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only 
+// SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
 import {vm} from "src/forge/Constants.sol";
@@ -66,24 +66,20 @@ library LibRecorder {
         recorder.initialized = true;
     }
 
-    function write(
-        Recorder storage recorder,
-        string memory deploymentName,
-        address deployment
-    ) internal returns (address) {
+    function write(Recorder storage recorder, string memory deploymentName, address deployment)
+        internal
+        returns (address)
+    {
         return recorder.write(vm.getChainId(), deploymentName, deployment);
     }
 
-    function write(
-        Recorder storage recorder,
-        uint256 chainId,
-        string memory deploymentName,
-        address deployment
-    ) internal returns (address) {
+    function write(Recorder storage recorder, uint256 chainId, string memory deploymentName, address deployment)
+        internal
+        returns (address)
+    {
         require(
             recorder.initialized,
-            "Recorder::Error: Recorder not initialized. "
-            "Has `recorder.initialize()` been called?"
+            "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
 
         string memory deploymentString = vm.toString(deployment);
@@ -93,7 +89,8 @@ library LibRecorder {
             if (recorder.debugMode) {
                 console.log(
                     string.concat(
-                        "Recorder::Debug: ", filePath, ": wrote {\"", deploymentName, "\" : \"", deploymentString, "\"}")
+                        "Recorder::Debug: ", filePath, ": wrote {\"", deploymentName, "\" : \"", deploymentString, "\"}"
+                    )
                 );
             }
         } catch (bytes memory revertData) {
@@ -107,15 +104,14 @@ library LibRecorder {
         return deployment;
     }
 
-    function read(
-        Recorder storage recorder,
-        uint256 chainId,
-        string memory deploymentName
-    ) internal view returns (address) {
+    function read(Recorder storage recorder, uint256 chainId, string memory deploymentName)
+        internal
+        view
+        returns (address)
+    {
         require(
             recorder.initialized,
-            "Recorder::Error: Recorder not initialized. "
-            "Has `recorder.initialize()` been called?"
+            "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
 
         string memory filePath = recorder.path();
@@ -142,23 +138,19 @@ library LibRecorder {
 
             return deployment;
         } catch (bytes memory revertData) {
-            console.log(
-                "Recorder::Error: vm.parseJsonAddress failed. This is likely "
-                "because the JSON is malformed"
-            );
+            console.log("Recorder::Error: vm.parseJsonAddress failed. This is likely " "because the JSON is malformed");
             revert(string.concat("Forge VM Error:", abi.decode(revertData, (string))));
         }
     }
 
-    function exists(
-        Recorder storage recorder,
-        uint256 chainId,
-        string memory deploymentName
-    ) internal view returns (bool) {
+    function exists(Recorder storage recorder, uint256 chainId, string memory deploymentName)
+        internal
+        view
+        returns (bool)
+    {
         require(
             recorder.initialized,
-            "Recorder::Error: Recorder not initialized. "
-            "Has `recorder.initialize()` been called?"
+            "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
 
         string memory filePath = recorder.path();
@@ -184,8 +176,7 @@ library LibRecorder {
     function clear(Recorder storage recorder) internal {
         require(
             recorder.initialized,
-            "Recorder::Error: Recorder not initialized. "
-            "Has `recorder.initialize()` been called?"
+            "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
 
         if (!vm.isDir(directory)) {
@@ -206,16 +197,15 @@ library LibRecorder {
         }
     }
 
-    function checkDirectoryPermissions(Recorder storage) internal view  {
-        try vm.isDir(directory) returns (bool) {} catch (bytes memory revertData) {
+    function checkDirectoryPermissions(Recorder storage) internal view {
+        try vm.isDir(directory) returns (bool) {}
+        catch (bytes memory revertData) {
             console.log(
                 string.concat(
-                "Recorder::Error: vm.isDir smoke check failed. This is likely due "
-                "to missing file permissions.\n"
-                "Does `foundry.toml` contain: "
-                "`fs_{ access = \"read-write\", path = \"",
-                directory,
-                "\"}`?\n"
+                    "Recorder::Error: vm.isDir smoke check failed. This is likely due " "to missing file permissions.\n"
+                    "Does `foundry.toml` contain: " "`fs_{ access = \"read-write\", path = \"",
+                    directory,
+                    "\"}`?\n"
                 )
             );
 

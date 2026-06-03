@@ -11,17 +11,12 @@ library L1CrossDomainMessengerEncoder {
 
     uint32 internal constant GAS_LIMIT = 200_000;
 
-    function encodeAction(
-        address crossChainMessengerSender,
-        address crossChainAccountReceiver,
-        Call memory remoteCall
-    ) internal pure returns (Action memory) {
-        return encodeAction(
-            crossChainMessengerSender,
-            crossChainAccountReceiver,
-            GAS_LIMIT,
-            remoteCall
-        );
+    function encodeAction(address crossChainMessengerSender, address crossChainAccountReceiver, Call memory remoteCall)
+        internal
+        pure
+        returns (Action memory)
+    {
+        return encodeAction(crossChainMessengerSender, crossChainAccountReceiver, GAS_LIMIT, remoteCall);
     }
 
     function encodeAction(
@@ -35,18 +30,15 @@ library L1CrossDomainMessengerEncoder {
             "L1CrossDomainMessengerEncoder::Error: L1CrossDomainMessenger cannot send msg.value > 0"
         );
 
-        bytes memory crossChainAccountData = abi.encodeCall(
-            ICrossChainAccount.forward,
-            (remoteCall.target, remoteCall.data)
-        );
+        bytes memory crossChainAccountData =
+            abi.encodeCall(ICrossChainAccount.forward, (remoteCall.target, remoteCall.data));
 
         return Action({
             target: crossChainMessengerSender,
             value: 0,
             signature: SIGNATURE,
             data: abi.encodeCall(
-                IL1CrossDomainMessenger.sendMessage,
-                (crossChainAccountReceiver, crossChainAccountData, gasLimit)
+                IL1CrossDomainMessenger.sendMessage, (crossChainAccountReceiver, crossChainAccountData, gasLimit)
             )
         });
     }

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 interface IL1CrossDomainMessenger {
-
     // Events
     event FailedRelayedMessage(bytes32 indexed msgHash);
     event Initialized(uint8 version);
@@ -28,7 +27,14 @@ interface IL1CrossDomainMessenger {
     function otherMessenger() external view returns (address);
     function paused() external view returns (bool);
     function portal() external view returns (address);
-    function relayMessage(uint256 _nonce, address _sender, address _target, uint256 _value, uint256 _minGasLimit, bytes memory _message) external payable;
+    function relayMessage(
+        uint256 _nonce,
+        address _sender,
+        address _target,
+        uint256 _value,
+        uint256 _minGasLimit,
+        bytes memory _message
+    ) external payable;
     function sendMessage(address _target, bytes memory _message, uint32 _minGasLimit) external payable;
     function successfulMessages(bytes32) external view returns (bool);
     function superchainConfig() external view returns (address);

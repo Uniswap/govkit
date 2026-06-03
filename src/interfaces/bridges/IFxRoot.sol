@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 interface IFxRoot {
-
     // Functions
     function fxChild() external view returns (address);
     function sendMessageToChild(address _receiver, bytes memory _data) external;

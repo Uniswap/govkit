@@ -16,6 +16,7 @@ library ERC1967Reader {
 
         return address(uint160(uint256(value)));
     }
+
     function implementation(address proxy) internal view returns (address) {
         bytes32 value = vm.load(proxy, ERC1967.IMPLEMENTATION_SLOT);
 

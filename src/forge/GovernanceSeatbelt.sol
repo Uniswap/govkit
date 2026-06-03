@@ -5,10 +5,7 @@ import {vm} from "src/forge/Constants.sol";
 import {Proposal} from "src/types/Proposal.sol";
 
 library GovernanceSeatbelt {
-    function toJson(
-        Proposal memory proposal,
-        address governorBravo
-    ) internal returns (string memory) {
+    function toJson(Proposal memory proposal, address governorBravo) internal returns (string memory) {
         (
             address[] memory targets,
             uint256[] memory values,

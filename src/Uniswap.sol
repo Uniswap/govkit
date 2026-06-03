@@ -1,7 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Ethereum, EthereumBridgeSender, Arbitrum, Avalanche, Base, BNBChain, Celo, Optimism, Polygon, UniChain, WorldChain} from "src/types/Networks.sol";
+import {
+    Ethereum,
+    EthereumBridgeSender,
+    Arbitrum,
+    Avalanche,
+    Base,
+    BNBChain,
+    Celo,
+    Optimism,
+    Polygon,
+    UniChain,
+    WorldChain
+} from "src/types/Networks.sol";
 
 // -------------------------------------------------------------------------------------------------
 // The Uniswap Protocol

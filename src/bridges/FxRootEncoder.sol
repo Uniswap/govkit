@@ -8,12 +8,11 @@ import {IFxRoot} from "src/interfaces/bridges/IFxRoot.sol";
 library FxRootEncoder {
     string internal constant SIGNATURE = "sendMessageToChild(address,bytes)";
 
-    function encodeAction(
-        address fxRoot,
-        address fxReceiver,
-        uint256 value,
-        Call[] memory remoteCalls
-    ) internal pure returns (Action memory) {
+    function encodeAction(address fxRoot, address fxReceiver, uint256 value, Call[] memory remoteCalls)
+        internal
+        pure
+        returns (Action memory)
+    {
         address[] memory targets = new address[](remoteCalls.length);
         uint256[] memory values = new uint256[](remoteCalls.length);
         bytes[] memory datas = new bytes[](remoteCalls.length);
@@ -28,13 +27,7 @@ library FxRootEncoder {
             target: fxRoot,
             value: value,
             signature: SIGNATURE,
-            data: abi.encodeCall(
-                IFxRoot.sendMessageToChild,
-                (
-                    fxReceiver,
-                    abi.encode(targets, datas, values)
-                )
-            )
+            data: abi.encodeCall(IFxRoot.sendMessageToChild, (fxReceiver, abi.encode(targets, datas, values)))
         });
     }
 }

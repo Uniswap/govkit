@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 interface IGovernorBravo {
-
     // Structs
     struct Receipt {
         bool hasVoted;
@@ -15,7 +14,17 @@ interface IGovernorBravo {
     event NewImplementation(address oldImplementation, address newImplementation);
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
     event ProposalCanceled(uint256 id);
-    event ProposalCreated(uint256 id, address proposer, address[] targets, uint256[] values, string[] signatures, bytes[] calldatas, uint256 startBlock, uint256 endBlock, string description);
+    event ProposalCreated(
+        uint256 id,
+        address proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        uint256 startBlock,
+        uint256 endBlock,
+        string description
+    );
     event ProposalExecuted(uint256 id);
     event ProposalQueued(uint256 id, uint256 eta);
     event ProposalThresholdSet(uint256 oldProposalThreshold, uint256 newProposalThreshold);
@@ -44,19 +53,53 @@ interface IGovernorBravo {
     function castVoteBySig(uint256 proposalId, uint8 support, uint8 v, bytes32 r, bytes32 s) external;
     function castVoteWithReason(uint256 proposalId, uint8 support, string memory reason) external;
     function execute(uint256 proposalId) external payable;
-    function getActions(uint256 proposalId) external view returns (address[] memory targets, uint256[] memory values, string[] memory signatures, bytes[] memory calldatas);
+    function getActions(uint256 proposalId)
+        external
+        view
+        returns (
+            address[] memory targets,
+            uint256[] memory values,
+            string[] memory signatures,
+            bytes[] memory calldatas
+        );
     function getReceipt(uint256 proposalId, address voter) external view returns (Receipt memory);
     function implementation() external view returns (address);
     function initialProposalId() external view returns (uint256);
-    function initialize(address timelock_, address uni_, uint256 votingPeriod_, uint256 votingDelay_, uint256 proposalThreshold_) external;
+    function initialize(
+        address timelock_,
+        address uni_,
+        uint256 votingPeriod_,
+        uint256 votingDelay_,
+        uint256 proposalThreshold_
+    ) external;
     function latestProposalIds(address) external view returns (uint256);
     function name() external view returns (string memory);
     function pendingAdmin() external view returns (address);
     function proposalCount() external view returns (uint256);
     function proposalMaxOperations() external view returns (uint256);
     function proposalThreshold() external view returns (uint256);
-    function proposals(uint256) external view returns (uint256 id, address proposer, uint256 eta, uint256 startBlock, uint256 endBlock, uint256 forVotes, uint256 againstVotes, uint256 abstainVotes, bool canceled, bool executed);
-    function propose(address[] memory targets, uint256[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) external returns (uint256);
+    function proposals(uint256)
+        external
+        view
+        returns (
+            uint256 id,
+            address proposer,
+            uint256 eta,
+            uint256 startBlock,
+            uint256 endBlock,
+            uint256 forVotes,
+            uint256 againstVotes,
+            uint256 abstainVotes,
+            bool canceled,
+            bool executed
+        );
+    function propose(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256);
     function queue(uint256 proposalId) external;
     function quorumVotes() external view returns (uint256);
     function state(uint256 proposalId) external view returns (uint8);

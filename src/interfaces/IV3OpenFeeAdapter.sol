@@ -2,17 +2,18 @@
 pragma solidity ^0.8.0;
 
 interface IV3OpenFeeAdapter {
-
     // Structs
     struct Pair {
         address token0;
         address token1;
     }
+
     struct CollectParams {
         address pool;
         uint128 amount0Requested;
         uint128 amount1Requested;
     }
+
     struct Collected {
         uint128 amount0Collected;
         uint128 amount1Collected;

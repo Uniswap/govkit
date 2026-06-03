@@ -34,10 +34,7 @@ library WormholeEncoder {
             target: wormholeBridge,
             value: value,
             signature: SIGNATURE,
-            data: abi.encodeCall(
-                IWormholeSender.sendMessage,
-                (targets, values, datas, remoteReceiver, wormholeChainId)
-            )
+            data: abi.encodeCall(IWormholeSender.sendMessage, (targets, values, datas, remoteReceiver, wormholeChainId))
         });
     }
 }

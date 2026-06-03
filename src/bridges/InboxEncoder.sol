@@ -6,18 +6,19 @@ import {Action} from "src/types/Action.sol";
 import {IInbox} from "src/interfaces/bridges/IInbox.sol";
 
 library InboxEncoder {
-    string internal constant SIGNATURE = "createRetryableTicket(address,uint256,uint256,address,address,uint256,uint256,bytes)";
+    string internal constant SIGNATURE =
+        "createRetryableTicket(address,uint256,uint256,address,address,uint256,uint256,bytes)";
 
     uint256 internal constant GAS_LIMIT = 200_000;
     uint256 internal constant MAX_FEE_PER_GAS = 0.1 gwei;
     uint256 internal constant MAX_SUBMISSION_COST = 0.01 ether;
     uint160 internal constant ALIAS_OFFSET = uint160(0x1111000000000000000000000000000000001111);
 
-    function encodeAction(
-        address inbox,
-        address timelock,
-        Call memory remoteCall
-    ) internal pure returns (Action memory) {
+    function encodeAction(address inbox, address timelock, Call memory remoteCall)
+        internal
+        pure
+        returns (Action memory)
+    {
         return encodeAction({
             inbox: inbox,
             timelock: timelock,

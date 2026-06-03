@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 interface IOptimismPortal2 {
-
     // Structs
     struct WithdrawalTransaction {
         uint256 nonce;
@@ -12,6 +11,7 @@ interface IOptimismPortal2 {
         uint256 gasLimit;
         bytes data;
     }
+
     struct OutputRootProof {
         bytes32 version;
         bytes32 stateRoot;
@@ -67,15 +67,25 @@ interface IOptimismPortal2 {
     // Functions
     function anchorStateRegistry() external view returns (address);
     function checkWithdrawal(bytes32 _withdrawalHash, address _proofSubmitter) external view;
-    function depositERC20Transaction(address _to, uint256 _mint, uint256 _value, uint64 _gasLimit, bool _isCreation, bytes memory _data) external;
-    function depositTransaction(address _to, uint256 _value, uint64 _gasLimit, bool _isCreation, bytes memory _data) external payable;
+    function depositERC20Transaction(
+        address _to,
+        uint256 _mint,
+        uint256 _value,
+        uint64 _gasLimit,
+        bool _isCreation,
+        bytes memory _data
+    ) external;
+    function depositTransaction(address _to, uint256 _value, uint64 _gasLimit, bool _isCreation, bytes memory _data)
+        external
+        payable;
     function disputeGameBlacklist(address _disputeGame) external view returns (bool);
     function disputeGameFactory() external view returns (address);
     function disputeGameFinalityDelaySeconds() external view returns (uint256);
     function donateETH() external payable;
     function ethLockbox() external view returns (address);
     function finalizeWithdrawalTransaction(WithdrawalTransaction memory _tx) external;
-    function finalizeWithdrawalTransactionExternalProof(WithdrawalTransaction memory _tx, address _proofSubmitter) external;
+    function finalizeWithdrawalTransactionExternalProof(WithdrawalTransaction memory _tx, address _proofSubmitter)
+        external;
     function finalizedWithdrawals(bytes32) external view returns (bool);
     function guardian() external view returns (address);
     function initVersion() external view returns (uint8);
@@ -87,7 +97,12 @@ interface IOptimismPortal2 {
     function paused() external view returns (bool);
     function proofMaturityDelaySeconds() external view returns (uint256);
     function proofSubmitters(bytes32, uint256) external view returns (address);
-    function proveWithdrawalTransaction(WithdrawalTransaction memory _tx, uint256 _disputeGameIndex, OutputRootProof memory _outputRootProof, bytes[] memory _withdrawalProof) external;
+    function proveWithdrawalTransaction(
+        WithdrawalTransaction memory _tx,
+        uint256 _disputeGameIndex,
+        OutputRootProof memory _outputRootProof,
+        bytes[] memory _withdrawalProof
+    ) external;
     function provenWithdrawals(bytes32, address) external view returns (address disputeGameProxy, uint64 timestamp);
     function proxyAdmin() external view returns (address);
     function proxyAdminOwner() external view returns (address);
