@@ -26,19 +26,13 @@ contract ProposalExample is Script {
                     target: uniswap.ethereum.v2Factory,
                     value: 0,
                     signature: "setFeeTo(address)",
-                    data: abi.encodeCall(
-                        IUniswapV2Factory.setFeeTo,
-                        (uniswap.ethereum.tokenJar)
-                    )
+                    data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
                 }),
                 Action({
                     target: uniswap.ethereum.v3Factory,
                     value: 0,
                     signature: "setOwner(address)",
-                    data: abi.encodeCall(
-                        IUniswapV3Factory.setOwner,
-                        (uniswap.ethereum.v3OpenFeeAdapter)
-                    )
+                    data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
                 })
             ]
         );
@@ -46,10 +40,8 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt
         //
-        string memory json = GovernanceSeatbelt.toJson({
-            proposal: proposal,
-            governorBravo: uniswap.ethereum.governorBravo
-        });
+        string memory json =
+            GovernanceSeatbelt.toJson({proposal: proposal, governorBravo: uniswap.ethereum.governorBravo});
 
         vm.writeFile("./seatbelt-example.json", json);
 

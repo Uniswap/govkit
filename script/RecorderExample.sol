@@ -18,22 +18,15 @@ contract Counter {
 
 contract RecorderExample is Script {
     Recorder internal recorder;
-    function run() external {
 
+    function run() external {
         // Initialize the Recorder.
         //
-        recorder.initialize({
-            scriptName: "Example",
-            debugMode: true
-        });
+        recorder.initialize({scriptName: "Example", debugMode: true});
 
         // Deploy the contract & record it.
         //
-        address counter = recorder.write(
-            ChainId.Ethereum,
-            "Counter", 
-            address(new Counter())
-        );
+        address counter = recorder.write(ChainId.Ethereum, "Counter", address(new Counter()));
 
         // Check the record exists.
         require(recorder.exists(ChainId.Ethereum, "Counter"), "Counter not found.");

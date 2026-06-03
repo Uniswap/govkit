@@ -15,17 +15,13 @@ import {Uniswap} from "src/Uniswap.sol";
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";
 
-string constant description = ""
-"# Turn on Fees BNB Chain & Celo \n\n"
-
-"Activates fee switch on BNB Chain & Celo by: \n\n"
-
-"- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
-"- Setting V3Factory's `owner` on BNB Chain to V3OpenFeeAdapter \n"
-"- Setting V2Factory's `feeTo` on Celo to TokenJar \n"
-"- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
-
-"> Note: Celo's OP Portal can only take one call each, so this is two actions.";
+string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
+    "Activates fee switch on BNB Chain & Celo by: \n\n"
+    "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
+    "- Setting V3Factory's `owner` on BNB Chain to V3OpenFeeAdapter \n"
+    "- Setting V2Factory's `feeTo` on Celo to TokenJar \n"
+    "- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
+    "> Note: Celo's OP Portal can only take one call each, so this is two actions.";
 
 contract ProposalExample is Script {
     Uniswap internal uniswap;
@@ -42,24 +38,20 @@ contract ProposalExample is Script {
             uniswap.bnbChain.wormholeReceiver,
             WormholeChainId.BNBChain,
             0,
-            LibCall.newCalls([
-                Call({
-                    target: uniswap.bnbChain.v2Factory,
-                    value: 0,
-                    data: abi.encodeCall(
-                        IUniswapV2Factory.setFeeTo,
-                        (uniswap.bnbChain.tokenJar)
-                    )
-                }),
-                Call({
-                    target: uniswap.bnbChain.v3Factory,
-                    value: 0,
-                    data: abi.encodeCall(
-                        IUniswapV3Factory.setOwner,
-                        (uniswap.bnbChain.v3OpenFeeAdapter)
-                    )
-                })
-            ])
+            LibCall.newCalls(
+                [
+                    Call({
+                        target: uniswap.bnbChain.v2Factory,
+                        value: 0,
+                        data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.bnbChain.tokenJar))
+                    }),
+                    Call({
+                        target: uniswap.bnbChain.v3Factory,
+                        value: 0,
+                        data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.bnbChain.v3OpenFeeAdapter))
+                    })
+                ]
+            )
         );
 
         // -----------------------------------------------------------------------------------------
@@ -88,18 +80,13 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Construct Proposal
         //
-        Proposal memory proposal = LibProposal.newProposal(
-            description,
-            [bnbChainAction, celoAction0, celoAction1]
-        );
+        Proposal memory proposal = LibProposal.newProposal(description, [bnbChainAction, celoAction0, celoAction1]);
 
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt
         //
-        string memory json = GovernanceSeatbelt.toJson({
-            proposal: proposal,
-            governorBravo: uniswap.ethereum.governorBravo
-        });
+        string memory json =
+            GovernanceSeatbelt.toJson({proposal: proposal, governorBravo: uniswap.ethereum.governorBravo});
 
         vm.writeFile("./seatbelt-example.json", json);
     }
