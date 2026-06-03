@@ -205,7 +205,8 @@ library LibRecorder {
                     "Recorder::Error: vm.isDir smoke check failed. This is likely due " "to missing file permissions.\n"
                     "Does `foundry.toml` contain: " "`fs_{ access = \"read-write\", path = \"",
                     directory,
-                    "\"}`?\n"
+                    "\"",
+                    " }`?\n"
                 )
             );
 
