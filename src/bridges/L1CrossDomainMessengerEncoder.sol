@@ -27,7 +27,7 @@ library L1CrossDomainMessengerEncoder {
     function encodeAction(
         address crossChainMessengerSender,
         address crossChainAccountReceiver,
-        uint256 gasLimit,
+        uint32 gasLimit,
         Call memory remoteCall
     ) internal pure returns (Action memory) {
         require(
@@ -48,6 +48,6 @@ library L1CrossDomainMessengerEncoder {
                 IL1CrossDomainMessenger.sendMessage,
                 (crossChainAccountReceiver, crossChainAccountData, gasLimit)
             )
-        })
+        });
     }
 }

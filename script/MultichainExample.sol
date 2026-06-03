@@ -36,12 +36,13 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // BNB Chain Action
         //
-        Action memory bnbChainAction = WormholeEncoder.encodeAction({
-            wormholeSender: uniswap.ethereum.bridge.bnbChain,
-            wormholeReceiver: uniswap.bnbChain.wormholeReceiver,
-            wormholeChainId: WormholeChainId.BNBChain,
-            value: 0,
-            calls: LibCall.newCalls([
+        Action memory bnbChainAction = WormholeEncoder.encodeAction(
+            uniswap.ethereum.bridge.wormholeCore,
+            uniswap.ethereum.bridge.bnbChain,
+            uniswap.bnbChain.wormholeReceiver,
+            WormholeChainId.BNBChain,
+            0,
+            LibCall.newCalls([
                 Call({
                     target: uniswap.bnbChain.v2Factory,
                     value: 0,
@@ -59,7 +60,7 @@ contract ProposalExample is Script {
                     )
                 })
             ])
-        });
+        );
 
         // -----------------------------------------------------------------------------------------
         // Celo Actions (Post-Optimism Bridge Transition)
@@ -70,7 +71,7 @@ contract ProposalExample is Script {
             remoteCall: Call({
                 target: uniswap.celo.v2Factory,
                 value: 0,
-                data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uinswap.celo.tokenJar))
+                data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.celo.tokenJar))
             })
         });
 

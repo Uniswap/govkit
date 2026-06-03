@@ -11,11 +11,12 @@ library WormholeEncoder {
     string internal constant SIGNATURE = "sendMessage(address[],uint256[],bytes[],address,uint16)";
 
     function encodeAction(
+        address wormholeBridge,
         address sourceSender,
         address remoteReceiver,
         uint256 chainId,
         uint256 value,
-        Call[] memory remoteCalls,
+        Call[] memory remoteCalls
     ) internal pure returns (Action memory) {
         address[] memory targets = new address[](remoteCalls.length);
         uint256[] memory values = new uint256[](remoteCalls.length);
@@ -37,6 +38,6 @@ library WormholeEncoder {
                 IWormholeSender.sendMessage,
                 (targets, values, datas, remoteReceiver, wormholeChainId)
             )
-        })
+        });
     }
 }
