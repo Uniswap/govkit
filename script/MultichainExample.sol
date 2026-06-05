@@ -33,7 +33,6 @@ contract ProposalExample is Script {
         // BNB Chain Action
         //
         Action memory bnbChainAction = WormholeEncoder.encodeAction(
-            uniswap.ethereum.bridge.wormholeCore,
             uniswap.ethereum.bridge.bnbChain,
             uniswap.bnbChain.wormholeReceiver,
             WormholeChainId.BNBChain,
