@@ -5,7 +5,6 @@ import {Script} from "lib/forge-std/src/Script.sol";
 
 import {WormholeChainId} from "src/constants/WormholeChainId.sol";
 import {LibProposal, Proposal} from "src/types/Proposal.sol";
-import {Action} from "src/types/Action.sol";
 import {Call, LibCall} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
 import {WormholeEncoder} from "src/bridges/WormholeEncoder.sol";
@@ -21,7 +20,7 @@ string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
     "- Setting V3Factory's `owner` on BNB Chain to V3OpenFeeAdapter \n"
     "- Setting V2Factory's `feeTo` on Celo to TokenJar \n"
     "- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
-    "> Note: Celo's OP Portal can only take one call each, so this is two actions.";
+    "> Note: Celo's OP Portal can only take one call each, so this is two calls.";
 
 contract ProposalExample is Script {
     Uniswap internal uniswap;
@@ -30,9 +29,9 @@ contract ProposalExample is Script {
         uniswap.loadLatest();
 
         // -----------------------------------------------------------------------------------------
-        // BNB Chain Action
+        // BNB Chain Call
         //
-        Action memory bnbChainAction = WormholeEncoder.encodeAction(
+        Call memory bnbChainCall = WormholeEncoder.encode(
             uniswap.ethereum.bridge.bnbChain,
             uniswap.bnbChain.wormholeReceiver,
             WormholeChainId.BNBChain,
@@ -54,9 +53,9 @@ contract ProposalExample is Script {
         );
 
         // -----------------------------------------------------------------------------------------
-        // Celo Actions (Post-Optimism Bridge Transition)
+        // Celo Calls (Post-Optimism Bridge Transition)
         //
-        Action memory celoAction0 = L1CrossDomainMessengerEncoder.encodeAction({
+        Call memory celoCall0 = L1CrossDomainMessengerEncoder.encode({
             crossChainMessengerSender: uniswap.ethereum.bridge.celo,
             crossChainAccountReceiver: uniswap.celo.crossChainAccount,
             remoteCall: Call({
@@ -66,7 +65,7 @@ contract ProposalExample is Script {
             })
         });
 
-        Action memory celoAction1 = L1CrossDomainMessengerEncoder.encodeAction({
+        Call memory celoCall1 = L1CrossDomainMessengerEncoder.encode({
             crossChainMessengerSender: uniswap.ethereum.bridge.celo,
             crossChainAccountReceiver: uniswap.celo.crossChainAccount,
             remoteCall: Call({
@@ -79,7 +78,7 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Construct Proposal
         //
-        Proposal memory proposal = LibProposal.newProposal(description, [bnbChainAction, celoAction0, celoAction1]);
+        Proposal memory proposal = LibProposal.newProposal(description, [bnbChainCall, celoCall0, celoCall1]);
 
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt

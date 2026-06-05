@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import {Uniswap} from "src/Uniswap.sol";
 import {Proposal} from "src/types/Proposal.sol";
-import {Action} from "src/types/Action.sol";
+import {Call} from "src/types/Call.sol";
 
 import {ICrossChainAccount} from "src/interfaces/bridges/ICrossChainAccount.sol";
 import {IFxRoot} from "src/interfaces/bridges/IFxRoot.sol";
@@ -16,13 +16,13 @@ library BridgeChecker {
     error EncodingError(string source, address target, bytes4 selector);
 
     function checkProposal(Uniswap storage uniswap, Proposal memory proposal) internal view {
-        Action[] memory actions = proposal.actions;
+        Call[] memory calls = proposal.calls;
 
-        for (uint256 i; i < actions.length; i++) {
-            address target = actions[i].target;
+        for (uint256 i; i < calls.length; i++) {
+            address target = calls[i].target;
 
             if (target == uniswap.ethereum.bridge.arbitrum) {
-                checkInbox(actions[i]);
+                checkInbox(calls[i]);
 
                 continue;
             }
@@ -32,19 +32,19 @@ library BridgeChecker {
                     || target == uniswap.ethereum.bridge.optimism || target == uniswap.ethereum.bridge.uniChain
                     || target == uniswap.ethereum.bridge.worldChain
             ) {
-                checkCrossDomainMessenger(actions[i]);
+                checkCrossDomainMessenger(calls[i]);
 
                 continue;
             }
 
             if (target == uniswap.ethereum.bridge.bnbChain) {
-                checkWormholeSender(actions[i]);
+                checkWormholeSender(calls[i]);
 
                 continue;
             }
 
             if (target == uniswap.ethereum.bridge.polygon) {
-                checkPolygon(actions[i]);
+                checkPolygon(calls[i]);
 
                 continue;
             }
@@ -58,46 +58,46 @@ library BridgeChecker {
         }
     }
 
-    function checkInbox(Action memory action) internal pure {
-        bytes4 selector = getSelector(action);
+    function checkInbox(Call memory call) internal pure {
+        bytes4 selector = getSelector(call);
 
         if (selector != IInbox.createRetryableTicket.selector) {
-            revert EncodingError("BridgeChecker::checkInbox", action.target, selector);
+            revert EncodingError("BridgeChecker::checkInbox", call.target, selector);
         }
     }
 
-    function checkCrossDomainMessenger(Action memory action) internal pure {
-        bytes4 selector = getSelector(action);
+    function checkCrossDomainMessenger(Call memory call) internal pure {
+        bytes4 selector = getSelector(call);
 
         if (selector != IL1CrossDomainMessenger.sendMessage.selector) {
-            revert EncodingError("BridgeChecker::checkCrossDomainMessenger", action.target, selector);
+            revert EncodingError("BridgeChecker::checkCrossDomainMessenger", call.target, selector);
         }
     }
 
-    function checkOptimismPortal2(Action memory action) internal pure {
-        bytes4 selector = getSelector(action);
+    function checkOptimismPortal2(Call memory call) internal pure {
+        bytes4 selector = getSelector(call);
 
         if (selector != IOptimismPortal2.depositTransaction.selector) {
-            revert EncodingError("BridgeChecker::checkOptimismPortal2", action.target, selector);
+            revert EncodingError("BridgeChecker::checkOptimismPortal2", call.target, selector);
         }
     }
 
-    function checkWormholeSender(Action memory action) internal pure {
-        bytes4 selector = getSelector(action);
+    function checkWormholeSender(Call memory call) internal pure {
+        bytes4 selector = getSelector(call);
 
         if (selector != IWormholeSender.sendMessage.selector && selector != IWormholeSender.setOwner.selector) {
-            revert EncodingError("BridgeChecker::checkWormholeSender", action.target, selector);
+            revert EncodingError("BridgeChecker::checkWormholeSender", call.target, selector);
         }
     }
 
-    function checkPolygon(Action memory action) internal pure {
-        bytes4 selector = getSelector(action);
+    function checkPolygon(Call memory call) internal pure {
+        bytes4 selector = getSelector(call);
 
         if (selector != IFxRoot.sendMessageToChild.selector) {
-            revert EncodingError("BridgeChecker::checkFxRoot", action.target, selector);
+            revert EncodingError("BridgeChecker::checkFxRoot", call.target, selector);
         }
 
-        (,, bytes memory sendMessageToChilData) = abi.decode(action.data, (bytes4, address, bytes));
+        (,, bytes memory sendMessageToChilData) = abi.decode(call.data, (bytes4, address, bytes));
 
         (address[] memory targets, bytes[] memory datas, uint256[] memory values) =
             abi.decode(sendMessageToChilData, (address[], bytes[], uint256[]));
@@ -105,8 +105,8 @@ library BridgeChecker {
         require(targets.length == datas.length && targets.length == values.length);
     }
 
-    function getSelector(Action memory action) internal pure returns (bytes4 selector) {
-        bytes memory data = action.data;
+    function getSelector(Call memory call) internal pure returns (bytes4 selector) {
+        bytes memory data = call.data;
 
         if (data.length == 0) return 0x00000000;
 

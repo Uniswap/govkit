@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Action} from "src/types/Action.sol";
+import {Call} from "src/types/Call.sol";
 
 struct Proposal {
     string description;
-    Action[] actions;
+    Call[] calls;
 }
 
 using LibProposal for Proposal global;
@@ -16,7 +16,8 @@ library LibProposal {
         pure
         returns (address[] memory, uint256[] memory, string[] memory, bytes[] memory, string memory)
     {
-        uint256 length = proposal.actions.length;
+        Call[] memory calls = proposal.calls;
+        uint256 length = calls.length;
 
         address[] memory targets = new address[](length);
         uint256[] memory values = new uint256[](length);
@@ -24,131 +25,129 @@ library LibProposal {
         bytes[] memory datas = new bytes[](length);
 
         for (uint256 i; i < length; i++) {
-            Action memory action = proposal.actions[i];
-
-            targets[i] = action.target;
-            values[i] = action.value;
+            targets[i] = calls[i].target;
+            values[i] = calls[i].value;
             signatures[i] = "";
-            datas[i] = action.data;
+            datas[i] = calls[i].data;
         }
 
         return (targets, values, signatures, datas, proposal.description);
     }
 
-    function newProposal(string memory description, Action[1] memory actionsArray)
+    function newProposal(string memory description, Call[1] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](1);
-        actions[0] = actionsArray[0];
-        return Proposal({description: description, actions: actions});
+        Call[] memory calls = new Call[](1);
+        calls[0] = callsArray[0];
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[2] memory actionsArray)
+    function newProposal(string memory description, Call[2] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](2);
-        actions[0] = actionsArray[0];
-        actions[1] = actionsArray[1];
-        return Proposal({description: description, actions: actions});
+        Call[] memory calls = new Call[](2);
+        calls[0] = callsArray[0];
+        calls[1] = callsArray[1];
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[3] memory actionsArray)
+    function newProposal(string memory description, Call[3] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](3);
+        Call[] memory calls = new Call[](3);
         for (uint256 i; i < 3; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[4] memory actionsArray)
+    function newProposal(string memory description, Call[4] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](4);
+        Call[] memory calls = new Call[](4);
         for (uint256 i; i < 4; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[5] memory actionsArray)
+    function newProposal(string memory description, Call[5] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](5);
+        Call[] memory calls = new Call[](5);
         for (uint256 i; i < 5; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[6] memory actionsArray)
+    function newProposal(string memory description, Call[6] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](6);
+        Call[] memory calls = new Call[](6);
         for (uint256 i; i < 6; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[7] memory actionsArray)
+    function newProposal(string memory description, Call[7] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](7);
+        Call[] memory calls = new Call[](7);
         for (uint256 i; i < 7; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[8] memory actionsArray)
+    function newProposal(string memory description, Call[8] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](8);
+        Call[] memory calls = new Call[](8);
         for (uint256 i; i < 8; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[9] memory actionsArray)
+    function newProposal(string memory description, Call[9] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](9);
+        Call[] memory calls = new Call[](9);
         for (uint256 i; i < 9; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 
-    function newProposal(string memory description, Action[10] memory actionsArray)
+    function newProposal(string memory description, Call[10] memory callsArray)
         internal
         pure
         returns (Proposal memory)
     {
-        Action[] memory actions = new Action[](10);
+        Call[] memory calls = new Call[](10);
         for (uint256 i; i < 10; i++) {
-            actions[i] = actionsArray[i];
+            calls[i] = callsArray[i];
         }
-        return Proposal({description: description, actions: actions});
+        return Proposal({description: description, calls: calls});
     }
 }

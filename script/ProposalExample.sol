@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import {Script} from "lib/forge-std/src/Script.sol";
 
 import {LibProposal, Proposal} from "src/types/Proposal.sol";
-import {Action} from "src/types/Action.sol";
+import {Call} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
 import {Uniswap} from "src/Uniswap.sol";
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
@@ -22,12 +22,12 @@ contract ProposalExample is Script {
         Proposal memory proposal = LibProposal.newProposal(
             description,
             [
-                Action({
+                Call({
                     target: uniswap.ethereum.v2Factory,
                     value: 0,
                     data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
                 }),
-                Action({
+                Call({
                     target: uniswap.ethereum.v3Factory,
                     value: 0,
                     data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
