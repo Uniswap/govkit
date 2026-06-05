@@ -28,7 +28,7 @@ library LibProposal {
 
             targets[i] = action.target;
             values[i] = action.value;
-            signatures[i] = action.signature;
+            signatures[i] = "";
             datas[i] = action.data;
         }
 

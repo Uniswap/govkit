@@ -7,8 +7,6 @@ import {IL1CrossDomainMessenger} from "src/interfaces/bridges/IL1CrossDomainMess
 import {ICrossChainAccount} from "src/interfaces/bridges/ICrossChainAccount.sol";
 
 library L1CrossDomainMessengerEncoder {
-    string internal constant SIGNATURE = "sendMessage(address,bytes,uint32)";
-
     uint32 internal constant GAS_LIMIT = 200_000;
 
     function encodeAction(address crossChainMessengerSender, address crossChainAccountReceiver, Call memory remoteCall)
@@ -36,7 +34,6 @@ library L1CrossDomainMessengerEncoder {
         return Action({
             target: crossChainMessengerSender,
             value: 0,
-            signature: SIGNATURE,
             data: abi.encodeCall(
                 IL1CrossDomainMessenger.sendMessage, (crossChainAccountReceiver, crossChainAccountData, gasLimit)
             )

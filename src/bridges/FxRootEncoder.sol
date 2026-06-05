@@ -6,8 +6,6 @@ import {Action} from "src/types/Action.sol";
 import {IFxRoot} from "src/interfaces/bridges/IFxRoot.sol";
 
 library FxRootEncoder {
-    string internal constant SIGNATURE = "sendMessageToChild(address,bytes)";
-
     function encodeAction(address fxRoot, address fxReceiver, uint256 value, Call[] memory remoteCalls)
         internal
         pure
@@ -26,7 +24,6 @@ library FxRootEncoder {
         return Action({
             target: fxRoot,
             value: value,
-            signature: SIGNATURE,
             data: abi.encodeCall(IFxRoot.sendMessageToChild, (fxReceiver, abi.encode(targets, datas, values)))
         });
     }

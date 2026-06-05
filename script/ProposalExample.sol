@@ -25,13 +25,11 @@ contract ProposalExample is Script {
                 Action({
                     target: uniswap.ethereum.v2Factory,
                     value: 0,
-                    signature: "setFeeTo(address)",
                     data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
                 }),
                 Action({
                     target: uniswap.ethereum.v3Factory,
                     value: 0,
-                    signature: "setOwner(address)",
                     data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
                 })
             ]

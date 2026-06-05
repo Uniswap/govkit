@@ -8,8 +8,6 @@ import {Action} from "src/types/Action.sol";
 import {IWormholeSender} from "src/interfaces/bridges/IWormholeSender.sol";
 
 library WormholeEncoder {
-    string internal constant SIGNATURE = "sendMessage(address[],uint256[],bytes[],address,uint16)";
-
     function encodeAction(
         address sourceSender,
         address remoteReceiver,
@@ -32,7 +30,6 @@ library WormholeEncoder {
         return Action({
             target: sourceSender,
             value: value,
-            signature: SIGNATURE,
             data: abi.encodeCall(IWormholeSender.sendMessage, (targets, values, datas, remoteReceiver, wormholeChainId))
         });
     }

@@ -13,7 +13,7 @@ import {IOptimismPortal2} from "src/interfaces/bridges/IOptimismPortal2.sol";
 import {IWormholeSender} from "src/interfaces/bridges/IWormholeSender.sol";
 
 library BridgeChecker {
-    error EncodingError(string source, address target, string invalidSignature);
+    error EncodingError(string source, address target, bytes4 selector);
 
     function checkProposal(Uniswap storage uniswap, Proposal memory proposal) internal view {
         Action[] memory actions = proposal.actions;
@@ -62,7 +62,7 @@ library BridgeChecker {
         bytes4 selector = getSelector(action);
 
         if (selector != IInbox.createRetryableTicket.selector) {
-            revert EncodingError("BridgeChecker::checkInbox", action.target, action.signature);
+            revert EncodingError("BridgeChecker::checkInbox", action.target, selector);
         }
     }
 
@@ -70,7 +70,7 @@ library BridgeChecker {
         bytes4 selector = getSelector(action);
 
         if (selector != IL1CrossDomainMessenger.sendMessage.selector) {
-            revert EncodingError("BridgeChecker::checkCrossDomainMessenger", action.target, action.signature);
+            revert EncodingError("BridgeChecker::checkCrossDomainMessenger", action.target, selector);
         }
     }
 
@@ -78,7 +78,7 @@ library BridgeChecker {
         bytes4 selector = getSelector(action);
 
         if (selector != IOptimismPortal2.depositTransaction.selector) {
-            revert EncodingError("BridgeChecker::checkOptimismPortal2", action.target, action.signature);
+            revert EncodingError("BridgeChecker::checkOptimismPortal2", action.target, selector);
         }
     }
 
@@ -86,7 +86,7 @@ library BridgeChecker {
         bytes4 selector = getSelector(action);
 
         if (selector != IWormholeSender.sendMessage.selector && selector != IWormholeSender.setOwner.selector) {
-            revert EncodingError("BridgeChecker::checkWormholeSender", action.target, action.signature);
+            revert EncodingError("BridgeChecker::checkWormholeSender", action.target, selector);
         }
     }
 
@@ -94,7 +94,7 @@ library BridgeChecker {
         bytes4 selector = getSelector(action);
 
         if (selector != IFxRoot.sendMessageToChild.selector) {
-            revert EncodingError("BridgeChecker::checkFxRoot", action.target, action.signature);
+            revert EncodingError("BridgeChecker::checkFxRoot", action.target, selector);
         }
 
         (,, bytes memory sendMessageToChilData) = abi.decode(action.data, (bytes4, address, bytes));

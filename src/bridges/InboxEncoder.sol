@@ -6,9 +6,6 @@ import {Action} from "src/types/Action.sol";
 import {IInbox} from "src/interfaces/bridges/IInbox.sol";
 
 library InboxEncoder {
-    string internal constant SIGNATURE =
-        "createRetryableTicket(address,uint256,uint256,address,address,uint256,uint256,bytes)";
-
     uint256 internal constant GAS_LIMIT = 200_000;
     uint256 internal constant MAX_FEE_PER_GAS = 0.1 gwei;
     uint256 internal constant MAX_SUBMISSION_COST = 0.01 ether;
@@ -42,7 +39,6 @@ library InboxEncoder {
         return Action({
             target: inbox,
             value: (gasLimit * maxFeePerGas) + maxSubmissionCost,
-            signature: SIGNATURE,
             data: abi.encodeCall(
                 IInbox.createRetryableTicket,
                 (
