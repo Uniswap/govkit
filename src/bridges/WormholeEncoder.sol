@@ -11,7 +11,6 @@ library WormholeEncoder {
     string internal constant SIGNATURE = "sendMessage(address[],uint256[],bytes[],address,uint16)";
 
     function encodeAction(
-        address wormholeBridge,
         address sourceSender,
         address remoteReceiver,
         uint256 chainId,
@@ -31,7 +30,7 @@ library WormholeEncoder {
         uint16 wormholeChainId = WormholeChainId.chainIdToWormholeChainId(chainId);
 
         return Action({
-            target: wormholeBridge,
+            target: sourceSender,
             value: value,
             signature: SIGNATURE,
             data: abi.encodeCall(IWormholeSender.sendMessage, (targets, values, datas, remoteReceiver, wormholeChainId))
