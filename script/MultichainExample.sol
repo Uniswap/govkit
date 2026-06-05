@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import {Script} from "lib/forge-std/src/Script.sol";
 
 import {WormholeChainId} from "src/constants/WormholeChainId.sol";
-import {LibProposal, Proposal} from "src/types/Proposal.sol";
+import {Proposal} from "src/types/Proposal.sol";
 import {Call, LibCall} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
 import {WormholeEncoder} from "src/bridges/WormholeEncoder.sol";
@@ -78,7 +78,10 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Construct Proposal
         //
-        Proposal memory proposal = LibProposal.newProposal(description, [bnbChainCall, celoCall0, celoCall1]);
+        Proposal memory proposal = Proposal({
+            description: description,
+            calls: LibCall.newCalls([bnbChainCall, celoCall0, celoCall1])
+        });
 
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt
