@@ -46,19 +46,21 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Send proposal on GovernorBravo
         //
-        // (
-        //     address[] memory targets,
-        //     uint256[] memory values,
-        //     string[] memory signatures,
-        //     bytes[] memory datas,
-        // ) = proposal.toGovernorBravoInputs();
+        if (true) return;
 
-        // IGovernorBravo(uniswap.ethereum.governorBravo).propose(
-        //     targets,
-        //     values,
-        //     signatures,
-        //     datas,
-        //     description
-        // );
+        (
+            address[] memory targets,
+            uint256[] memory values,
+            string[] memory signatures,
+            bytes[] memory datas,
+        ) = proposal.toGovernorBravoInputs();
+
+        IGovernorBravo(uniswap.ethereum.governorBravo).propose(
+            targets,
+            values,
+            signatures,
+            datas,
+            description
+        );
     }
 }
