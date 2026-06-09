@@ -18,6 +18,7 @@ import {
 // -------------------------------------------------------------------------------------------------
 // The Uniswap Protocol
 //
+/// @dev Uniswap Protocol Addresses
 struct Uniswap {
     Ethereum ethereum;
     Arbitrum arbitrum;
@@ -33,7 +34,12 @@ struct Uniswap {
 
 using LibUniswap for Uniswap global;
 
+/// @title Uniswap Protocol Library
+/// @dev Primarily used for loading addresses into the Uniswap type.
 library LibUniswap {
+    /// @dev Loads all relevant addresses into the Uniswap type. In the future,
+    ///      this should be importing addresses from a unified source of truth.
+    /// @param uniswap Uniswap type stored in the local state for easy access.
     function loadLatest(Uniswap storage uniswap) internal {
         // -----------------------------------------------------------------------------------------
         // Ethereum

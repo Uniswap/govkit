@@ -4,7 +4,16 @@ pragma solidity ^0.8.0;
 import {vm} from "src/forge/Constants.sol";
 import {Proposal} from "src/types/Proposal.sol";
 
+/// @title Governance Seatbelt Exporter
+/// @dev Serializes a proposal to JSON, which can be parsed, simulated, &
+///      analyzed by Governance Seatbelt. This streamlines the process between
+///      writing the proposal in Solidity and that proposal being analyzed &
+///      run from the Seatbelt application.
 library GovernanceSeatbelt {
+    /// @dev Serializes the proposal to a JSON object.
+    /// @param proposal Proposal to serialize.
+    /// @param governorBravo GovernorBravo address (used in Seatbelt).
+    /// @return Serialized JSON.
     function toJson(Proposal memory proposal, address governorBravo) internal returns (string memory) {
         (
             address[] memory targets,

@@ -4,8 +4,15 @@ pragma solidity ^0.8.0;
 import {ChainId} from "src/constants/ChainId.sol";
 
 // source: https://wormhole.com/docs/products/reference/chain-ids/
+/// @title Wormhole Chain ID
+/// @dev This is Wormhole's chain ID system for arbitrary blockchains. We
+///      implement this library to fully encapsulate this system so propsal
+///      writers only need to focus on the canonical chain ID system.
 library WormholeChainId {
+    /// @dev Thrown when an EIP-155 chain ID does not map to a Wormhole chain ID.
     error UnknownWormholeChainId(uint256 chainId);
+
+    /// @dev Thrown when a Wormhole chain ID does not map to an EIP-155 chain ID.
     error UnknownChainId(uint16 wormholeChainId);
 
     uint16 internal constant Arbitrum = 23;
@@ -19,6 +26,9 @@ library WormholeChainId {
     uint16 internal constant UniChain = 44;
     uint16 internal constant WorldChain = 45;
 
+    /// @dev Maps an EIP-155 chain ID to a Wormhole chain ID.
+    /// @param chainId EIP-155 chain ID.
+    /// @return Wormhole chain ID.
     function chainIdToWormholeChainId(uint256 chainId) internal pure returns (uint16) {
         if (chainId == ChainId.Arbitrum) {
             return Arbitrum;
@@ -45,6 +55,9 @@ library WormholeChainId {
         revert UnknownWormholeChainId(chainId);
     }
 
+    /// @dev Maps an EIP-155 chain ID to a Wormhole chain ID.
+    /// @param wormholeChainId Wormhole chain ID.
+    /// @return EIP-155 chain ID.
     function wormholeChainIdtoChainId(uint16 wormholeChainId) internal pure returns (uint256) {
         if (wormholeChainId == Arbitrum) {
             return ChainId.Arbitrum;

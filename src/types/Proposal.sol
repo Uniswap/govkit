@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {Call} from "src/types/Call.sol";
 
+/// @dev Proposal Type.
 struct Proposal {
     string description;
     Call[] calls;
@@ -10,7 +11,16 @@ struct Proposal {
 
 using LibProposal for Proposal global;
 
+/// @title Proposal Library
+/// @dev Only used for transforming the Proposal into GovernorBravo inputs.
 library LibProposal {
+    /// @dev Transforms Proposal into GovernorBravo inputs.
+    /// @param proposal Proposal to transform.
+    /// @return Array of target addresses.
+    /// @return Array of call values.
+    /// @return Array of function signatures (MUST ALL be empty).
+    /// @return Array of call datas.
+    /// @return Description string.
     function toGovernorBravoInputs(Proposal memory proposal)
         internal
         pure

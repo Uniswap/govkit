@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
+/// @dev Call Type.
 struct Call {
     address target;
     uint256 value;
     bytes data;
 }
 
+/// @title Call Library
+/// @dev For transforming static-array declarations into dyanmic arrays, making
+///      for better readability & ergonomics.
 library LibCall {
     function newCalls(Call[1] memory callsArray) internal pure returns (Call[] memory) {
         Call[] memory calls = new Call[](1);

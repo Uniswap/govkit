@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
+/// @title ERC-1967 Proxy Slots
+/// @dev These are the ERC-1967 proxy constants, often used in Foundry tooling
+///      for state & proxy validation. The logic for reading these slots is
+///      contained in `src/forge/ERC1967Reader.sol` to keep the Foundry-specific
+///      logic separated.
 library ERC1967 {
     bytes32 constant ADMIN_SLOT = 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
 

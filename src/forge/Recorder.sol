@@ -5,22 +5,46 @@ import {vm} from "src/forge/Constants.sol";
 import {console} from "lib/forge-std/src/console.sol";
 import {VmSafe} from "lib/forge-std/src/Vm.sol";
 
+/// @dev Recorder Type
 struct Recorder {
+    /// @dev Name of the Script from which this executes.
     string scriptName;
+    /// @dev If true, use excessive logging.
     bool debugMode;
+    /// @dev If true, then `recorder.initialize()` has been called.
     bool initialized;
 }
 
 using LibRecorder for Recorder global;
 
+/// @title Persistent Contract Recorder
+/// @dev Records contract addresses with their network & name to a JSON file for
+///      subsequent script runs. This is for scripts which must be run
+///      separately from one another but addresses from deployed contracts in
+///      prior scripts must be referenced in subsequent scripts. We map this
+///      in `.records/<script_name>.json` structured as
+///      `<chain_id>.<name>.<address>`.
+/// @dev We use excessive logging if `debugMode` is on, as Foundry's native API
+///      for file-based I/O is unintuitive and clunky. This makes debugging the
+///      issues, if any, with recording things to disk.
 library LibRecorder {
+    /// @dev Default script name if none is provided.
     string internal constant defaultName = "Default";
+
+    /// @dev Directory name in which records are written.
     string internal constant directory = ".records/";
 
+    /// @dev Initializes the Recorder without debug mode.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param scriptName Name of the script in which the relevant contract is deployed.
     function initialize(Recorder storage recorder, string memory scriptName) internal {
         recorder.initialize({scriptName: scriptName, debugMode: false});
     }
 
+    /// @dev Initializes the Recorder.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param scriptName Name of the script in which the relevant contract is deployed.
+    /// @param debugMode If true, uses excessive logging for debugging purposes.
     function initialize(Recorder storage recorder, string memory scriptName, bool debugMode) internal {
         recorder.scriptName = scriptName;
         recorder.debugMode = debugMode;
@@ -66,6 +90,10 @@ library LibRecorder {
         recorder.initialized = true;
     }
 
+    /// @dev Write a contract name to disk with current chain ID.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param deploymentName Name of the contract to record.
+    /// @param deployment Address to be recorded.
     function write(Recorder storage recorder, string memory deploymentName, address deployment)
         internal
         returns (address)
@@ -73,6 +101,11 @@ library LibRecorder {
         return recorder.write(vm.getChainId(), deploymentName, deployment);
     }
 
+    /// @dev Write a contract name to disk.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param chainId Chain ID to record to.
+    /// @param deploymentName Name of the contract to record.
+    /// @param deployment Address to be recorded.
     function write(Recorder storage recorder, uint256 chainId, string memory deploymentName, address deployment)
         internal
         returns (address)
@@ -104,6 +137,11 @@ library LibRecorder {
         return deployment;
     }
 
+    /// @dev Read a contract from disk.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param chainId Chain ID to read from.
+    /// @param deploymentName Name of the contract to read.
+    /// @return Address read.
     function read(Recorder storage recorder, uint256 chainId, string memory deploymentName)
         internal
         view
@@ -143,6 +181,12 @@ library LibRecorder {
         }
     }
 
+    /// @dev Check if a contract exists on disk.
+    /// @dev This IS NOT required before `read()`, this is for conditional deployments.
+    /// @param recorder The recorder in the Script/Test contract's state.
+    /// @param chainId Chain ID to read from.
+    /// @param deploymentName Name of the contract to read.
+    /// @return If true, the address exists.
     function exists(Recorder storage recorder, uint256 chainId, string memory deploymentName)
         internal
         view
@@ -173,6 +217,8 @@ library LibRecorder {
         return vm.keyExistsJson(json, key);
     }
 
+    /// @dev Clear a record file if it exists on disk, otherwise does nothing.
+    /// @param recorder The recorder in the Script/Test contract's state.
     function clear(Recorder storage recorder) internal {
         require(
             recorder.initialized,
@@ -197,7 +243,13 @@ library LibRecorder {
         }
     }
 
-    function checkDirectoryPermissions(Recorder storage) internal view {
+    /// @dev Internal path contruction for the recorder's script name.
+    function path(Recorder storage recorder) internal view returns (string memory) {
+        return string.concat(directory, recorder.scriptName, ".json");
+    }
+
+    /// @dev Internal check if the recorder has file permissions.
+    function checkDirectoryPermissions(Recorder storage) private view {
         try vm.isDir(directory) returns (bool) {}
         catch (bytes memory revertData) {
             console.log(
@@ -212,9 +264,5 @@ library LibRecorder {
 
             revert(string.concat("Forge VM Error: ", abi.decode(revertData, (string))));
         }
-    }
-
-    function path(Recorder storage recorder) internal view returns (string memory) {
-        return string.concat(directory, recorder.scriptName, ".json");
     }
 }
