@@ -91,7 +91,7 @@ library InboxEncoder {
     function arbitrumDeAlias(address l2Address) internal pure returns (address) {
         // safety: arbitrum's alias system intends for this to underflow.
         unchecked {
-            return address(uint160(l1Address) - ALIAS_OFFSET);
+            return address(uint160(l2Address) - ALIAS_OFFSET);
         }
     }
 }

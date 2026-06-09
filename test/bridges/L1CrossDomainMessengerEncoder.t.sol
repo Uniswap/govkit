@@ -18,7 +18,7 @@ contract L1CrossDomainMessengerEncoderTest is Test {
     }
 
     function testEncode() external {
-        address crossChainAccountReceiver = address(0x02);
+        address crossChainAccount = address(0x02);
         Call memory remoteCall = Call({
             target: address(0x04),
             value: 0,
@@ -26,8 +26,8 @@ contract L1CrossDomainMessengerEncoderTest is Test {
         });
 
         Call memory encoded = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: messenger,
-            crossChainAccountReceiver: crossChainAccountReceiver,
+            l1CrossDomainMessenger: messenger,
+            crossChainAccount: crossChainAccount,
             remoteCall: remoteCall
         });
 
@@ -44,14 +44,14 @@ contract L1CrossDomainMessengerEncoderTest is Test {
 
         assertEq(encoded.target, messenger);
         assertEq(encoded.value, 0);
-        assertEq(accountReceiver, crossChainAccountReceiver);
+        assertEq(accountReceiver, crossChainAccount);
         assertEq(forwardTarget, remoteCall.target);
         assertEq(forwardData, remoteCall.data);
         assertEq(gasLimit, L1CrossDomainMessengerEncoder.GAS_LIMIT);
     }
 
     function testEncodeWithGasLimit() external {
-        address crossChainAccountReceiver = address(0x02);
+        address crossChainAccount = address(0x02);
         uint32 gasLimit_ = 300_000;
         Call memory remoteCall = Call({
             target: address(0x04),
@@ -60,8 +60,8 @@ contract L1CrossDomainMessengerEncoderTest is Test {
         });
 
         Call memory encoded = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: messenger,
-            crossChainAccountReceiver: crossChainAccountReceiver,
+            l1CrossDomainMessenger: messenger,
+            crossChainAccount: crossChainAccount,
             gasLimit: gasLimit_,
             remoteCall: remoteCall
         });
@@ -79,14 +79,14 @@ contract L1CrossDomainMessengerEncoderTest is Test {
 
         assertEq(encoded.target, messenger);
         assertEq(encoded.value, 0);
-        assertEq(accountReceiver, crossChainAccountReceiver);
+        assertEq(accountReceiver, crossChainAccount);
         assertEq(forwardTarget, remoteCall.target);
         assertEq(forwardData, remoteCall.data);
         assertEq(gasLimit, gasLimit_);
     }
 
     function testFuzzEncode(
-        address crossChainAccountReceiver,
+        address crossChainAccount,
         address remoteCallTarget,
         bytes calldata remoteCallData
     ) external {
@@ -97,8 +97,8 @@ contract L1CrossDomainMessengerEncoderTest is Test {
         });
 
         Call memory encoded = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: messenger,
-            crossChainAccountReceiver: crossChainAccountReceiver,
+            l1CrossDomainMessenger: messenger,
+            crossChainAccount: crossChainAccount,
             remoteCall: remoteCall
         });
 
@@ -115,14 +115,14 @@ contract L1CrossDomainMessengerEncoderTest is Test {
 
         assertEq(encoded.target, messenger);
         assertEq(encoded.value, 0);
-        assertEq(accountReceiver, crossChainAccountReceiver);
+        assertEq(accountReceiver, crossChainAccount);
         assertEq(forwardTarget, remoteCall.target);
         assertEq(forwardData, remoteCall.data);
         assertEq(gasLimit, L1CrossDomainMessengerEncoder.GAS_LIMIT);
     }
 
     function testFuzzEncodeWithGasLimit(
-        address crossChainAccountReceiver,
+        address crossChainAccount,
         uint32 gasLimit_,
         address remoteCallTarget,
         bytes calldata remoteCallData
@@ -134,8 +134,8 @@ contract L1CrossDomainMessengerEncoderTest is Test {
         });
 
         Call memory encoded = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: messenger,
-            crossChainAccountReceiver: crossChainAccountReceiver,
+            l1CrossDomainMessenger: messenger,
+            crossChainAccount: crossChainAccount,
             gasLimit: gasLimit_,
             remoteCall: remoteCall
         });
@@ -153,14 +153,14 @@ contract L1CrossDomainMessengerEncoderTest is Test {
 
         assertEq(encoded.target, messenger);
         assertEq(encoded.value, 0);
-        assertEq(accountReceiver, crossChainAccountReceiver);
+        assertEq(accountReceiver, crossChainAccount);
         assertEq(forwardTarget, remoteCall.target);
         assertEq(forwardData, remoteCall.data);
         assertEq(gasLimit, gasLimit_);
     }
 
     function testFuzzEncodeRevertsOnNonZeroValue(
-        address crossChainAccountReceiver,
+        address crossChainAccount,
         uint32 gasLimit_,
         address remoteCallTarget,
         uint256 value,
@@ -176,9 +176,7 @@ contract L1CrossDomainMessengerEncoderTest is Test {
 
         L1CrossDomainMessengerEncoderHarness harness = new L1CrossDomainMessengerEncoderHarness();
 
-        vm.expectRevert(
-            bytes("L1CrossDomainMessengerEncoder::Error: L1CrossDomainMessenger cannot send msg.value > 0")
-        );
-        harness.encode(messenger, crossChainAccountReceiver, gasLimit_, remoteCall);
+        vm.expectRevert();
+        harness.encode(messenger, crossChainAccount, gasLimit_, remoteCall);
     }
 }

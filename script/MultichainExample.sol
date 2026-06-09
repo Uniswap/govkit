@@ -56,8 +56,8 @@ contract ProposalExample is Script {
         // Celo Calls (Post-Optimism Bridge Transition)
         //
         Call memory celoCall0 = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: uniswap.ethereum.bridge.celo,
-            crossChainAccountReceiver: uniswap.celo.crossChainAccount,
+            l1CrossDomainMessenger: uniswap.ethereum.bridge.celo,
+            crossChainAccount: uniswap.celo.crossChainAccount,
             remoteCall: Call({
                 target: uniswap.celo.v2Factory,
                 value: 0,
@@ -66,8 +66,8 @@ contract ProposalExample is Script {
         });
 
         Call memory celoCall1 = L1CrossDomainMessengerEncoder.encode({
-            crossChainMessengerSender: uniswap.ethereum.bridge.celo,
-            crossChainAccountReceiver: uniswap.celo.crossChainAccount,
+            l1CrossDomainMessenger: uniswap.ethereum.bridge.celo,
+            crossChainAccount: uniswap.celo.crossChainAccount,
             remoteCall: Call({
                 target: uniswap.celo.v3Factory,
                 value: 0,

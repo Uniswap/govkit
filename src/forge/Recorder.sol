@@ -249,7 +249,7 @@ library LibRecorder {
     }
 
     /// @dev Internal check if the recorder has file permissions.
-    function checkDirectoryPermissions(Recorder storage) private view {
+    function checkDirectoryPermissions(Recorder storage) internal view {
         try vm.isDir(directory) returns (bool) {}
         catch (bytes memory revertData) {
             console.log(
