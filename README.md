@@ -112,32 +112,31 @@ proposals instead of re-hard coding them each proposal.
 
 Usage:
 
-> Note: The `WormholeChainId` will be explained in the next section.
-
 ```solidity
 import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
 import {Proposal} from "lib/govkit/src/types/Proposal.sol";
 import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
-import {WormholeChainId} from "lib/govkit/src/constants/WormholeChainId.sol";
 
 Uniswap internal uniswap;
 uniswap.loadLatest();
 
 Proposal memory proposal = Proposal({
-    description: "Send Message over Wormhole to BNB Chain.",
+    description: "# Activate Fee Switch V2+V3 on Ethereum ....",
     calls: LibCall.newCalls([
         Call({
-            target: uniswap.ethereum.bridge.bnbChain,
+            target: uniswap.ethereum.v2Factory,
             value: 0,
             data: abi.encodeCall(
-                IWormhole.sendMessage,
-                (
-                    new address[](0),
-                    new uint256[](0),
-                    new bytes[](0),
-                    uniswap.bnbChain.wormholeReceiver,
-                    WormholeChainId.BNBChain
-                )
+                IUniswapV2Factory.setFeeTo,
+                (uniswap.ethereum.tokenJar)
+            )
+        }),
+        Call({
+            target: uniswap.ethereum.v3Factory,
+            value: 0,
+            data: abi.encodeCall(
+                IUniswapV3Factory.setOwner,
+                (uniswap.ethereum.v3OpenFeeAdapter)
             )
         })
     ])
@@ -163,13 +162,29 @@ uniswap.ethereum.governorBravo = address(new MockGovernorBravo());
 Each action that interacts with remote chains requires the target chain ID, the bridge used to send
 the message to the target chain, the target chain infrastructure to receive the message, and in some
 cases, it requires bridge-defined "chain identifier" values, which are unrelated to the "chain ID".
-We define constants and encoders (TODO) for each bridge type.
+We define constants and encoders for each bridge type.
 
 Chain ID in the EIP-155 sense (the intuitive sense) are define together in a `ChainId` library,
 while bridge protocols' chain identifiers are defined together in their respective libraries as
-necessary. We also provide converters for these as well.
+necessary. While each bridge's chain identifier has transformer functions to move between their
+chain identifiers and the canonical EIP-155 chain ID's, we will only expose the `ChainId` values in
+the top-level API. The appropriate transformations happen internally.
 
-Usage:
+We define encoders for the following:
+
+| Network    | Library                                         |
+| ---------- | ----------------------------------------------- |
+| Arbitrum   | `src/bridges/InboxEncoder.sol`                  |
+| Avalanche  | N/A (Transitioning)                             |
+| Base       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| BnbChain   | `src/bridges/WormnholeEncoder.sol`              |
+| Celo       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| Optimism   | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| Polygon    | `src/bridges/FxRootEncoder.sol`                 |
+| UniChain   | `src/bridges/OptimismPortal2Encoder.sol`        |
+| WorldChain | `src/bridges/OptimismPortal2Encoder.sol`        |
+
+Chain ID usage:
 
 ```solidity
 import {ChainId} from "lib/govkit/src/constants/ChainId.sol";
@@ -199,6 +214,46 @@ assertEq(
     ),
     ChainId.Ethereum
 );
+```
+
+Encoder Usage:
+
+```solidity
+Proposal memory proposal = Proposal({
+    description: description,
+    calls: LibCall.newCalls([
+        // ---------------------------------------------------------------------
+        // Set feeToSetter on Uniswap V2 factory on Celo.
+        //
+        L1CrossDomainMessengerEncoder.encode({
+            l1CrossDomainMessenger: uniswap.ethereum.bridge.celo,
+            crossChainAccount: uniswap.celo.crossChainAccount,
+            remoteCall: Call({
+                target: uniswap.celo.v2Factory,
+                value: 0,
+                data: abi.encodeCall(
+                    IUniswapV2Factory.setFeeTo,
+                    (uniswap.celo.tokenJar)
+                )
+            })
+        }),
+        // ---------------------------------------------------------------------
+        // Set owner on Uniswap V3 factory on Celo.
+        //
+        L1CrossDomainMessengerEncoder.encode({
+            l1CrossDomainMessenger: uniswap.ethereum.bridge.celo,
+            crossChainAccount: uniswap.celo.crossChainAccount,
+            remoteCall: Call({
+                target: uniswap.celo.v3Factory,
+                value: 0,
+                data: abi.encodeCall(
+                    IUniswapV3Factory.setOwner,
+                    (uniswap.celo.v3OpenFeeAdapter)
+                )
+            })
+        })
+    ])
+});
 ```
 
 ## Seatbelt Handoff
@@ -263,9 +318,9 @@ handling is fragile, unwieldy, and its internal API for interacting with it is b
 a data type which can record contract addresses, names, and chain ID's to disk in a clean and easy
 to interpret JSON file, stored in `.records/`.
 
-> While external libraries are anti-patterns and we generally avoid them, there have been cases
-> where we had to deploy bridge infrastructure using external teams' code which embedded external
-> libraries.
+We also optionally allow for a `debugMode`, which performs excessive logging before any VM-related
+action which may fail. This makes it clearer where things fail if they do and should fill in
+contextual gaps for proposal writers in the future.
 
 Usage:
 
@@ -312,7 +367,7 @@ Output (`.records/MyScript.json`):
 }
 ```
 
-We can also use this to conditionally deploy contracts, which helps with error recovery.
+We can also use this to conditionally deploy contracts, which helps with mid-script failure recovery.
 
 Usage:
 
