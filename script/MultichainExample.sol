@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import {Script} from "lib/forge-std/src/Script.sol";
 
-import {WormholeChainId} from "src/constants/WormholeChainId.sol";
+import {ChainId} from "src/constants/ChainId.sol";
 import {Proposal} from "src/types/Proposal.sol";
 import {Call, LibCall} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
@@ -34,7 +34,7 @@ contract ProposalExample is Script {
         Call memory bnbChainCall = WormholeEncoder.encode(
             uniswap.ethereum.bridge.bnbChain,
             uniswap.bnbChain.wormholeReceiver,
-            WormholeChainId.BNBChain,
+            ChainId.BNBChain,
             0,
             LibCall.newCalls(
                 [
