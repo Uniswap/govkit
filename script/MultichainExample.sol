@@ -9,7 +9,7 @@ import {Call, LibCall} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
 import {WormholeEncoder} from "src/bridges/WormholeEncoder.sol";
 import {L1CrossDomainMessengerEncoder} from "src/bridges/L1CrossDomainMessengerEncoder.sol";
-import {Uniswap} from "src/Uniswap.sol";
+import {Uniswap} from "src/types/Uniswap.sol";
 
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";

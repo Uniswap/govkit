@@ -6,7 +6,7 @@ import {Script} from "lib/forge-std/src/Script.sol";
 import {Proposal} from "src/types/Proposal.sol";
 import {LibCall, Call} from "src/types/Call.sol";
 import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
-import {Uniswap} from "src/Uniswap.sol";
+import {Uniswap} from "src/types/Uniswap.sol";
 import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";
 import {IGovernorBravo} from "src/interfaces/IGovernorBravo.sol";
