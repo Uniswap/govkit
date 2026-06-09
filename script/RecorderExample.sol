@@ -29,6 +29,7 @@ contract RecorderExample is Script {
         address counter = recorder.write(ChainId.Ethereum, "Counter", address(new Counter()));
 
         // Check the record exists.
+        //
         require(recorder.exists(ChainId.Ethereum, "Counter"), "Counter not found.");
 
         // Load the contract's address.
