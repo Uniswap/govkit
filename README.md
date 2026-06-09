@@ -5,6 +5,10 @@ A lightweight kit for writing Uniswap Governance Proposals
 ## At a Glance
 
 ```solidity
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
+
 // -----------------------------------------------------------------------------
 // Initialize Uniswap protocol addresses.
 //
@@ -14,29 +18,27 @@ uniswap.loadLatest();
 // -----------------------------------------------------------------------------
 // Build proposal.
 //
-Proposal memory proposal = LibProposal.newProposal(
-    "# Activate Fee Switch V2+V3 on Ethereum ....",
-    [
-        Action({
+Proposal memory proposal = Proposal({
+    description: "# Activate Fee Switch V2+V3 on Ethereum ....",
+    calls: LibCall.newCalls([
+        Call({
             target: uniswap.ethereum.v2Factory,
             value: 0,
-            signature: "setFeeTo(address)",
             data: abi.encodeCall(
                 IUniswapV2Factory.setFeeTo,
                 (uniswap.ethereum.tokenJar)
             )
         }),
-        Action({
+        Call({
             target: uniswap.ethereum.v3Factory,
             value: 0,
-            signature: "setOwner(address)",
             data: abi.encodeCall(
                 IUniswapV3Factory.setOwner,
                 (uniswap.ethereum.v3OpenFeeAdapter)
             )
         })
-    ]
-);
+    ])
+});
 
 // -----------------------------------------------------------------------------
 // Export proposal to Governance Seatbelt.
@@ -71,8 +73,7 @@ IGovernorBravo(uniswap.ethereum.governorBravo).propose(
 
 ### Proposal
 
-Each proposal requires a series of actions, each containing a target, value, data, and "signature"
-(not in the digital signature sense, but the function signature sense, for tooling). `GovernorBravo`
+Each proposal requires a series of calls, each containing a target, value, and data. `GovernorBravo`
 takes each of these as separate arrays, making proposal specification unwieldy. We define a data
 type which encapsulates these actions more cleanly, as well as provide a function to transform it
 into the input that `GovernorBravo` can accept.
@@ -81,18 +82,18 @@ Usage:
 
 ```solidity
 import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {Call, LibCall} from "lib/";
 
-Proposal memory proposal = LibProposal.newProposal(
-    "Transfer <token> to <receiver>.",
-    [
-        Action({
+Proposal memory proposal = Proposal({
+    description: "Transfer <token> to <receiver>.",
+    calls: LibCall.newCalls([
+        Call({
             target: token,
             value: 0,
-            signature: "transfer(address,uint256)",
             data: abi.encodeCall(ERC20.transfer, (receiver, amount))
         })
-    ]
-);
+    ])
+});
 
 (
     address[] memory targets,
@@ -114,21 +115,20 @@ Usage:
 > Note: The `WormholeChainId` will be explained in the next section.
 
 ```solidity
-import {Uniswap} from "lib/govkit/src/Uniswap.sol";
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
 import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
 import {WormholeChainId} from "lib/govkit/src/constants/WormholeChainId.sol";
 
 Uniswap internal uniswap;
-
 uniswap.loadLatest();
 
-Proposal memory proposal = LibProposal.newProposal(
-    "Send Message over Wormhole to BNB Chain.",
-    [
-        Action({
+Proposal memory proposal = Proposal({
+    description: "Send Message over Wormhole to BNB Chain.",
+    calls: LibCall.newCalls([
+        Call({
             target: uniswap.ethereum.bridge.bnbChain,
             value: 0,
-            signature: "sendMessage(address[],uint256[],bytes[],address,uint16)",
             data: abi.encodeCall(
                 IWormhole.sendMessage,
                 (
@@ -140,14 +140,14 @@ Proposal memory proposal = LibProposal.newProposal(
                 )
             )
         })
-    ]
-);
+    ])
+});
 ```
 
 This also makes testing environments more flexible for protocol mocking.
 
 ```solidity
-import {Uniswap} from "lib/govkit/src/Uniswap.sol";
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
 
 contract MockGovernorBravo {
     // ...
@@ -210,23 +210,22 @@ into the seatbelt program to be interpreted in a more uniform and automated way.
 Usage:
 
 ```solidity
-import {Uniswap} from "lib/govkit/src/Uniswap.sol";
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
 import {Proposal} from "lib/govkit/src/types/Proposal.sol";
 import {GovernanceSeatbelt} from "lib/govkit/src/forge/GovernanceSeatbelt.sol";
 
 Uniswap internal uniswap;
 uniswap.loadLatest();
-Proposal memory proposal = LibProposal.newProposal(
-    "Burn 20 UNI.",
-    [
-        Action({
+Proposal memory proposal = Proposal({
+    description: "Burn 20 UNI.",
+    calls: LibCall.newCalls([
+        Call({
             target: uniswap.ethereum.uni,
             value: 0,
-            signature: "transfer(address,uint256)",
             data: abi.encodeCall(ERC20.transfer, (address(0xdead), 20e18))
         })
-    ]
-);
+    ])
+});
 
 vm.writeJson("./prop-100.json", GovernanceSeatbelt.toJson(proposal));
 ```
@@ -246,7 +245,7 @@ Output (`./prop-100.json`):
         0
     ],
     "signatures": [
-        "transfer(address,uint256)"
+        ""
     ],
     "calldatas": [
         "0xa9059cbb000000000000000000000000000000000000000000000000000000000000dead000000000000000000000000000000000000000000000001158e460913d00000"
@@ -353,7 +352,3 @@ address admin = ERC1967Reader.admin(proxy);
 address beacon = ERC1967Reader.beacon(proxy);
 address implementation = ERC1967Reader.implementation(proxy);
 ```
-
-## TODO's
-
-- Bridge Encoder
