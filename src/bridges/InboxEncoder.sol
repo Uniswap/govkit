@@ -27,11 +27,7 @@ library InboxEncoder {
     /// @param timelock Uniswap's Timelock contract on Ethereum.
     /// @param remoteCall Call to be run from the aliased Timelock address on Arbitrum.
     /// @return Proposal-ready call.
-    function encode(address inbox, address timelock, Call memory remoteCall)
-        internal
-        pure
-        returns (Call memory)
-    {
+    function encode(address inbox, address timelock, Call memory remoteCall) internal pure returns (Call memory) {
         return encode({
             inbox: inbox,
             timelock: timelock,

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import {Call} from "src/types/Call.sol";
 import {IOptimismPortal2} from "src/interfaces/bridges/IOptimismPortal2.sol";
 
-/// @title OP Stack Portal Encoder. 
+/// @title OP Stack Portal Encoder.
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, in
 ///      particular, the OptimismPortal2. We call the OptimismPortal2 contract
 ///      on Ethereum, then the OP Stack chain runs a transaction on the OP Stack
@@ -28,11 +28,7 @@ library OptimismPortal2Encoder {
     /// @param remoteCall Call to be run from the aliased Timelock address on the
     ///        OP Stack chain.
     /// @return Proposal-ready call.
-    function encode(address portal, uint64 gasLimit, Call memory remoteCall)
-        internal
-        pure
-        returns (Call memory)
-    {
+    function encode(address portal, uint64 gasLimit, Call memory remoteCall) internal pure returns (Call memory) {
         return Call({
             target: portal,
             value: remoteCall.value,

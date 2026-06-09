@@ -7,11 +7,14 @@ import {L1CrossDomainMessengerEncoder} from "src/bridges/L1CrossDomainMessengerE
 // Wraps the library so its internal `encode` is reachable across a call boundary, letting `vm.expectRevert`
 // observe the `require` revert (inlined internal library reverts are not caught by `vm.expectRevert`).
 contract L1CrossDomainMessengerEncoderHarness {
-    function encode(address crossChainMessengerSender, address crossChainAccountReceiver, uint32 gasLimit, Call memory remoteCall)
-        external
-        pure
-        returns (Call memory)
-    {
-        return L1CrossDomainMessengerEncoder.encode(crossChainMessengerSender, crossChainAccountReceiver, gasLimit, remoteCall);
+    function encode(
+        address crossChainMessengerSender,
+        address crossChainAccountReceiver,
+        uint32 gasLimit,
+        Call memory remoteCall
+    ) external pure returns (Call memory) {
+        return L1CrossDomainMessengerEncoder.encode(
+            crossChainMessengerSender, crossChainAccountReceiver, gasLimit, remoteCall
+        );
     }
 }

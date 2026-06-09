@@ -21,18 +21,20 @@ contract ProposalExample is Script {
 
         Proposal memory proposal = Proposal({
             description: description,
-            calls: LibCall.newCalls([
-                Call({
-                    target: uniswap.ethereum.v2Factory,
-                    value: 0,
-                    data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
-                }),
-                Call({
-                    target: uniswap.ethereum.v3Factory,
-                    value: 0,
-                    data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
-                })
-            ])
+            calls: LibCall.newCalls(
+                [
+                    Call({
+                        target: uniswap.ethereum.v2Factory,
+                        value: 0,
+                        data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
+                    }),
+                    Call({
+                        target: uniswap.ethereum.v3Factory,
+                        value: 0,
+                        data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
+                    })
+                ]
+            )
         });
 
         // -----------------------------------------------------------------------------------------
@@ -48,19 +50,9 @@ contract ProposalExample is Script {
         //
         if (true) return;
 
-        (
-            address[] memory targets,
-            uint256[] memory values,
-            string[] memory signatures,
-            bytes[] memory datas,
-        ) = proposal.toGovernorBravoInputs();
+        (address[] memory targets, uint256[] memory values, string[] memory signatures, bytes[] memory datas,) =
+            proposal.toGovernorBravoInputs();
 
-        IGovernorBravo(uniswap.ethereum.governorBravo).propose(
-            targets,
-            values,
-            signatures,
-            datas,
-            description
-        );
+        IGovernorBravo(uniswap.ethereum.governorBravo).propose(targets, values, signatures, datas, description);
     }
 }

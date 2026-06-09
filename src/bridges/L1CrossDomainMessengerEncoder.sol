@@ -8,7 +8,7 @@ import {ICrossChainAccount} from "src/interfaces/bridges/ICrossChainAccount.sol"
 /// @title OP Stack L1 Cross Domain Messenger Encoder
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, the
 ///      L1CrossDomainMessenger is an abstraction on top of this. Uniswap's
-///      Timelock calls the L1CrossDomainMessenger on Ethereum, which then uses 
+///      Timelock calls the L1CrossDomainMessenger on Ethereum, which then uses
 ///      the underlying OptimismPortal on Ethereum, which then calls Uniswap's
 ///      CrossChainAccount on the OP Stack chain, which then then runs calls
 ///      against the protocol on the respective chain.
@@ -38,12 +38,11 @@ library L1CrossDomainMessengerEncoder {
     /// @param gasLimit Gas limit for the call.
     /// @param remoteCall Call to be run from the CrossChainAccount on the OP Stack chain.
     /// @return Proposal-ready call.
-    function encode(
-        address l1CrossDomainMessenger,
-        address crossChainAccount,
-        uint32 gasLimit,
-        Call memory remoteCall
-    ) internal pure returns (Call memory) {
+    function encode(address l1CrossDomainMessenger, address crossChainAccount, uint32 gasLimit, Call memory remoteCall)
+        internal
+        pure
+        returns (Call memory)
+    {
         if (remoteCall.value > 0) revert NonzeroCallValue();
 
         bytes memory crossChainAccountData =

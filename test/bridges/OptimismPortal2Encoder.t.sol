@@ -16,28 +16,16 @@ contract OptimismPortal2EncoderTest is Test {
     }
 
     function testEncode() external {
-        Call memory remoteCall = Call({
-            target: address(0x04),
-            value: 5,
-            data: hex"aabbccdd"
-        });
+        Call memory remoteCall = Call({target: address(0x04), value: 5, data: hex"aabbccdd"});
 
-        Call memory encoded = OptimismPortal2Encoder.encode({
-            portal: portal,
-            remoteCall: remoteCall
-        });
+        Call memory encoded = OptimismPortal2Encoder.encode({portal: portal, remoteCall: remoteCall});
 
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
-        (
-            address to,
-            uint256 value,
-            uint64 gasLimit,
-            bool isCreation,
-            bytes memory data
-        ) = abi.decode(returndata, (address, uint256, uint64, bool, bytes));
+        (address to, uint256 value, uint64 gasLimit, bool isCreation, bytes memory data) =
+            abi.decode(returndata, (address, uint256, uint64, bool, bytes));
 
         assertEq(encoded.target, portal);
         assertEq(encoded.value, remoteCall.value);
@@ -50,29 +38,17 @@ contract OptimismPortal2EncoderTest is Test {
 
     function testEncodeWithGasLimit() external {
         uint64 gasLimit_ = 300_000;
-        Call memory remoteCall = Call({
-            target: address(0x04),
-            value: 5,
-            data: hex"aabbccdd"
-        });
+        Call memory remoteCall = Call({target: address(0x04), value: 5, data: hex"aabbccdd"});
 
-        Call memory encoded = OptimismPortal2Encoder.encode({
-            portal: portal,
-            gasLimit: gasLimit_,
-            remoteCall: remoteCall
-        });
+        Call memory encoded =
+            OptimismPortal2Encoder.encode({portal: portal, gasLimit: gasLimit_, remoteCall: remoteCall});
 
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
-        (
-            address to,
-            uint256 value,
-            uint64 gasLimit,
-            bool isCreation,
-            bytes memory data
-        ) = abi.decode(returndata, (address, uint256, uint64, bool, bytes));
+        (address to, uint256 value, uint64 gasLimit, bool isCreation, bytes memory data) =
+            abi.decode(returndata, (address, uint256, uint64, bool, bytes));
 
         assertEq(encoded.target, portal);
         assertEq(encoded.value, remoteCall.value);
@@ -84,23 +60,15 @@ contract OptimismPortal2EncoderTest is Test {
     }
 
     function testFuzzEncode(Call calldata remoteCall) external {
-        Call memory encoded = OptimismPortal2Encoder.encode({
-            portal: portal,
-            remoteCall: remoteCall
-        });
+        Call memory encoded = OptimismPortal2Encoder.encode({portal: portal, remoteCall: remoteCall});
 
         vm.deal(address(this), encoded.value);
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
-        (
-            address to,
-            uint256 value,
-            uint64 gasLimit,
-            bool isCreation,
-            bytes memory data
-        ) = abi.decode(returndata, (address, uint256, uint64, bool, bytes));
+        (address to, uint256 value, uint64 gasLimit, bool isCreation, bytes memory data) =
+            abi.decode(returndata, (address, uint256, uint64, bool, bytes));
 
         assertEq(encoded.target, portal);
         assertEq(encoded.value, remoteCall.value);
@@ -112,24 +80,16 @@ contract OptimismPortal2EncoderTest is Test {
     }
 
     function testFuzzEncodeWithGasLimit(uint64 gasLimit_, Call calldata remoteCall) external {
-        Call memory encoded = OptimismPortal2Encoder.encode({
-            portal: portal,
-            gasLimit: gasLimit_,
-            remoteCall: remoteCall
-        });
+        Call memory encoded =
+            OptimismPortal2Encoder.encode({portal: portal, gasLimit: gasLimit_, remoteCall: remoteCall});
 
         vm.deal(address(this), encoded.value);
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
-        (
-            address to,
-            uint256 value,
-            uint64 gasLimit,
-            bool isCreation,
-            bytes memory data
-        ) = abi.decode(returndata, (address, uint256, uint64, bool, bytes));
+        (address to, uint256 value, uint64 gasLimit, bool isCreation, bytes memory data) =
+            abi.decode(returndata, (address, uint256, uint64, bool, bytes));
 
         assertEq(encoded.target, portal);
         assertEq(encoded.value, remoteCall.value);

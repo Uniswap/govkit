@@ -15,8 +15,7 @@ import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";
 
 string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
-    "Activates fee switch on BNB Chain & Celo by: \n\n"
-    "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
+    "Activates fee switch on BNB Chain & Celo by: \n\n" "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
     "- Setting V3Factory's `owner` on BNB Chain to V3OpenFeeAdapter \n"
     "- Setting V2Factory's `feeTo` on Celo to TokenJar \n"
     "- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
@@ -78,10 +77,8 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Construct Proposal
         //
-        Proposal memory proposal = Proposal({
-            description: description,
-            calls: LibCall.newCalls([bnbChainCall, celoCall0, celoCall1])
-        });
+        Proposal memory proposal =
+            Proposal({description: description, calls: LibCall.newCalls([bnbChainCall, celoCall0, celoCall1])});
 
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt

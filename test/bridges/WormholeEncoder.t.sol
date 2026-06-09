@@ -22,13 +22,7 @@ contract WormholeEncoderTest is Test {
         address remoteReceiver = address(0x02);
         uint256 chainId = ChainId.Base;
         uint256 value = 3;
-        Call[] memory remoteCalls = LibCall.newCalls([
-            Call({
-                target: address(0x04),
-                value: 5,
-                data: hex"aabbccdd"
-            })
-        ]);
+        Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 5, data: hex"aabbccdd"})]);
 
         Call memory encoded = WormholeEncoder.encode({
             sourceSender: sourceSender,
@@ -66,12 +60,9 @@ contract WormholeEncoderTest is Test {
         }
     }
 
-    function testFuzzEncode(
-        address remoteReceiver,
-        uint256 chainIdSeed,
-        uint256 value,
-        Call[] calldata remoteCalls
-    ) external {
+    function testFuzzEncode(address remoteReceiver, uint256 chainIdSeed, uint256 value, Call[] calldata remoteCalls)
+        external
+    {
         uint256 chainId = _knownChainId(chainIdSeed);
 
         Call memory encoded = WormholeEncoder.encode({

@@ -17,17 +17,9 @@ contract InboxEncoderTest is Test {
 
     function testEncode() external {
         address timelock = address(0x03);
-        Call memory remoteCall = Call({
-            target: address(0x04),
-            value: 5,
-            data: hex"aabbccdd"
-        });
+        Call memory remoteCall = Call({target: address(0x04), value: 5, data: hex"aabbccdd"});
 
-        Call memory encoded = InboxEncoder.encode({
-            inbox: inbox,
-            timelock: timelock,
-            remoteCall: remoteCall
-        });
+        Call memory encoded = InboxEncoder.encode({inbox: inbox, timelock: timelock, remoteCall: remoteCall});
 
         vm.deal(address(this), encoded.value);
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
@@ -57,11 +49,7 @@ contract InboxEncoderTest is Test {
         uint256 gasLimit_ = 250_000;
         uint256 maxFeePerGas_ = 0.2 gwei;
         uint256 maxSubmissionCost_ = 0.02 ether;
-        Call memory remoteCall = Call({
-            target: address(0x04),
-            value: 5,
-            data: hex"aabbccdd"
-        });
+        Call memory remoteCall = Call({target: address(0x04), value: 5, data: hex"aabbccdd"});
 
         Call memory encoded = InboxEncoder.encode({
             inbox: inbox,
@@ -95,13 +83,11 @@ contract InboxEncoderTest is Test {
 
     function testFuzzEncode(address timelock, Call calldata remoteCall) external {
         // Keep `arbitrumAlias` from overflowing uint160.
-        timelock = address(uint160(bound(uint256(uint160(timelock)), 0, uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET))));
+        timelock = address(
+            uint160(bound(uint256(uint160(timelock)), 0, uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET)))
+        );
 
-        Call memory encoded = InboxEncoder.encode({
-            inbox: inbox,
-            timelock: timelock,
-            remoteCall: remoteCall
-        });
+        Call memory encoded = InboxEncoder.encode({inbox: inbox, timelock: timelock, remoteCall: remoteCall});
 
         vm.deal(address(this), encoded.value);
         (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
@@ -134,7 +120,9 @@ contract InboxEncoderTest is Test {
         Call calldata remoteCall
     ) external {
         // Keep `arbitrumAlias` from overflowing uint160 and the value computation from overflowing uint256.
-        timelock = address(uint160(bound(uint256(uint160(timelock)), 0, uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET))));
+        timelock = address(
+            uint160(bound(uint256(uint160(timelock)), 0, uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET)))
+        );
         gasLimit_ = bound(gasLimit_, 0, type(uint64).max);
         maxFeePerGas_ = bound(maxFeePerGas_, 0, type(uint64).max);
         maxSubmissionCost_ = bound(maxSubmissionCost_, 0, type(uint128).max);

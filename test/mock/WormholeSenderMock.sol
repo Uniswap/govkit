@@ -8,13 +8,7 @@ contract WormholeSenderMock {
         bytes[] memory calldatas,
         address messageReceiver,
         uint16 receiverChainId
-    ) external payable returns (
-        address[] memory,
-        uint256[] memory,
-        bytes[] memory,
-        address,
-        uint16
-    ) {
+    ) external payable returns (address[] memory, uint256[] memory, bytes[] memory, address, uint16) {
         return (targets, values, calldatas, messageReceiver, receiverChainId);
     }
 }
