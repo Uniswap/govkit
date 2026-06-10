@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract FxRootMock {
     function sendMessageToChild(address receiver, bytes memory data)
         external
-        payable
+        pure
         returns (address, address[] memory, bytes[] memory, uint256[] memory)
     {
         (address[] memory targets, bytes[] memory datas, uint256[] memory values) =

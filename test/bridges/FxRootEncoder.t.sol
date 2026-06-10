@@ -17,13 +17,12 @@ contract FxRootEncoderTest is Test {
 
     function testEncode() external {
         address fxReceiver = address(0x02);
-        uint256 value = 5;
-        Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 3, data: hex"aabbccdd"})]);
+        Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 0, data: hex"aabbccdd"})]);
 
         Call memory encoded =
-            FxRootEncoder.encode({fxRoot: fxRoot, fxReceiver: fxReceiver, value: value, remoteCalls: remoteCalls});
+            FxRootEncoder.encode({fxRoot: fxRoot, fxReceiver: fxReceiver, remoteCalls: remoteCalls});
 
-        (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
+        (bool success, bytes memory returndata) = encoded.target.call(encoded.data);
 
         assertTrue(success);
 
@@ -31,7 +30,7 @@ contract FxRootEncoderTest is Test {
             abi.decode(returndata, (address, address[], bytes[], uint256[]));
 
         assertEq(encoded.target, fxRoot);
-        assertEq(encoded.value, value);
+        assertEq(encoded.value, 0);
         assertEq(receiver, fxReceiver);
         assertEq(targets.length, remoteCalls.length);
         assertEq(datas.length, remoteCalls.length);
@@ -40,7 +39,7 @@ contract FxRootEncoderTest is Test {
         for (uint256 i; i < remoteCalls.length; i++) {
             assertEq(targets[i], remoteCalls[i].target);
             assertEq(datas[i], remoteCalls[i].data);
-            assertEq(values[i], remoteCalls[i].value);
+            assertEq(values[i], 0);
         }
     }
 }
