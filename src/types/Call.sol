@@ -9,7 +9,7 @@ struct Call {
 }
 
 /// @title Call Library
-/// @dev For transforming static-array declarations into dyanmic arrays, making
+/// @dev For transforming static-array declarations into dynamic arrays, making
 ///      for better readability & ergonomics.
 library LibCall {
     function newCalls(Call[1] memory callsArray) internal pure returns (Call[] memory) {

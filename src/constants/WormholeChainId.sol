@@ -6,7 +6,7 @@ import {ChainId} from "src/constants/ChainId.sol";
 // source: https://wormhole.com/docs/products/reference/chain-ids/
 /// @title Wormhole Chain ID
 /// @dev This is Wormhole's chain ID system for arbitrary blockchains. We
-///      implement this library to fully encapsulate this system so propsal
+///      implement this library to fully encapsulate this system so proposal
 ///      writers only need to focus on the canonical chain ID system.
 library WormholeChainId {
     /// @dev Thrown when an EIP-155 chain ID does not map to a Wormhole chain ID.

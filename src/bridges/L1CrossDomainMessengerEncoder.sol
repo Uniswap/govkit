@@ -21,7 +21,7 @@ library L1CrossDomainMessengerEncoder {
 
     /// @dev Encodes an L1CrossDomainMessenger call.
     /// @param l1CrossDomainMessenger OP Stack chain's L1CrossDomainMessenger contract on Ethereum.
-    /// @param crossChainAccount Uniswap's CrossChainAcccount contract on the OP Stack chain.
+    /// @param crossChainAccount Uniswap's CrossChainAccount contract on the OP Stack chain.
     /// @param remoteCall Call to be run from the CrossChainAccount on the OP Stack chain.
     /// @return Proposal-ready call.
     function encode(address l1CrossDomainMessenger, address crossChainAccount, Call memory remoteCall)
@@ -34,7 +34,7 @@ library L1CrossDomainMessengerEncoder {
 
     /// @dev Encodes an L1CrossDomainMessenger call.
     /// @param l1CrossDomainMessenger OP Stack chain's L1CrossDomainMessenger contract on Ethereum.
-    /// @param crossChainAccount Uniswap's CrossChainAcccount contract on the OP Stack chain.
+    /// @param crossChainAccount Uniswap's CrossChainAccount contract on the OP Stack chain.
     /// @param gasLimit Gas limit for the call.
     /// @param remoteCall Call to be run from the CrossChainAccount on the OP Stack chain.
     /// @return Proposal-ready call.

@@ -243,7 +243,7 @@ library LibRecorder {
         }
     }
 
-    /// @dev Internal path contruction for the recorder's script name.
+    /// @dev Internal path construction for the recorder's script name.
     function path(Recorder storage recorder) internal view returns (string memory) {
         return string.concat(directory, recorder.scriptName, ".json");
     }

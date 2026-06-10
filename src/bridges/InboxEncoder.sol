@@ -19,7 +19,7 @@ library InboxEncoder {
     /// @dev Default max submission cost.
     uint256 internal constant MAX_SUBMISSION_COST = 0.01 ether;
 
-    /// @dev Arbitrum adress alias offset.
+    /// @dev Arbitrum address alias offset.
     uint160 internal constant ALIAS_OFFSET = uint160(0x1111000000000000000000000000000000001111);
 
     /// @dev Encodes an Arbitrum Inbox call with defaults.
