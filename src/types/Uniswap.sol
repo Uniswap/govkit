@@ -101,7 +101,6 @@ library LibUniswap {
             tokenJar: 0x9bD25e67bF390437C8fAF480AC735a27BcF6168c,
             releaser: 0xFf77c0ED0B6b13A20446969107E5867abc46f53a,
             releaserUni: 0xc3De830EA07524a0761646a6a4e4be0e114a3C83,
-            crossDomainMessenger: 0x4200000000000000000000000000000000000007,
             crossChainAccount: 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9
         });
 
@@ -131,7 +130,6 @@ library LibUniswap {
             tokenJar: 0x190c22c5085640D1cB60CeC88a4F736Acb59bb6B,
             releaser: 0x2758FbaA228D7d3c41dD139F47dab1a27bF9bc25,
             releaserUni: 0xd7493e84a060292CDca6B67619402F7702336bF4,
-            crossDomainMessenger: 0x4200000000000000000000000000000000000007,
             crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
         });
 
@@ -146,7 +144,6 @@ library LibUniswap {
             tokenJar: 0xb13285DF724ea75f3f1E9912010B7e491dCd5EE3,
             releaser: 0x94460443Ca27FFC1baeCa61165fde18346C91AbD,
             releaserUni: 0x6fd9d7AD17242c41f7131d257212c54A0e816691,
-            crossDomainMessenger: 0x4200000000000000000000000000000000000007,
             crossChainAccount: 0xa1dD330d602c32622AA270Ea73d078B803Cb3518
         });
 
@@ -186,7 +183,7 @@ library LibUniswap {
             v3OpenFeeAdapter: 0x1CE9d4DfB474Ef9ea7dc0e804a333202e40d6201,
             tokenJar: 0xbDb82c2dE7D8748A3e499e771604ef8ef8544918,
             releaser: 0x455e844D286631566cF98D6cb2996149734618C6,
-            releaserUni: 0x1CE9d4DfB474Ef9ea7dc0e804a333202e40d6201,
+            releaserUni: 0x6fD31f56eb971113bEA12C5883deC68337b3B7b5,
             crossChainAccount: 0xcb2436774C3e191c85056d248EF4260ce5f27A9D
         });
     }

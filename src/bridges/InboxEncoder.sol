@@ -58,7 +58,7 @@ library InboxEncoder {
 
         return Call({
             target: inbox,
-            value: (gasLimit * maxFeePerGas) + maxSubmissionCost,
+            value: (gasLimit * maxFeePerGas) + maxSubmissionCost + remoteCall.value,
             data: abi.encodeCall(
                 IInbox.createRetryableTicket,
                 (

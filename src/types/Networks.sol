@@ -51,7 +51,6 @@ struct Base {
     address tokenJar;
     address releaser;
     address releaserUni;
-    address crossDomainMessenger;
     address crossChainAccount;
 }
 
@@ -75,7 +74,6 @@ struct Celo {
     address tokenJar;
     address releaser;
     address releaserUni;
-    address crossDomainMessenger;
     address crossChainAccount;
 }
 
@@ -87,7 +85,6 @@ struct Optimism {
     address tokenJar;
     address releaser;
     address releaserUni;
-    address crossDomainMessenger;
     address crossChainAccount;
 }
 

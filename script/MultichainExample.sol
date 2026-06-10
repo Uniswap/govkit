@@ -21,7 +21,7 @@ string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
     "- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
     "> Note: Celo's OP Portal can only take one call each, so this is two calls.";
 
-contract ProposalExample is Script {
+contract MultichainExample is Script {
     Uniswap internal uniswap;
 
     function run() external {
