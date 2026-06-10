@@ -9,9 +9,26 @@ struct Call {
 }
 
 /// @title Call Library
-/// @dev For transforming static-array declarations into dynamic arrays, making
-///      for better readability & ergonomics.
+/// @dev Ergonomics for dynamic call arrays. Provides an API for transforming
+///      static call arrays into dynamic ones & for transforming dynamic call
+///      arrays into arrays of targets, values, and datas.
 library LibCall {
+    function decompose(Call[] memory calls)
+        internal
+        pure
+        returns (address[] memory targets, uint256[] memory values, bytes[] memory datas)
+    {
+        targets = new address[](calls.length);
+        values = new uint256[](calls.length);
+        datas = new bytes[](calls.length);
+
+        for (uint256 i; i < calls.length; i++) {
+            targets[i] = calls[i].target;
+            values[i] = calls[i].value;
+            datas[i] = calls[i].data;
+        }
+    }
+
     function newCalls(Call[1] memory callsArray) internal pure returns (Call[] memory) {
         Call[] memory calls = new Call[](1);
         calls[0] = callsArray[0];
