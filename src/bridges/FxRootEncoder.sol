@@ -17,11 +17,7 @@ library FxRootEncoder {
     /// @param fxReceiver Uniswap's FxReceiver contract on Polygon.
     /// @param remoteCalls Call array to be run from the FxReceiver on Polygon.
     /// @return Proposal-ready call.
-    function encode(address fxRoot, address fxReceiver, Call[] memory remoteCalls)
-        internal
-        pure
-        returns (Call memory)
-    {
+    function encode(address fxRoot, address fxReceiver, Call[] memory remoteCalls) internal pure returns (Call memory) {
         address[] memory targets = new address[](remoteCalls.length);
         uint256[] memory values = new uint256[](remoteCalls.length);
         bytes[] memory datas = new bytes[](remoteCalls.length);

@@ -19,8 +19,7 @@ contract FxRootEncoderTest is Test {
         address fxReceiver = address(0x02);
         Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 0, data: hex"aabbccdd"})]);
 
-        Call memory encoded =
-            FxRootEncoder.encode({fxRoot: fxRoot, fxReceiver: fxReceiver, remoteCalls: remoteCalls});
+        Call memory encoded = FxRootEncoder.encode({fxRoot: fxRoot, fxReceiver: fxReceiver, remoteCalls: remoteCalls});
 
         (bool success, bytes memory returndata) = encoded.target.call(encoded.data);
 
