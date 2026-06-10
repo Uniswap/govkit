@@ -82,7 +82,7 @@ Usage:
 
 ```solidity
 import {Proposal} from "lib/govkit/src/types/Proposal.sol";
-import {Call, LibCall} from "lib/";
+import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
 
 Proposal memory proposal = Proposal({
     description: "Transfer <token> to <receiver>.",
@@ -177,7 +177,7 @@ We define encoders for the following:
 | Arbitrum   | `src/bridges/InboxEncoder.sol`                  |
 | Avalanche  | N/A (Transitioning)                             |
 | Base       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
-| BnbChain   | `src/bridges/WormnholeEncoder.sol`              |
+| BnbChain   | `src/bridges/WormholeEncoder.sol`               |
 | Celo       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | Optimism   | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | Polygon    | `src/bridges/FxRootEncoder.sol`                 |
@@ -282,7 +282,10 @@ Proposal memory proposal = Proposal({
     ])
 });
 
-vm.writeJson("./prop-100.json", GovernanceSeatbelt.toJson(proposal));
+vm.writeJson(
+    "./prop-100.json",
+    GovernanceSeatbelt.toJson(proposal, uniswap.ethereum.governorBravo)
+);
 ```
 
 Output (`./prop-100.json`):
@@ -395,7 +398,7 @@ relevant addresses.
 Usage:
 
 ```solidity
-import {Uniswap} from "lib/govkit/src/Uniswap.sol";
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
 import {ERC1967Reader} from "lib/govkit/src/forge/ERC1967Reader.sol";
 
 Uniswap internal uniswap;
