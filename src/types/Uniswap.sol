@@ -152,9 +152,9 @@ library LibUniswap {
         // MegaETH
         //
         uniswap.megaEth = MegaEth({
-            v2Factory: 0xbf56488c857a881ae7e3bed27cf99c10a7ab7e50,
-            v3Factory: 0x3a5f0cd7d62452b7f899b2a5758bfa57be0de478,
-            poolManager: 0xacb7e78fa05d562e0a5d3089ec896d57d057d38e,
+            v2Factory: 0xbf56488c857A881ae7e3BED27Cf99c10A7Ab7e50,
+            v3Factory: 0x3a5F0CD7d62452b7f899B2A5758BFa57be0dE478,
+            poolManager: 0xaCB7e78fa05D562e0A5D3089ec896D57D057d38E
         });
 
         // -----------------------------------------------------------------------------------------
