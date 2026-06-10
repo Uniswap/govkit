@@ -32,7 +32,8 @@ contract InboxEncoderTest is Test {
 
         assertEq(encoded.target, inbox);
         assertEq(
-            encoded.value, (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST
+            encoded.value,
+            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST + remoteCall.value
         );
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);
@@ -70,7 +71,7 @@ contract InboxEncoderTest is Test {
         address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
-        assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_);
+        assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_ + remoteCall.value);
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);
         assertEq(ticket.maxSubmissionCost, maxSubmissionCost_);
@@ -81,10 +82,16 @@ contract InboxEncoderTest is Test {
         assertEq(ticket.data, remoteCall.data);
     }
 
-    function testFuzzEncode(address timelock, Call calldata remoteCall) external {
+    function testFuzzEncode(address timelock, Call memory remoteCall) external {
         // Keep `arbitrumAlias` from overflowing uint160.
         timelock = address(
             uint160(bound(uint256(uint160(timelock)), 0, uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET)))
+        );
+        // Keep the value computation from overflowing uint256.
+        remoteCall.value = bound(
+            remoteCall.value,
+            0,
+            type(uint256).max - (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) - InboxEncoder.MAX_SUBMISSION_COST
         );
 
         Call memory encoded = InboxEncoder.encode({inbox: inbox, timelock: timelock, remoteCall: remoteCall});
@@ -100,7 +107,8 @@ contract InboxEncoderTest is Test {
 
         assertEq(encoded.target, inbox);
         assertEq(
-            encoded.value, (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST
+            encoded.value,
+            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST + remoteCall.value
         );
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);
@@ -117,7 +125,7 @@ contract InboxEncoderTest is Test {
         uint256 gasLimit_,
         uint256 maxFeePerGas_,
         uint256 maxSubmissionCost_,
-        Call calldata remoteCall
+        Call memory remoteCall
     ) external {
         // Keep `arbitrumAlias` from overflowing uint160 and the value computation from overflowing uint256.
         timelock = address(
@@ -126,6 +134,7 @@ contract InboxEncoderTest is Test {
         gasLimit_ = bound(gasLimit_, 0, type(uint64).max);
         maxFeePerGas_ = bound(maxFeePerGas_, 0, type(uint64).max);
         maxSubmissionCost_ = bound(maxSubmissionCost_, 0, type(uint128).max);
+        remoteCall.value = bound(remoteCall.value, 0, type(uint128).max);
 
         Call memory encoded = InboxEncoder.encode({
             inbox: inbox,
@@ -146,7 +155,7 @@ contract InboxEncoderTest is Test {
         address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
-        assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_);
+        assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_ + remoteCall.value);
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);
         assertEq(ticket.maxSubmissionCost, maxSubmissionCost_);

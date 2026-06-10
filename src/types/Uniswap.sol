@@ -28,6 +28,7 @@ struct Uniswap {
     BNBChain bnbChain;
     Celo celo;
     Optimism optimism;
+    MegaEth megaEth;
     Polygon polygon;
     UniChain uniChain;
     WorldChain worldChain;
