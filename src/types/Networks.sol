@@ -88,6 +88,12 @@ struct Optimism {
     address crossChainAccount;
 }
 
+struct MegaEth {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+}
+
 struct Polygon {
     address v2Factory;
     address v3Factory;

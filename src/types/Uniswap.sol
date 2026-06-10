@@ -10,6 +10,7 @@ import {
     BNBChain,
     Celo,
     Optimism,
+    MegaEth,
     Polygon,
     UniChain,
     WorldChain
@@ -145,6 +146,15 @@ library LibUniswap {
             releaser: 0x94460443Ca27FFC1baeCa61165fde18346C91AbD,
             releaserUni: 0x6fd9d7AD17242c41f7131d257212c54A0e816691,
             crossChainAccount: 0xa1dD330d602c32622AA270Ea73d078B803Cb3518
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // MegaETH
+        //
+        uniswap.megaEth = MegaEth({
+            v2Factory: 0xbf56488c857a881ae7e3bed27cf99c10a7ab7e50,
+            v3Factory: 0x3a5f0cd7d62452b7f899b2a5758bfa57be0de478,
+            poolManager: 0xacb7e78fa05d562e0a5d3089ec896d57d057d38e,
         });
 
         // -----------------------------------------------------------------------------------------
