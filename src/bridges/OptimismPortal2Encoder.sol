@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IOptimismPortal2} from "src/interfaces/bridges/IOptimismPortal2.sol";
+import {Call} from "../types/Call.sol";
+import {IOptimismPortal2} from "../interfaces/bridges/IOptimismPortal2.sol";
 
 /// @title OP Stack Portal Encoder.
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, in

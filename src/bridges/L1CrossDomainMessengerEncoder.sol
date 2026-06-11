@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IL1CrossDomainMessenger} from "src/interfaces/bridges/IL1CrossDomainMessenger.sol";
-import {ICrossChainAccount} from "src/interfaces/bridges/ICrossChainAccount.sol";
+import {Call} from "../types/Call.sol";
+import {IL1CrossDomainMessenger} from "../interfaces/bridges/IL1CrossDomainMessenger.sol";
+import {ICrossChainAccount} from "../interfaces/bridges/ICrossChainAccount.sol";
 
 /// @title OP Stack L1 Cross Domain Messenger Encoder
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, the

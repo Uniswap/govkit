@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {WormholeChainId} from "src/constants/WormholeChainId.sol";
-import {Call} from "src/types/Call.sol";
+import {WormholeChainId} from "../constants/WormholeChainId.sol";
+import {Call} from "../types/Call.sol";
 
-import {IWormholeSender} from "src/interfaces/bridges/IWormholeSender.sol";
+import {IWormholeSender} from "../interfaces/bridges/IWormholeSender.sol";
 
 /// @title Wormhole Encoder
 /// @dev The Wormhole system requires Uniswap's Timelock to call a Uniswap-

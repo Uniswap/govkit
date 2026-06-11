@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IInbox} from "src/interfaces/bridges/IInbox.sol";
-import {InboxEncoder} from "src/bridges/InboxEncoder.sol";
+import {Call} from "../../src/types/Call.sol";
+import {IInbox} from "../../src/interfaces/bridges/IInbox.sol";
+import {InboxEncoder} from "../../src/bridges/InboxEncoder.sol";
 
-import {Test, console} from "lib/forge-std/src/Test.sol";
-import {InboxMock, RetryableTicket} from "test/mock/InboxMock.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {InboxMock, RetryableTicket} from "../mock/InboxMock.sol";
 
 contract InboxEncoderTest is Test {
     address internal inbox;
@@ -33,7 +33,8 @@ contract InboxEncoderTest is Test {
         assertEq(encoded.target, inbox);
         assertEq(
             encoded.value,
-            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST + remoteCall.value
+            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST
+                + remoteCall.value
         );
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);
@@ -91,7 +92,8 @@ contract InboxEncoderTest is Test {
         remoteCall.value = bound(
             remoteCall.value,
             0,
-            type(uint256).max - (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) - InboxEncoder.MAX_SUBMISSION_COST
+            type(uint256).max - (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS)
+                - InboxEncoder.MAX_SUBMISSION_COST
         );
 
         Call memory encoded = InboxEncoder.encode({inbox: inbox, timelock: timelock, remoteCall: remoteCall});
@@ -108,7 +110,8 @@ contract InboxEncoderTest is Test {
         assertEq(encoded.target, inbox);
         assertEq(
             encoded.value,
-            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST + remoteCall.value
+            (InboxEncoder.GAS_LIMIT * InboxEncoder.MAX_FEE_PER_GAS) + InboxEncoder.MAX_SUBMISSION_COST
+                + remoteCall.value
         );
         assertEq(ticket.to, remoteCall.target);
         assertEq(ticket.l2CallValue, remoteCall.value);

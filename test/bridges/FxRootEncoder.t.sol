@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {LibCall, Call} from "src/types/Call.sol";
-import {IFxRoot} from "src/interfaces/bridges/IFxRoot.sol";
-import {FxRootEncoder} from "src/bridges/FxRootEncoder.sol";
+import {LibCall, Call} from "../../src/types/Call.sol";
+import {IFxRoot} from "../../src/interfaces/bridges/IFxRoot.sol";
+import {FxRootEncoder} from "../../src/bridges/FxRootEncoder.sol";
 
-import {Test, console} from "lib/forge-std/src/Test.sol";
-import {FxRootMock} from "test/mock/FxRootMock.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {FxRootMock} from "../mock/FxRootMock.sol";
 
 contract FxRootEncoderTest is Test {
     address internal fxRoot;

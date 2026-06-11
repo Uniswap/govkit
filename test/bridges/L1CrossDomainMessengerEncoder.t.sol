@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IL1CrossDomainMessenger} from "src/interfaces/bridges/IL1CrossDomainMessenger.sol";
-import {ICrossChainAccount} from "src/interfaces/bridges/ICrossChainAccount.sol";
-import {L1CrossDomainMessengerEncoder} from "src/bridges/L1CrossDomainMessengerEncoder.sol";
+import {Call} from "../../src/types/Call.sol";
+import {IL1CrossDomainMessenger} from "../../src/interfaces/bridges/IL1CrossDomainMessenger.sol";
+import {ICrossChainAccount} from "../../src/interfaces/bridges/ICrossChainAccount.sol";
+import {L1CrossDomainMessengerEncoder} from "../../src/bridges/L1CrossDomainMessengerEncoder.sol";
 
-import {Test, console} from "lib/forge-std/src/Test.sol";
-import {L1CrossDomainMessengerMock} from "test/mock/L1CrossDomainMessengerMock.sol";
-import {L1CrossDomainMessengerEncoderHarness} from "test/harness/L1CrossDomainMessengerEncoderHarness.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {L1CrossDomainMessengerMock} from "../mock/L1CrossDomainMessengerMock.sol";
+import {L1CrossDomainMessengerEncoderHarness} from "../harness/L1CrossDomainMessengerEncoderHarness.sol";
 
 contract L1CrossDomainMessengerEncoderTest is Test {
     address internal messenger;

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IOptimismPortal2} from "src/interfaces/bridges/IOptimismPortal2.sol";
-import {OptimismPortal2Encoder} from "src/bridges/OptimismPortal2Encoder.sol";
+import {Call} from "../../src/types/Call.sol";
+import {IOptimismPortal2} from "../../src/interfaces/bridges/IOptimismPortal2.sol";
+import {OptimismPortal2Encoder} from "../../src/bridges/OptimismPortal2Encoder.sol";
 
-import {Test, console} from "lib/forge-std/src/Test.sol";
-import {OptimismPortal2Mock} from "test/mock/OptimismPortal2Mock.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {OptimismPortal2Mock} from "../mock/OptimismPortal2Mock.sol";
 
 contract OptimismPortal2EncoderTest is Test {
     address internal portal;

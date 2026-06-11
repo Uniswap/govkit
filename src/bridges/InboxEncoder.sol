@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IInbox} from "src/interfaces/bridges/IInbox.sol";
+import {Call} from "../types/Call.sol";
+import {IInbox} from "../interfaces/bridges/IInbox.sol";
 
 /// @title Arbitrum Inbox Encoder
 /// @dev The Arbitrum Inbox system requires Uniswap Timelock to call Arbitrum's

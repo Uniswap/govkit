@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Script} from "lib/forge-std/src/Script.sol";
+import {Script} from "forge-std/Script.sol";
 
-import {Recorder} from "src/forge/Recorder.sol";
-import {ChainId} from "src/constants/ChainId.sol";
+import {Recorder} from "../src/forge/Recorder.sol";
+import {ChainId} from "../src/constants/ChainId.sol";
 
 // forge script script/RecorderExample.sol:RecorderExample
 

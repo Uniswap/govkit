@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {vm} from "src/forge/Constants.sol";
-import {ERC1967} from "src/constants/ERC1967.sol";
+import {vm} from "./Constants.sol";
+import {ERC1967} from "../constants/ERC1967.sol";
 
 /// @title ERC-1967 Slot Reader
 /// @dev Reads ERC-1967 slots using Foundry's VM logic.

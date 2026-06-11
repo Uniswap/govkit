@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {LibCall, Call} from "src/types/Call.sol";
-import {IWormholeSender} from "src/interfaces/bridges/IWormholeSender.sol";
-import {WormholeEncoder} from "src/bridges/WormholeEncoder.sol";
-import {ChainId} from "src/constants/ChainId.sol";
-import {WormholeChainId} from "src/constants/WormholeChainId.sol";
+import {LibCall, Call} from "../../src/types/Call.sol";
+import {IWormholeSender} from "../../src/interfaces/bridges/IWormholeSender.sol";
+import {WormholeEncoder} from "../../src/bridges/WormholeEncoder.sol";
+import {ChainId} from "../../src/constants/ChainId.sol";
+import {WormholeChainId} from "../../src/constants/WormholeChainId.sol";
 
-import {Test, console} from "lib/forge-std/src/Test.sol";
-import {WormholeSenderMock} from "test/mock/WormholeSenderMock.sol";
-import {WormholeEncoderHarness} from "test/harness/WormholeEncoderHarness.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {WormholeSenderMock} from "../mock/WormholeSenderMock.sol";
+import {WormholeEncoderHarness} from "../harness/WormholeEncoderHarness.sol";
 
 contract WormholeEncoderTest is Test {
     address internal sourceSender;

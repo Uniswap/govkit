@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {vm} from "src/forge/Constants.sol";
-import {Proposal} from "src/types/Proposal.sol";
+import {vm} from "./Constants.sol";
+import {Proposal} from "../types/Proposal.sol";
 
 /// @title Governance Seatbelt Exporter
 /// @dev Serializes a proposal to JSON, which can be parsed, simulated, &

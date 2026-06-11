@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Script} from "lib/forge-std/src/Script.sol";
+import {Script} from "forge-std/Script.sol";
 
-import {ChainId} from "src/constants/ChainId.sol";
-import {Proposal} from "src/types/Proposal.sol";
-import {Call, LibCall} from "src/types/Call.sol";
-import {GovernanceSeatbelt} from "src/forge/GovernanceSeatbelt.sol";
-import {WormholeEncoder} from "src/bridges/WormholeEncoder.sol";
-import {L1CrossDomainMessengerEncoder} from "src/bridges/L1CrossDomainMessengerEncoder.sol";
-import {Uniswap} from "src/types/Uniswap.sol";
+import {ChainId} from "../src/constants/ChainId.sol";
+import {Proposal} from "../src/types/Proposal.sol";
+import {Call, LibCall} from "../src/types/Call.sol";
+import {GovernanceSeatbelt} from "../src/forge/GovernanceSeatbelt.sol";
+import {WormholeEncoder} from "../src/bridges/WormholeEncoder.sol";
+import {L1CrossDomainMessengerEncoder} from "../src/bridges/L1CrossDomainMessengerEncoder.sol";
+import {Uniswap} from "../src/types/Uniswap.sol";
 
-import {IUniswapV2Factory} from "src/interfaces/IUniswapV2Factory.sol";
-import {IUniswapV3Factory} from "src/interfaces/IUniswapV3Factory.sol";
+import {IUniswapV2Factory} from "../src/interfaces/IUniswapV2Factory.sol";
+import {IUniswapV3Factory} from "../src/interfaces/IUniswapV3Factory.sol";
 
 string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
     "Activates fee switch on BNB Chain & Celo by: \n\n" "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"

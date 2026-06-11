@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {vm} from "src/forge/Constants.sol";
-import {console} from "lib/forge-std/src/console.sol";
-import {VmSafe} from "lib/forge-std/src/Vm.sol";
+import {vm} from "./Constants.sol";
+import {console} from "forge-std/console.sol";
+import {VmSafe} from "forge-std/Vm.sol";
 
 /// @dev Recorder Type
 struct Recorder {

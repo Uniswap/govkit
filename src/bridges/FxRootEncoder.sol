@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
-import {IFxRoot} from "src/interfaces/bridges/IFxRoot.sol";
+import {Call} from "../types/Call.sol";
+import {IFxRoot} from "../interfaces/bridges/IFxRoot.sol";
 
 /// @title Polygon FxRoot Encoder
 /// @dev The Polygon FxRoot/FxChild system requires Uniswap Timelock to call

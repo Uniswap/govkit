@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "src/types/Call.sol";
+import {Call} from "./Call.sol";
 
 /// @dev Proposal Type.
 struct Proposal {

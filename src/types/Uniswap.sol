@@ -14,7 +14,7 @@ import {
     Polygon,
     UniChain,
     WorldChain
-} from "src/types/Networks.sol";
+} from "./Networks.sol";
 
 // -------------------------------------------------------------------------------------------------
 // The Uniswap Protocol
