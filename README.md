@@ -182,8 +182,11 @@ We define encoders for the following:
 | Celo       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | Optimism   | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | Polygon    | `src/bridges/FxRootEncoder.sol`                 |
+| Soneium    | N/A (Transitioning)                             |
 | UniChain   | `src/bridges/OptimismPortal2Encoder.sol`        |
+| XLayer     | N/A (Transitioning)                             |
 | WorldChain | `src/bridges/OptimismPortal2Encoder.sol`        |
+| Zora       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 
 Chain ID usage:
 

@@ -12,8 +12,11 @@ import {
     Optimism,
     MegaEth,
     Polygon,
+    Soneium,
     UniChain,
-    WorldChain
+    XLayer,
+    WorldChain,
+    Zora
 } from "./Networks.sol";
 
 // -------------------------------------------------------------------------------------------------
@@ -30,8 +33,11 @@ struct Uniswap {
     Optimism optimism;
     MegaEth megaEth;
     Polygon polygon;
+    Soneium soneium;
     UniChain uniChain;
     WorldChain worldChain;
+    XLayer xLayer;
+    Zora zora;
 }
 
 using LibUniswap for Uniswap global;
@@ -173,6 +179,20 @@ library LibUniswap {
         });
 
         // -----------------------------------------------------------------------------------------
+        // Soneium
+        //
+        uniswap.soneium = Soneium({
+            v2Factory: 0x97FeBbC2AdBD5644ba22736E962564B23F5828CE,
+            v3Factory: 0x42aE7Ec7ff020412639d443E245D936429Fbe717,
+            poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
+            v3OpenFeeAdapter: 0x47Cf920815344Fd684A48BBEFcbfbed9C7AE09CF,
+            tokenJar: 0x85aeb792b94a9d79741002FC871423Ec5dAD29e9,
+            releaser: 0xc9CC50A75cE2a5f88fa77B43e3b050480c731b6e,
+            releaserUni: 0x8f187aA05619a017077f5308904739877ce9eA21,
+            crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
+        });
+
+        // -----------------------------------------------------------------------------------------
         // UniChain
         //
         uniswap.uniChain = UniChain({
@@ -182,6 +202,20 @@ library LibUniswap {
             tokenJar: 0xD576BDF6b560079a4c204f7644e556DbB19140b5,
             releaser: 0xe0A780E9105aC10Ee304448224Eb4A2b11A77eeB,
             releaserUni: 0x8f187aA05619a017077f5308904739877ce9eA21
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // XLayer
+        //
+        uniswap.xLayer = XLayer({
+            v2Factory: 0xDf38F24fE153761634Be942F9d859f3DBA857E95,
+            v3Factory: 0x4B2ab38DBF28D31D467aA8993f6c2585981D6804,
+            poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
+            v3OpenFeeAdapter: 0x6A88EF2e6511CAFfE2D006e260e7A5d1E7D4d7D7,
+            tokenJar: 0x8Dd8B6D56e4a4A158EDbBfE7f2f703B8FFC1a754,
+            releaser: 0xe122E231cb52aea99690963Fd73E91e33E97468f,
+            releaserUni: 0x57FB37d035e6Ad0E687E0a50dC3F515691deB815,
+            crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
         });
 
         // -----------------------------------------------------------------------------------------
@@ -196,6 +230,20 @@ library LibUniswap {
             releaser: 0x455e844D286631566cF98D6cb2996149734618C6,
             releaserUni: 0x6fD31f56eb971113bEA12C5883deC68337b3B7b5,
             crossChainAccount: 0xcb2436774C3e191c85056d248EF4260ce5f27A9D
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Zora
+        //
+        uniswap.zora = Zora({
+            v2Factory: 0x0F797dC7efaEA995bB916f268D919d0a1950eE3C,
+            v3Factory: 0x7145F8aeef1f6510E92164038E1B6F8cB2c42Cbb,
+            poolManager: 0x0575338e4C17006aE181B47900A84404247CA30f,
+            v3OpenFeeAdapter: 0xbfc49b47637a4DC9b7B8dE8E71BF41E519103B95,
+            tokenJar: 0x4753C137002D802f45302b118E265c41140e73C2,
+            releaser: 0x2f98eD4D04e633169FbC941BFCc54E785853b143,
+            releaserUni: 0xE7798f023fC62146e8Aa1b36Da45fb70855a77Ea,
+            crossChainAccount: 0x36eEC182D0B24Df3DC23115D64DB521A93D5154f
         });
     }
 }

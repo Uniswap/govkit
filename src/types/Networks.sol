@@ -105,6 +105,17 @@ struct Polygon {
     address fxReceiver;
 }
 
+struct Soneium {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address v3OpenFeeAdapter;
+    address tokenJar;
+    address releaser;
+    address releaserUni;
+    address crossChainAccount;
+}
+
 struct UniChain {
     address v2Factory;
     address v3Factory;
@@ -114,7 +125,29 @@ struct UniChain {
     address releaserUni;
 }
 
+struct XLayer {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address v3OpenFeeAdapter;
+    address tokenJar;
+    address releaser;
+    address releaserUni;
+    address crossChainAccount;
+}
+
 struct WorldChain {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address v3OpenFeeAdapter;
+    address tokenJar;
+    address releaser;
+    address releaserUni;
+    address crossChainAccount;
+}
+
+struct Zora {
     address v2Factory;
     address v3Factory;
     address poolManager;
@@ -129,4 +162,3 @@ struct WorldChain {
 //
 // Warning: AST source not found for <project_root>/src/Networks.sol
 library __ {}
-
