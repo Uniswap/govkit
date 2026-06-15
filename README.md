@@ -99,7 +99,8 @@ Proposal memory proposal = Proposal({
     address[] memory targets,
     uint256[] memory values,
     string[] memory signatures,
-    bytes[] memory datas
+    bytes[] memory datas,
+    string memory description
 ) = actions.toGovernorBravoInputs();
 ```
 
