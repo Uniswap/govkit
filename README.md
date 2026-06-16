@@ -111,6 +111,12 @@ fragmented with no importable source of truth. We implement a collection of data
 which scope, by name, contracts across networks in the protocol; which gives us portability across
 proposals instead of re-hard coding them each proposal.
 
+Using `uniswap.<network>.<name>` returns the contract with the given `<name>` on the given
+`<network>`.
+
+Using `uniswap.ethereum.bridge.<target_network>` returns the bridge sender on Ethereum that sends
+messages to the given `<target_network>`.
+
 Usage:
 
 ```solidity
