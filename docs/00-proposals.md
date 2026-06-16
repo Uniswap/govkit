@@ -12,8 +12,8 @@ to be made.
 > functions for making the array of calls more readable when writing a proposal.
 
 ```solidity
-import {Proposal} from "govkit/types/Proposal.sol";
-import {Call, LibCall} from "lib/";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
 
 Proposal memory proposal = Proposal({
     description: "Transfer <token> to <receiver>.",
@@ -27,20 +27,70 @@ Proposal memory proposal = Proposal({
 });
 ```
 
-## Multichain Proposals
+`GovernorBravo` accepts a proposal as separate arrays of targets, values,
+signatures, and datas, which makes proposal specification unwieldy. The
+`Proposal` type encapsulates these actions more cleanly; transforming it back
+into `GovernorBravo`'s inputs is covered in [Exporting](./03-exporting.md).
 
-Multichain proposals are complex, often the calls at the top level of the
-`Proposal` are bridge calls where the actual actions to take on the respective
-remote network are encoded into the bridge call in arbitrary ways. We implement
-encoders for all relevant, persistent bridges used in proposal writing. Each
-contains a namespaced `encode` function, some of which use ad-hoc polymorphism
-to allow for reasonable defaults on parameters like gas limits while allowing a
-proposal writer to override them in the event they need more granularity.
+## Contract Addresses
 
-### Polygon
+Each call needs the address of the contract it targets, and those addresses are
+fragmented across networks with no importable source of truth. We define a
+collection of types and constants that scope, by name, the protocol's contracts
+across networks. This gives us portability across proposals instead of
+re-hard-coding addresses each time.
 
-Polygon uses an `FxRoot` system for sending proposals.
+The `Uniswap` type holds every network's addresses. Call `loadLatest` to
+populate it with the protocol's current deployments.
 
-The Polygon `FxRoot`/`FxChild` system requires Uniswap's `Timelock` to call
-Polygon's `FxRoot` on Ethereum, then Polygon's FxChild calls Uniswap's EthereumProxy
-(receiver contract), which then runs calls against the protocol on Polygon.
+> `loadLatest` currently hard-codes the addresses. In the future this should
+> import them from a unified source of truth.
+
+```solidity
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
+import {Proposal} from "lib/govkit/src/types/Proposal.sol";
+import {Call, LibCall} from "lib/govkit/src/types/Call.sol";
+
+Uniswap internal uniswap;
+uniswap.loadLatest();
+
+Proposal memory proposal = Proposal({
+    description: "# Activate Fee Switch V2+V3 on Ethereum ....",
+    calls: LibCall.newCalls([
+        Call({
+            target: uniswap.ethereum.v2Factory,
+            value: 0,
+            data: abi.encodeCall(
+                IUniswapV2Factory.setFeeTo,
+                (uniswap.ethereum.tokenJar)
+            )
+        }),
+        Call({
+            target: uniswap.ethereum.v3Factory,
+            value: 0,
+            data: abi.encodeCall(
+                IUniswapV3Factory.setOwner,
+                (uniswap.ethereum.v3OpenFeeAdapter)
+            )
+        })
+    ])
+});
+```
+
+Because addresses live in plain struct fields, this also makes testing
+environments more flexible for protocol mocking. Any address can be overridden
+before the proposal is built.
+
+```solidity
+import {Uniswap} from "lib/govkit/src/types/Uniswap.sol";
+
+contract MockGovernorBravo {
+    // ...
+}
+
+Uniswap internal uniswap;
+
+uniswap.ethereum.governorBravo = address(new MockGovernorBravo());
+```
+</content>
+</invoke>
