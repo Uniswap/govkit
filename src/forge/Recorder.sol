@@ -114,6 +114,10 @@ library LibRecorder {
             recorder.initialized,
             "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
+        require(
+            bytes(deploymentName).length > 0,
+            "Recorder::Error: deploymentName is empty."
+        );
 
         string memory deploymentString = vm.toString(deployment);
         string memory filePath = recorder.path();
