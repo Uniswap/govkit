@@ -9,6 +9,10 @@ import {IFxRoot} from "../interfaces/bridges/IFxRoot.sol";
 ///      Polygon's FxRoot on Ethereum, then Polygon's FxChild calls Uniswap's
 ///      EthereumProxy (receiver contract), which then runs calls against the
 ///      protocol on Polygon.
+/// @dev Note: The encode function encodes arrays of targets, datas, and values.
+///      While most encoders order these as targets, values, then datas, the
+///      polygon receiver explicitly breaks this convention, so the ordering of
+///      those in abi.encode is intended.
 library FxRootEncoder {
     error NonZeroValue();
 
