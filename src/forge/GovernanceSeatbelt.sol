@@ -23,6 +23,11 @@ library GovernanceSeatbelt {
             string memory description
         ) = proposal.toGovernorBravoInputs();
 
+        string[] memory valueStrings = new string[](values.length);
+        for (uint256 i; i < length; i++) {
+            valueStrings[i] = vm.toString(value[i]);
+        }
+
         string memory object = "placeholder";
 
         vm.serializeString(object, "type", "new");
@@ -30,7 +35,7 @@ library GovernanceSeatbelt {
         vm.serializeAddress(object, "governorAddress", governorBravo);
         vm.serializeString(object, "governorType", "bravo");
         vm.serializeAddress(object, "targets", targets);
-        vm.serializeUint(object, "values", values);
+        vm.serializeString(object, "values", valueStrings);
         vm.serializeString(object, "signatures", signatures);
         vm.serializeBytes(object, "calldatas", datas);
         object = vm.serializeString(object, "description", description);
