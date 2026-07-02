@@ -24,8 +24,8 @@ library GovernanceSeatbelt {
         ) = proposal.toGovernorBravoInputs();
 
         string[] memory valueStrings = new string[](values.length);
-        for (uint256 i; i < length; i++) {
-            valueStrings[i] = vm.toString(value[i]);
+        for (uint256 i; i < values.length; i++) {
+            valueStrings[i] = vm.toString(values[i]);
         }
 
         string memory object = "placeholder";
