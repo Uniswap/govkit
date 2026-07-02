@@ -182,17 +182,33 @@ We define encoders for the following:
 | Network    | Library                                         |
 | ---------- | ----------------------------------------------- |
 | Arbitrum   | `src/bridges/InboxEncoder.sol`                  |
-| Avalanche  | N/A (Transitioning)                             |
+| Avalanche  | `src/bridges/WormholeEncoder.sol`               |
 | Base       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| Blast      | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | BnbChain   | `src/bridges/WormholeEncoder.sol`               |
 | Celo       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| Ink        | See Below.                                      |
+| MegaETH    | `src/bridges/WormholeEncoder.sol`               |
+| Linea      | !! UNIMPLEMENTED !!                             |
+| Monad      | `src/bridges/WormholeEncoder.sol`               |
 | Optimism   | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
 | Polygon    | `src/bridges/FxRootEncoder.sol`                 |
-| Soneium    | N/A (Transitioning)                             |
+| RootStock  | `src/bridges/WormholeEncoder.sol`               |
+| Soneium    | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+| Tempo      | `src/bridges/WormholeEncoder.sol`               |
 | UniChain   | `src/bridges/OptimismPortal2Encoder.sol`        |
-| XLayer     | N/A (Transitioning)                             |
-| WorldChain | `src/bridges/OptimismPortal2Encoder.sol`        |
+| WorldChain | See Below.                                      |
+| XLayer     | See Below.                                      |
 | Zora       | `src/bridges/L1CrossDomainMessengerEncoder.sol` |
+
+> Regarding Ink, WorldChain, and XLayer: On these networks, most of the protocol is owned by the
+> OP-stack-aliased Timelock (from L1), which uses the `OptimismPortal2` low level bridge for
+> ownership. However, when the fee infrastructure was deployed, the `V3OpenFeeAdapter` becomes the
+> owner of the `UniswapV3Factory`, but this adapter is owned by a newly deployed `CrossChainAccount`
+> which uses the high level bridge on OP-stack chains.
+>
+> So for these networks, use `L1CrossDomainMessengerEncoder` for the `V3OpenFeeAdapter` ONLY and use
+> `OptimismPortal2Encoder` for the rest of the protocol.
 
 Chain ID usage:
 
