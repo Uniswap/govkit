@@ -18,12 +18,22 @@ struct EthereumBridgeSender {
     address arbitrum;
     address avalanche;
     address base;
+    address blast;
     address bnbChain;
     address celo;
+    address ink;
+    address megaEth;
+    address linea;
+    address monad;
     address optimism;
     address polygon;
+    address rootStock;
+    address soneium;
+    address tempo;
     address uniChain;
     address worldChain;
+    address xLayer;
+    address zora;
     address wormholeCore;
 }
 
@@ -41,6 +51,8 @@ struct Avalanche {
     address v2Factory;
     address v3Factory;
     address poolManager;
+    address wormholeCore;
+    address wormholeReceiver;
 }
 
 struct Base {
@@ -51,6 +63,13 @@ struct Base {
     address tokenJar;
     address releaser;
     address releaserUni;
+    address crossChainAccount;
+}
+
+struct Blast {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
     address crossChainAccount;
 }
 
@@ -77,6 +96,36 @@ struct Celo {
     address crossChainAccount;
 }
 
+struct Ink {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address crossChainAccount;
+}
+
+struct MegaEth {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address wormholeCore;
+    address wormholeReceiver;
+}
+
+struct Linea {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address crossChainAccountLinea;
+}
+
+struct Monad {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address wormholeCore;
+    address wormholeReceiver;
+}
+
 struct Optimism {
     address v2Factory;
     address v3Factory;
@@ -86,12 +135,6 @@ struct Optimism {
     address releaser;
     address releaserUni;
     address crossChainAccount;
-}
-
-struct MegaEth {
-    address v2Factory;
-    address v3Factory;
-    address poolManager;
 }
 
 struct Polygon {
@@ -105,6 +148,12 @@ struct Polygon {
     address fxReceiver;
 }
 
+struct RootStock {
+    address v3Factory;
+    address wormholeCore;
+    address wormholeReceiver;
+}
+
 struct Soneium {
     address v2Factory;
     address v3Factory;
@@ -116,6 +165,14 @@ struct Soneium {
     address crossChainAccount;
 }
 
+struct Tempo {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address wormholeCore;
+    address wormholeReceiver;
+}
+
 struct UniChain {
     address v2Factory;
     address v3Factory;
@@ -125,7 +182,7 @@ struct UniChain {
     address releaserUni;
 }
 
-struct XLayer {
+struct WorldChain {
     address v2Factory;
     address v3Factory;
     address poolManager;
@@ -136,7 +193,7 @@ struct XLayer {
     address crossChainAccount;
 }
 
-struct WorldChain {
+struct XLayer {
     address v2Factory;
     address v3Factory;
     address poolManager;

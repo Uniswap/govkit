@@ -15,11 +15,21 @@ library ChainId {
     uint256 internal constant Arbitrum = 42161;
     uint256 internal constant Avalanche = 43114;
     uint256 internal constant Base = 8453;
+    uint256 internal constant Blast = 81457;
     uint256 internal constant BNBChain = 56;
     uint256 internal constant Celo = 42220;
     uint256 internal constant Ethereum = 1;
+    uint256 internal constant Ink = 57073;
+    uint256 internal constant MegaEth = 4326;
+    uint256 internal constant Linea = 59144;
+    uint256 internal constant Monad = 143;
     uint256 internal constant Optimism = 10;
     uint256 internal constant Polygon = 137;
+    uint256 internal constant RootStock = 30;
+    uint256 internal constant Soneium = 1868;
+    uint256 internal constant Tempo = 4217;
     uint256 internal constant UniChain = 130;
     uint256 internal constant WorldChain = 480;
+    uint256 internal constant XLayer = 196;
+    uint256 internal constant Zora = 7777777;
 }

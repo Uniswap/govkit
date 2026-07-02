@@ -7,12 +7,18 @@ import {
     Arbitrum,
     Avalanche,
     Base,
+    Blast,
     BNBChain,
     Celo,
-    Optimism,
+    Ink,
     MegaEth,
+    Linea,
+    Monad,
+    Optimism,
     Polygon,
+    RootStock,
     Soneium,
+    Tempo,
     UniChain,
     XLayer,
     WorldChain,
@@ -28,12 +34,18 @@ struct Uniswap {
     Arbitrum arbitrum;
     Avalanche avalanche;
     Base base;
+    Blast blast;
     BNBChain bnbChain;
     Celo celo;
-    Optimism optimism;
+    Ink ink;
     MegaEth megaEth;
+    Linea linea;
+    Monad monad;
+    Optimism optimism;
     Polygon polygon;
+    RootStock rootStock;
     Soneium soneium;
+    Tempo tempo;
     UniChain uniChain;
     WorldChain worldChain;
     XLayer xLayer;
@@ -44,6 +56,7 @@ using LibUniswap for Uniswap global;
 
 /// @title Uniswap Protocol Library
 /// @dev Primarily used for loading addresses into the Uniswap type.
+/// @dev WARNING: LINEA DOES NOT HAVE AN ENCODER. This is beyond the V1 scope.
 library LibUniswap {
     /// @dev Loads all relevant addresses into the Uniswap type. In the future,
     ///      this should be importing addresses from a unified source of truth.
@@ -52,6 +65,7 @@ library LibUniswap {
         // -----------------------------------------------------------------------------------------
         // Ethereum
         //
+        // Note: crossChainAccountLinea UNIMPLEMENTED
         uniswap.ethereum = Ethereum({
             uni: 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984,
             governorBravo: 0x408ED6354d4973f66138C91495F2f2FCbd8724C3,
@@ -66,12 +80,22 @@ library LibUniswap {
                 arbitrum: 0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f,
                 avalanche: 0xeb0BCF27D1Fb4b25e708fBB815c421Aeb51eA9fc,
                 base: 0x866E82a600A1414e583f7F13623F1aC5d58b0Afa,
+                blast: address(0x00),
                 bnbChain: 0xf5F4496219F31CDCBa6130B5402873624585615a,
                 celo: 0x1AC1181fc4e4F877963680587AEAa2C90D7EbB95,
+                ink: address(0x00),
+                megaEth: address(0x00),
+                linea: address(0x00),
+                monad: address(0x00),
                 optimism: 0x25ace71c97B33Cc4729CF772ae268934F7ab5fA1,
                 polygon: 0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2,
+                rootStock: address(0x00),
+                soneium: address(0x00),
+                tempo: address(0x00),
                 uniChain: 0x9A3D64E386C18Cb1d6d5179a9596A4B5736e98A6,
                 worldChain: 0xf931a81D18B1766d15695ffc7c1920a62b7e710a,
+                xLayer: address(0x00),
+                zora: address(0x00),
                 wormholeCore: 0x98f3c9e6E3fAce36bAAd05FE09d375Ef1464288B
             })
         });
@@ -95,7 +119,9 @@ library LibUniswap {
         uniswap.avalanche = Avalanche({
             v2Factory: 0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C,
             v3Factory: 0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD,
-            poolManager: 0x06380C0e0912312B5150364B9DC4542BA0DbBc85
+            poolManager: 0x06380C0e0912312B5150364B9DC4542BA0DbBc85,
+            wormholeCore: 0x54a8e5f9c4CbA08F9943965859F6c34eAF03E26c,
+            wormholeReceiver: 0x47eB0Cf11a1626462Da3C830bCDe64c3F582B5a6
         });
 
         // -----------------------------------------------------------------------------------------
@@ -110,6 +136,16 @@ library LibUniswap {
             releaser: 0xFf77c0ED0B6b13A20446969107E5867abc46f53a,
             releaserUni: 0xc3De830EA07524a0761646a6a4e4be0e114a3C83,
             crossChainAccount: 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Blast
+        //
+        uniswap.blast = Blast({
+            v2Factory: 0x5C346464d33F90bABaf70dB6388507CC889C1070,
+            v3Factory: 0x792edAdE80af5fC680d96a2eD80A44247D2Cf6Fd,
+            poolManager: 0x1631559198A9e474033433b2958daBC135ab6446,
+            crossChainAccount: 0x2339C0d23b60739B3E5ABF201F05903D24A26C77
         });
 
         // -----------------------------------------------------------------------------------------
@@ -142,6 +178,48 @@ library LibUniswap {
         });
 
         // -----------------------------------------------------------------------------------------
+        // Ink
+        //
+        uniswap.ink = Ink({
+            v2Factory: 0xfe57A6BA1951F69aE2Ed4abe23e0f095DF500C04,
+            v3Factory: 0x640887A9ba3A9C53Ed27D0F7e8246A4F933f3424,
+            poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
+            crossChainAccount: 0x66c5D722Fc52671c7F839BBbF752BC38E0520B91
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // MegaETH
+        //
+        uniswap.megaEth = MegaEth({
+            v2Factory: 0xbf56488c857A881ae7e3BED27Cf99c10A7Ab7e50,
+            v3Factory: 0x3a5F0CD7d62452b7f899B2A5758BFa57be0dE478,
+            poolManager: 0xaCB7e78fa05D562e0A5D3089ec896D57D057d38E,
+            wormholeCore: 0xaBf89de706B583424328B54dD05a8fC986750Da8,
+            wormholeReceiver: 0xa107580F73BD797Bd8b87Ff24e98346D99F93DdB
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Linea
+        //
+        uniswap.linea = Linea({
+            v2Factory: 0x114A43DF6C5f54EBB8A9d70Cd1951D3dD68004c7,
+            v3Factory: 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9,
+            poolManager: 0x248083Fb965359d82b06C1F5322480Dcfc1AD857,
+            crossChainAccountLinea: 0x581F86Da293A1D5Cd087a10E7227a75d2d2201A8
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Monad
+        //
+        uniswap.monad = Monad({
+            v2Factory: 0x182a927119D56008d921126764bF884221b10f59,
+            v3Factory: 0x204FAca1764B154221e35c0d20aBb3c525710498,
+            poolManager: 0x188d586Ddcf52439676Ca21A244753fA19F9Ea8e,
+            wormholeCore: 0x194B123c5E96B9b2E49763619985790Dc241CAC0,
+            wormholeReceiver: 0xE783DE89a7F0408687f051e3E6D0BEb62719EbAd
+        });
+
+        // -----------------------------------------------------------------------------------------
         // Optimism
         //
         uniswap.optimism = Optimism({
@@ -153,15 +231,6 @@ library LibUniswap {
             releaser: 0x94460443Ca27FFC1baeCa61165fde18346C91AbD,
             releaserUni: 0x6fd9d7AD17242c41f7131d257212c54A0e816691,
             crossChainAccount: 0xa1dD330d602c32622AA270Ea73d078B803Cb3518
-        });
-
-        // -----------------------------------------------------------------------------------------
-        // MegaETH
-        //
-        uniswap.megaEth = MegaEth({
-            v2Factory: 0xbf56488c857A881ae7e3BED27Cf99c10A7Ab7e50,
-            v3Factory: 0x3a5F0CD7d62452b7f899B2A5758BFa57be0dE478,
-            poolManager: 0xaCB7e78fa05D562e0A5D3089ec896D57D057d38E
         });
 
         // -----------------------------------------------------------------------------------------
@@ -179,6 +248,15 @@ library LibUniswap {
         });
 
         // -----------------------------------------------------------------------------------------
+        // RootStock
+        //
+        uniswap.rootStock = RootStock({
+            v3Factory: 0xaF37EC98A00FD63689CF3060BF3B6784E00caD82,
+            wormholeCore: 0xbebdb6C8ddC678FfA9f8748f85C815C556Dd8ac6,
+            wormholeReceiver: 0x38aE7De6f9c51e17f49cF5730DD5F2d29fa20758
+        });
+
+        // -----------------------------------------------------------------------------------------
         // Soneium
         //
         uniswap.soneium = Soneium({
@@ -190,6 +268,17 @@ library LibUniswap {
             releaser: 0xc9CC50A75cE2a5f88fa77B43e3b050480c731b6e,
             releaserUni: 0x8f187aA05619a017077f5308904739877ce9eA21,
             crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Tempo
+        //
+        uniswap.tempo = Tempo({
+            v2Factory: 0xf9EC577a4E45B5278BB7Cf60FCBc20c3acAef68f,
+            v3Factory: 0x24a3d4757E330890A8b8978028c9e58E04611fd6,
+            poolManager: 0x33620f62C5b9B2086dD6b62F4A297A9f30347029,
+            wormholeCore: 0xbebdb6C8ddC678FfA9f8748f85C815C556Dd8ac6,
+            wormholeReceiver: 0xCFB43dC56B55bE9611deD8384201cECf06A9811b
         });
 
         // -----------------------------------------------------------------------------------------
@@ -205,20 +294,6 @@ library LibUniswap {
         });
 
         // -----------------------------------------------------------------------------------------
-        // XLayer
-        //
-        uniswap.xLayer = XLayer({
-            v2Factory: 0xDf38F24fE153761634Be942F9d859f3DBA857E95,
-            v3Factory: 0x4B2ab38DBF28D31D467aA8993f6c2585981D6804,
-            poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
-            v3OpenFeeAdapter: 0x6A88EF2e6511CAFfE2D006e260e7A5d1E7D4d7D7,
-            tokenJar: 0x8Dd8B6D56e4a4A158EDbBfE7f2f703B8FFC1a754,
-            releaser: 0xe122E231cb52aea99690963Fd73E91e33E97468f,
-            releaserUni: 0x57FB37d035e6Ad0E687E0a50dC3F515691deB815,
-            crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
-        });
-
-        // -----------------------------------------------------------------------------------------
         // WorldChain
         //
         uniswap.worldChain = WorldChain({
@@ -230,6 +305,20 @@ library LibUniswap {
             releaser: 0x455e844D286631566cF98D6cb2996149734618C6,
             releaserUni: 0x6fD31f56eb971113bEA12C5883deC68337b3B7b5,
             crossChainAccount: 0xcb2436774C3e191c85056d248EF4260ce5f27A9D
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // XLayer
+        //
+        uniswap.xLayer = XLayer({
+            v2Factory: 0xDf38F24fE153761634Be942F9d859f3DBA857E95,
+            v3Factory: 0x4B2ab38DBF28D31D467aA8993f6c2585981D6804,
+            poolManager: 0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32,
+            v3OpenFeeAdapter: 0x6A88EF2e6511CAFfE2D006e260e7A5d1E7D4d7D7,
+            tokenJar: 0x8Dd8B6D56e4a4A158EDbBfE7f2f703B8FFC1a754,
+            releaser: 0xe122E231cb52aea99690963Fd73E91e33E97468f,
+            releaserUni: 0x57FB37d035e6Ad0E687E0a50dC3F515691deB815,
+            crossChainAccount: 0x044aAF330d7fD6AE683EEc5c1C1d1fFf5196B6b7
         });
 
         // -----------------------------------------------------------------------------------------
