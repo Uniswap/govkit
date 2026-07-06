@@ -20,7 +20,7 @@ contract WormholeEncoderTest is Test {
 
     function testEncode() external {
         address remoteReceiver = address(0x02);
-        uint256 chainId = ChainId.Base;
+        uint256 chainId = ChainId.BNBChain;
         uint256 value = 3;
         Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 5, data: hex"aabbccdd"})]);
 
@@ -111,22 +111,19 @@ contract WormholeEncoderTest is Test {
 
         WormholeEncoderHarness harness = new WormholeEncoderHarness();
 
-        vm.expectRevert(abi.encodeWithSelector(WormholeChainId.UnknownWormholeChainId.selector, chainId));
+        vm.expectRevert(abi.encodeWithSelector(WormholeChainId.UnsupportedChainId.selector, chainId));
         harness.encode(sourceSender, remoteReceiver, chainId, value, remoteCalls);
     }
 
     function _knownChainIds() internal pure returns (uint256[] memory ids) {
-        ids = new uint256[](10);
-        ids[0] = ChainId.Arbitrum;
-        ids[1] = ChainId.Avalanche;
-        ids[2] = ChainId.Base;
-        ids[3] = ChainId.BNBChain;
-        ids[4] = ChainId.Celo;
-        ids[5] = ChainId.Ethereum;
-        ids[6] = ChainId.Optimism;
-        ids[7] = ChainId.Polygon;
-        ids[8] = ChainId.UniChain;
-        ids[9] = ChainId.WorldChain;
+        ids = new uint256[](7);
+        ids[0] = ChainId.Avalanche;
+        ids[1] = ChainId.BNBChain;
+        ids[2] = ChainId.Ethereum;
+        ids[3] = ChainId.MegaEth;
+        ids[4] = ChainId.Monad;
+        ids[5] = ChainId.RootStock;
+        ids[6] = ChainId.Tempo;
     }
 
     function _knownChainId(uint256 seed) internal pure returns (uint256) {
