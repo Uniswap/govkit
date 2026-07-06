@@ -28,9 +28,7 @@ library WormholeChainId {
     /// @dev Maps an EIP-155 chain ID to a Wormhole chain ID.
     /// @param chainId EIP-155 chain ID.
     /// @return Wormhole chain ID.
-    function chainIdToWormholeChainId(
-        uint256 chainId
-    ) internal pure returns (uint16) {
+    function chainIdToWormholeChainId(uint256 chainId) internal pure returns (uint16) {
         if (chainId == ChainId.Avalanche) {
             return Avalanche;
         } else if (chainId == ChainId.BNBChain) {
@@ -53,9 +51,7 @@ library WormholeChainId {
     /// @dev Maps a Wormhole chain ID to an EIP-155 chain ID.
     /// @param wormholeChainId Wormhole chain ID.
     /// @return EIP-155 chain ID.
-    function wormholeChainIdToChainId(
-        uint16 wormholeChainId
-    ) internal pure returns (uint256) {
+    function wormholeChainIdToChainId(uint16 wormholeChainId) internal pure returns (uint256) {
         if (wormholeChainId == Avalanche) {
             return ChainId.Avalanche;
         } else if (wormholeChainId == BNBChain) {

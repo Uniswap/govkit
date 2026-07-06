@@ -59,7 +59,7 @@ using LibUniswap for Uniswap global;
 /// @dev WARNING: LINEA DOES NOT HAVE AN ENCODER. This is beyond the V1 scope.
 library LibUniswap {
     address internal constant UNIMPLEMENTED = address(0x00);
- 
+
     /// @dev Loads all relevant addresses into the Uniswap type. In the future,
     ///      this should be importing addresses from a unified source of truth.
     /// @param uniswap Uniswap type stored in the local state for easy access.
