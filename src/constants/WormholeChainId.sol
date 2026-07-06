@@ -53,7 +53,7 @@ library WormholeChainId {
     /// @dev Maps a Wormhole chain ID to an EIP-155 chain ID.
     /// @param wormholeChainId Wormhole chain ID.
     /// @return EIP-155 chain ID.
-    function wormholeChainIdtoChainId(
+    function wormholeChainIdToChainId(
         uint16 wormholeChainId
     ) internal pure returns (uint256) {
         if (wormholeChainId == Avalanche) {
