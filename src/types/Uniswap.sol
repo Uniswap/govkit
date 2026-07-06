@@ -58,6 +58,8 @@ using LibUniswap for Uniswap global;
 /// @dev Primarily used for loading addresses into the Uniswap type.
 /// @dev WARNING: LINEA DOES NOT HAVE AN ENCODER. This is beyond the V1 scope.
 library LibUniswap {
+    address internal constant UNIMPLEMENTED = address(0x00);
+ 
     /// @dev Loads all relevant addresses into the Uniswap type. In the future,
     ///      this should be importing addresses from a unified source of truth.
     /// @param uniswap Uniswap type stored in the local state for easy access.
@@ -78,24 +80,24 @@ library LibUniswap {
             releaser: 0x0D5Cd355e2aBEB8fb1552F56c965B867346d6721,
             bridge: EthereumBridgeSender({
                 arbitrum: 0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f,
-                avalanche: 0xeb0BCF27D1Fb4b25e708fBB815c421Aeb51eA9fc,
+                avalanche: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
                 base: 0x866E82a600A1414e583f7F13623F1aC5d58b0Afa,
-                blast: address(0x00),
+                blast: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
                 bnbChain: 0xf5F4496219F31CDCBa6130B5402873624585615a,
                 celo: 0x1AC1181fc4e4F877963680587AEAa2C90D7EbB95,
-                ink: address(0x00),
-                megaEth: address(0x00),
-                linea: address(0x00),
-                monad: address(0x00),
+                ink: 0x69d3Cf86B2Bf1a9e99875B7e2D9B6a84426c171f,
+                megaEth: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
+                linea: UNIMPLEMENTED,
+                monad: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
                 optimism: 0x25ace71c97B33Cc4729CF772ae268934F7ab5fA1,
                 polygon: 0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2,
-                rootStock: address(0x00),
-                soneium: address(0x00),
-                tempo: address(0x00),
-                uniChain: 0x9A3D64E386C18Cb1d6d5179a9596A4B5736e98A6,
+                rootStock: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
+                soneium: 0x9CF951E3F74B644e621b36Ca9cea147a78D4c39f,
+                tempo: 0x5D4472f31Bd9385709ec61305AFc749F0fA8e9d0,
+                uniChain: 0x0bd48f6B86a26D3a217d0Fa6FfE2B491B956A7a2,
                 worldChain: 0xf931a81D18B1766d15695ffc7c1920a62b7e710a,
-                xLayer: address(0x00),
-                zora: address(0x00),
+                xLayer: 0xF94B553F3602a03931e5D10CaB343C0968D793e3,
+                zora: 0xdC40a14d9abd6F410226f1E6de71aE03441ca506,
                 wormholeCore: 0x98f3c9e6E3fAce36bAAd05FE09d375Ef1464288B
             })
         });
@@ -188,6 +190,16 @@ library LibUniswap {
         });
 
         // -----------------------------------------------------------------------------------------
+        // Linea
+        //
+        uniswap.linea = Linea({
+            v2Factory: 0x114A43DF6C5f54EBB8A9d70Cd1951D3dD68004c7,
+            v3Factory: 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9,
+            poolManager: 0x248083Fb965359d82b06C1F5322480Dcfc1AD857,
+            crossChainAccountLinea: 0x581F86Da293A1D5Cd087a10E7227a75d2d2201A8
+        });
+
+        // -----------------------------------------------------------------------------------------
         // MegaETH
         //
         uniswap.megaEth = MegaEth({
@@ -196,16 +208,6 @@ library LibUniswap {
             poolManager: 0xaCB7e78fa05D562e0A5D3089ec896D57D057d38E,
             wormholeCore: 0xaBf89de706B583424328B54dD05a8fC986750Da8,
             wormholeReceiver: 0xa107580F73BD797Bd8b87Ff24e98346D99F93DdB
-        });
-
-        // -----------------------------------------------------------------------------------------
-        // Linea
-        //
-        uniswap.linea = Linea({
-            v2Factory: 0x114A43DF6C5f54EBB8A9d70Cd1951D3dD68004c7,
-            v3Factory: 0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9,
-            poolManager: 0x248083Fb965359d82b06C1F5322480Dcfc1AD857,
-            crossChainAccountLinea: 0x581F86Da293A1D5Cd087a10E7227a75d2d2201A8
         });
 
         // -----------------------------------------------------------------------------------------
