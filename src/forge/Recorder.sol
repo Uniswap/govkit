@@ -90,17 +90,6 @@ library LibRecorder {
         recorder.initialized = true;
     }
 
-    /// @dev Write a contract name to disk with current chain ID.
-    /// @param recorder The recorder in the Script/Test contract's state.
-    /// @param deploymentName Name of the contract to record.
-    /// @param deployment Address to be recorded.
-    function write(Recorder storage recorder, string memory deploymentName, address deployment)
-        internal
-        returns (address)
-    {
-        return recorder.write(vm.getChainId(), deploymentName, deployment);
-    }
-
     /// @dev Write a contract name to disk.
     /// @param recorder The recorder in the Script/Test contract's state.
     /// @param chainId Chain ID to record to.
