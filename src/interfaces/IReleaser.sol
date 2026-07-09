@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-interface IFirepit {
+interface IReleaser {
     // Events
     event OwnershipTransferred(address indexed user, address indexed newOwner);
     event Released(uint256 indexed nonce, address indexed recipient, address[] assets);
