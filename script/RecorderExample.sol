@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Script} from "forge-std/Script.sol";
+import {Script, VmSafe, console} from "forge-std/Script.sol";
 
 import {Recorder} from "../src/forge/Recorder.sol";
 import {ChainId} from "../src/constants/ChainId.sol";
@@ -26,7 +26,13 @@ contract RecorderExample is Script {
 
         // Deploy the contract & record it.
         //
+        vm.broadcast();
         address counter = recorder.write(ChainId.Ethereum, "Counter", address(new Counter()));
+
+        if (vm.isContext(VmSafe.ForgeContext.ScriptDryRun)) {
+            console.log("Skipping the last steps on a dry run. Use --broadcast for the full thing.");
+            return;
+        }
 
         // Check the record exists.
         //
@@ -42,6 +48,6 @@ contract RecorderExample is Script {
 
         // (Optional): Clear the record.
         //
-        recorder.clear();
+        // recorder.clear();
     }
 }

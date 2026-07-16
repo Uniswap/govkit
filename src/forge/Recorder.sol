@@ -105,6 +105,14 @@ library LibRecorder {
         );
         require(bytes(deploymentName).length > 0, "Recorder::Error: deploymentName is empty.");
 
+        if (vm.isContext(VmSafe.ForgeContext.ScriptDryRun)) {
+            if (recorder.debugMode) {
+                console.log("Recorder::Debug: This is a dry run, no address will be recorded.");
+            }
+
+            return deployment;
+        }
+
         string memory deploymentString = vm.toString(deployment);
         string memory filePath = recorder.path();
 
@@ -214,6 +222,14 @@ library LibRecorder {
             recorder.initialized,
             "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
         );
+
+        if (vm.isContext(VmSafe.ForgeContext.ScriptDryRun)) {
+            if (recorder.debugMode) {
+                console.log("Recorder::Debug: This is a dry run, skipping this clear() step.");
+            }
+
+            return;
+        }
 
         if (!vm.isDir(directory)) {
             if (recorder.debugMode) {
