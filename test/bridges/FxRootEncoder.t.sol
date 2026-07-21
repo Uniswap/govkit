@@ -4,22 +4,29 @@ pragma solidity ^0.8.0;
 import {LibCall, Call} from "../../src/types/Call.sol";
 import {IFxRoot} from "../../src/interfaces/bridges/IFxRoot.sol";
 import {FxRootEncoder} from "../../src/bridges/FxRootEncoder.sol";
+import {EncoderHarness} from "../harness/EncoderHarness.sol";
+import {DecoderHarness} from "../harness/DecoderHarness.sol";
 
 import {Test, console} from "forge-std/Test.sol";
 import {FxRootMock} from "../mock/FxRootMock.sol";
 
 contract FxRootEncoderTest is Test {
-    address internal fxRoot;
+    EncoderHarness internal encoder;
+    DecoderHarness internal decoder;
+    
+    address internal mockFxRoot;
 
     function setUp() external {
-        fxRoot = address(new FxRootMock());
+        encoder = new EncoderHarness();
+        decoder = new DecoderHarness();
+        mockFxRoot = address(new FxRootMock());
     }
 
     function testEncode() external {
         address fxReceiver = address(0x02);
         Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 0, data: hex"aabbccdd"})]);
 
-        Call memory encoded = FxRootEncoder.encode({fxRoot: fxRoot, fxReceiver: fxReceiver, remoteCalls: remoteCalls});
+        Call memory encoded = FxRootEncoder.encode({fxRoot: mockFxRoot, fxReceiver: fxReceiver, remoteCalls: remoteCalls});
 
         (bool success, bytes memory returndata) = encoded.target.call(encoded.data);
 
@@ -28,7 +35,7 @@ contract FxRootEncoderTest is Test {
         (address receiver, address[] memory targets, bytes[] memory datas, uint256[] memory values) =
             abi.decode(returndata, (address, address[], bytes[], uint256[]));
 
-        assertEq(encoded.target, fxRoot);
+        assertEq(encoded.target, mockFxRoot);
         assertEq(encoded.value, 0);
         assertEq(receiver, fxReceiver);
         assertEq(targets.length, remoteCalls.length);
@@ -39,6 +46,53 @@ contract FxRootEncoderTest is Test {
             assertEq(targets[i], remoteCalls[i].target);
             assertEq(datas[i], remoteCalls[i].data);
             assertEq(values[i], 0);
+        }
+    }
+
+    function testEncodeDecode() external view {
+        address fxRoot = address(0x01);
+        address fxReceiver = address(0x02);
+        Call[] memory remoteCalls = new Call[](1);
+        remoteCalls[0] = Call({
+            target: address(0x03),
+            value: 0,
+            data: hex"05"
+        });
+
+        Call memory fxRootCall = encoder.encodeFxRoot(fxRoot, fxReceiver, remoteCalls);
+
+        (address decodedFxRoot, address decodedFxReceiver, Call[] memory decodedRemoteCalls) = decoder.decodeFxRoot(fxRootCall);
+
+        assertEq(fxRoot, decodedFxRoot);
+        assertEq(fxReceiver, decodedFxReceiver);
+
+        for (uint256 i; i < remoteCalls.length; i++) {
+            assertEq(remoteCalls[i].target, decodedRemoteCalls[i].target);
+            assertEq(remoteCalls[i].value, decodedRemoteCalls[i].value);
+            assertEq(remoteCalls[i].data, decodedRemoteCalls[i].data);
+        }
+    }
+
+    function testFuzzEncodeDecode(
+        address fxRoot,
+        address fxReceiver,
+        Call[] memory remoteCalls
+    ) external view {
+        for (uint256 i; i < remoteCalls.length; i++) {
+            remoteCalls[i].value = 0;
+        }
+
+        Call memory fxRootCall = encoder.encodeFxRoot(fxRoot, fxReceiver, remoteCalls);
+
+        (address decodedFxRoot, address decodedFxReceiver, Call[] memory decodedRemoteCalls) = decoder.decodeFxRoot(fxRootCall);
+
+        assertEq(fxRoot, decodedFxRoot);
+        assertEq(fxReceiver, decodedFxReceiver);
+
+        for (uint256 i; i < remoteCalls.length; i++) {
+            assertEq(remoteCalls[i].target, decodedRemoteCalls[i].target);
+            assertEq(remoteCalls[i].value, decodedRemoteCalls[i].value);
+            assertEq(remoteCalls[i].data, decodedRemoteCalls[i].data);
         }
     }
 }

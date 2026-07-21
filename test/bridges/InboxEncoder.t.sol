@@ -4,14 +4,21 @@ pragma solidity ^0.8.0;
 import {Call} from "../../src/types/Call.sol";
 import {IInbox} from "../../src/interfaces/bridges/IInbox.sol";
 import {InboxEncoder} from "../../src/bridges/InboxEncoder.sol";
+import {EncoderHarness} from "../harness/EncoderHarness.sol";
+import {DecoderHarness} from "../harness/DecoderHarness.sol";
 
 import {Test, console} from "forge-std/Test.sol";
 import {InboxMock, RetryableTicket} from "../mock/InboxMock.sol";
 
 contract InboxEncoderTest is Test {
+    EncoderHarness internal encoder;
+    DecoderHarness internal decoder;
+
     address internal inbox;
 
     function setUp() external {
+        encoder = new EncoderHarness();
+        decoder = new DecoderHarness();
         inbox = address(new InboxMock());
     }
 
@@ -167,5 +174,75 @@ contract InboxEncoderTest is Test {
         assertEq(ticket.gasLimit, gasLimit_);
         assertEq(ticket.maxFeePerGas, maxFeePerGas_);
         assertEq(ticket.data, remoteCall.data);
+    }
+
+    function testEncodeDecode() external view {
+        address inbox_ = address(0x01);
+        address timelock = address(0x02);
+        uint256 gasLimit = 200_000;
+        uint256 maxFeePerGas = 0.1 gwei;
+        uint256 maxSubmissionCost = 0.01 ether;
+        Call memory remoteCall = Call({
+            target: address(0x03),
+            value: 5,
+            data: hex"05"
+        });
+
+        Call memory inboxCall =
+            encoder.encodeInbox(inbox_, timelock, gasLimit, maxFeePerGas, maxSubmissionCost, remoteCall);
+
+        (
+            address decodedInbox,
+            address decodedTimelock,
+            uint256 decodedGasLimit,
+            uint256 decodedMaxFeePerGas,
+            uint256 decodedMaxSubmissionCost,
+            Call memory decodedRemoteCall
+        ) = decoder.decodeInbox(inboxCall);
+
+        assertEq(inbox_, decodedInbox);
+        assertEq(timelock, decodedTimelock);
+        assertEq(gasLimit, decodedGasLimit);
+        assertEq(maxFeePerGas, decodedMaxFeePerGas);
+        assertEq(maxSubmissionCost, decodedMaxSubmissionCost);
+        assertEq(remoteCall.target, decodedRemoteCall.target);
+        assertEq(remoteCall.value, decodedRemoteCall.value);
+        assertEq(remoteCall.data, decodedRemoteCall.data);
+    }
+
+    function testFuzzEncodeDecode(
+        address inbox_,
+        address timelock,
+        uint256 gasLimit,
+        uint256 maxFeePerGas,
+        uint256 maxSubmissionCost,
+        Call memory remoteCall
+    ) external view {
+        // Keep the value computation from overflowing uint256.
+        gasLimit = bound(gasLimit, 0, type(uint64).max);
+        maxFeePerGas = bound(maxFeePerGas, 0, type(uint64).max);
+        maxSubmissionCost = bound(maxSubmissionCost, 0, type(uint128).max);
+        remoteCall.value = bound(remoteCall.value, 0, type(uint128).max);
+
+        Call memory inboxCall =
+            encoder.encodeInbox(inbox_, timelock, gasLimit, maxFeePerGas, maxSubmissionCost, remoteCall);
+
+        (
+            address decodedInbox,
+            address decodedTimelock,
+            uint256 decodedGasLimit,
+            uint256 decodedMaxFeePerGas,
+            uint256 decodedMaxSubmissionCost,
+            Call memory decodedRemoteCall
+        ) = decoder.decodeInbox(inboxCall);
+
+        assertEq(inbox_, decodedInbox);
+        assertEq(timelock, decodedTimelock);
+        assertEq(gasLimit, decodedGasLimit);
+        assertEq(maxFeePerGas, decodedMaxFeePerGas);
+        assertEq(maxSubmissionCost, decodedMaxSubmissionCost);
+        assertEq(remoteCall.target, decodedRemoteCall.target);
+        assertEq(remoteCall.value, decodedRemoteCall.value);
+        assertEq(remoteCall.data, decodedRemoteCall.data);
     }
 }

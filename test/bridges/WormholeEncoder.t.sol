@@ -6,15 +6,22 @@ import {IWormholeSender} from "../../src/interfaces/bridges/IWormholeSender.sol"
 import {WormholeEncoder} from "../../src/bridges/WormholeEncoder.sol";
 import {ChainId} from "../../src/constants/ChainId.sol";
 import {WormholeChainId} from "../../src/constants/WormholeChainId.sol";
+import {EncoderHarness} from "../harness/EncoderHarness.sol";
+import {DecoderHarness} from "../harness/DecoderHarness.sol";
 
 import {Test, console} from "forge-std/Test.sol";
 import {WormholeSenderMock} from "../mock/WormholeSenderMock.sol";
 import {WormholeEncoderHarness} from "../harness/WormholeEncoderHarness.sol";
 
 contract WormholeEncoderTest is Test {
+    EncoderHarness internal encoder;
+    DecoderHarness internal decoder;
+
     address internal sourceSender;
 
     function setUp() external {
+        encoder = new EncoderHarness();
+        decoder = new DecoderHarness();
         sourceSender = address(new WormholeSenderMock());
     }
 
@@ -113,6 +120,73 @@ contract WormholeEncoderTest is Test {
 
         vm.expectRevert(abi.encodeWithSelector(WormholeChainId.UnsupportedChainId.selector, chainId));
         harness.encode(sourceSender, remoteReceiver, chainId, value, remoteCalls);
+    }
+
+    function testEncodeDecode() external view {
+        address sourceSender_ = address(0x01);
+        address remoteReceiver = address(0x02);
+        uint256 chainId = ChainId.BNBChain;
+        uint256 value = 3;
+        Call[] memory remoteCalls = new Call[](1);
+        remoteCalls[0] = Call({
+            target: address(0x03),
+            value: 5,
+            data: hex"05"
+        });
+
+        Call memory wormholeCall =
+            encoder.encodeWormhole(sourceSender_, remoteReceiver, chainId, value, remoteCalls);
+
+        (
+            address decodedSourceSender,
+            address decodedRemoteReceiver,
+            uint256 decodedChainId,
+            uint256 decodedValue,
+            Call[] memory decodedRemoteCalls
+        ) = decoder.decodeWormhole(wormholeCall);
+
+        assertEq(sourceSender_, decodedSourceSender);
+        assertEq(remoteReceiver, decodedRemoteReceiver);
+        assertEq(chainId, decodedChainId);
+        assertEq(value, decodedValue);
+
+        for (uint256 i; i < remoteCalls.length; i++) {
+            assertEq(remoteCalls[i].target, decodedRemoteCalls[i].target);
+            assertEq(remoteCalls[i].value, decodedRemoteCalls[i].value);
+            assertEq(remoteCalls[i].data, decodedRemoteCalls[i].data);
+        }
+    }
+
+    function testFuzzEncodeDecode(
+        address sourceSender_,
+        address remoteReceiver,
+        uint256 chainIdSeed,
+        uint256 value,
+        Call[] memory remoteCalls
+    ) external view {
+        uint256 chainId = _knownChainId(chainIdSeed);
+
+        Call memory wormholeCall =
+            encoder.encodeWormhole(sourceSender_, remoteReceiver, chainId, value, remoteCalls);
+
+        (
+            address decodedSourceSender,
+            address decodedRemoteReceiver,
+            uint256 decodedChainId,
+            uint256 decodedValue,
+            Call[] memory decodedRemoteCalls
+        ) = decoder.decodeWormhole(wormholeCall);
+
+        assertEq(sourceSender_, decodedSourceSender);
+        assertEq(remoteReceiver, decodedRemoteReceiver);
+        assertEq(chainId, decodedChainId);
+        assertEq(value, decodedValue);
+
+        for (uint256 i; i < remoteCalls.length; i++) {
+            assertEq(remoteCalls[i].target, decodedRemoteCalls[i].target);
+            assertEq(remoteCalls[i].value, decodedRemoteCalls[i].value);
+            assertEq(remoteCalls[i].data, decodedRemoteCalls[i].data);
+        }
     }
 
     function _knownChainIds() internal pure returns (uint256[] memory ids) {

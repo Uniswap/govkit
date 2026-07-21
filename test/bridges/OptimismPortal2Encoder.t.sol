@@ -4,14 +4,21 @@ pragma solidity ^0.8.0;
 import {Call} from "../../src/types/Call.sol";
 import {IOptimismPortal2} from "../../src/interfaces/bridges/IOptimismPortal2.sol";
 import {OptimismPortal2Encoder} from "../../src/bridges/OptimismPortal2Encoder.sol";
+import {EncoderHarness} from "../harness/EncoderHarness.sol";
+import {DecoderHarness} from "../harness/DecoderHarness.sol";
 
 import {Test, console} from "forge-std/Test.sol";
 import {OptimismPortal2Mock} from "../mock/OptimismPortal2Mock.sol";
 
 contract OptimismPortal2EncoderTest is Test {
+    EncoderHarness internal encoder;
+    DecoderHarness internal decoder;
+
     address internal portal;
 
     function setUp() external {
+        encoder = new EncoderHarness();
+        decoder = new DecoderHarness();
         portal = address(new OptimismPortal2Mock());
     }
 
@@ -98,5 +105,39 @@ contract OptimismPortal2EncoderTest is Test {
         assertEq(gasLimit, gasLimit_);
         assertFalse(isCreation);
         assertEq(data, remoteCall.data);
+    }
+
+    function testEncodeDecode() external view {
+        address portal_ = address(0x01);
+        uint64 gasLimit = 200_000;
+        Call memory remoteCall = Call({
+            target: address(0x03),
+            value: 5,
+            data: hex"05"
+        });
+
+        Call memory portalCall = encoder.encodeOptimismPortal2(portal_, gasLimit, remoteCall);
+
+        (address decodedPortal, uint64 decodedGasLimit, Call memory decodedRemoteCall) =
+            decoder.decodeOptimismPortal2(portalCall);
+
+        assertEq(portal_, decodedPortal);
+        assertEq(gasLimit, decodedGasLimit);
+        assertEq(remoteCall.target, decodedRemoteCall.target);
+        assertEq(remoteCall.value, decodedRemoteCall.value);
+        assertEq(remoteCall.data, decodedRemoteCall.data);
+    }
+
+    function testFuzzEncodeDecode(address portal_, uint64 gasLimit, Call memory remoteCall) external view {
+        Call memory portalCall = encoder.encodeOptimismPortal2(portal_, gasLimit, remoteCall);
+
+        (address decodedPortal, uint64 decodedGasLimit, Call memory decodedRemoteCall) =
+            decoder.decodeOptimismPortal2(portalCall);
+
+        assertEq(portal_, decodedPortal);
+        assertEq(gasLimit, decodedGasLimit);
+        assertEq(remoteCall.target, decodedRemoteCall.target);
+        assertEq(remoteCall.value, decodedRemoteCall.value);
+        assertEq(remoteCall.data, decodedRemoteCall.data);
     }
 }
