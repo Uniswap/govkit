@@ -18,20 +18,21 @@ library FxRootDecoder {
     /// @return fxRoot FxRoot contract to call on Ethereum.
     /// @return fxReceiver FxReceiver contract that receives the message on Polygon.
     /// @return remoteCalls Array of calls to make on Polygon.
-    function decode(Call memory fxRootCall) internal pure returns (
-        address,
-        address,
-        Call[] memory
-    ) {
-        require(fxRootCall.data.getSelector() == IFxRoot.sendMessageToChild.selector, SelectorMismatch(fxRootCall.data.getSelector(), IFxRoot.sendMessageToChild.selector));
-
-        (address fxReceiver, bytes memory encodedCalls) = abi.decode(
-            fxRootCall.data.stripSelector(), (address, bytes)
+    function decode(Call memory fxRootCall)
+        internal
+        pure
+        returns (address, address, Call[] memory)
+    {
+        require(
+            fxRootCall.data.getSelector() == IFxRoot.sendMessageToChild.selector,
+            SelectorMismatch(fxRootCall.data.getSelector(), IFxRoot.sendMessageToChild.selector)
         );
 
-        (address[] memory targets, bytes[] memory datas, uint256[] memory values) = abi.decode(
-            encodedCalls, (address[], bytes[], uint256[])
-        );
+        (address fxReceiver, bytes memory encodedCalls) =
+            abi.decode(fxRootCall.data.stripSelector(), (address, bytes));
+
+        (address[] memory targets, bytes[] memory datas, uint256[] memory values) =
+            abi.decode(encodedCalls, (address[], bytes[], uint256[]));
 
         uint256 length = targets.length;
         require(length == datas.length && length == values.length, LengthsMismatch());
@@ -39,17 +40,9 @@ library FxRootDecoder {
         Call[] memory remoteCalls = new Call[](length);
 
         for (uint256 i; i < length; i++) {
-            remoteCalls[i] = Call({
-                target: targets[i],
-                value: values[i],
-                data: datas[i]
-            });
+            remoteCalls[i] = Call({target: targets[i], value: values[i], data: datas[i]});
         }
 
-        return (
-            fxRootCall.target,
-            fxReceiver,
-            remoteCalls
-        );
+        return (fxRootCall.target, fxReceiver, remoteCalls);
     }
 }

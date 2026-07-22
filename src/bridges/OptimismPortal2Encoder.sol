@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "../types/Call.sol";
 import {IOptimismPortal2} from "../interfaces/bridges/IOptimismPortal2.sol";
+import {Call} from "../types/Call.sol";
 
 /// @title OP Stack Portal Encoder.
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, in
@@ -28,7 +28,11 @@ library OptimismPortal2Encoder {
     /// @param remoteCall Call to be run from the aliased Timelock address on the
     ///        OP Stack chain.
     /// @return Proposal-ready call.
-    function encode(address portal, uint64 gasLimit, Call memory remoteCall) internal pure returns (Call memory) {
+    function encode(address portal, uint64 gasLimit, Call memory remoteCall)
+        internal
+        pure
+        returns (Call memory)
+    {
         return Call({
             target: portal,
             value: remoteCall.value,

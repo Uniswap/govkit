@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "../types/Call.sol";
-import {IL1CrossDomainMessenger} from "../interfaces/bridges/IL1CrossDomainMessenger.sol";
 import {ICrossChainAccount} from "../interfaces/bridges/ICrossChainAccount.sol";
+import {IL1CrossDomainMessenger} from "../interfaces/bridges/IL1CrossDomainMessenger.sol";
+import {Call} from "../types/Call.sol";
 
 /// @title OP Stack L1 Cross Domain Messenger Encoder
 /// @dev OP Stack chains' core bridge system is the Optimism Portal, the
@@ -24,11 +24,11 @@ library L1CrossDomainMessengerEncoder {
     /// @param crossChainAccount Uniswap's CrossChainAccount contract on the OP Stack chain.
     /// @param remoteCall Call to be run from the CrossChainAccount on the OP Stack chain.
     /// @return Proposal-ready call.
-    function encode(address l1CrossDomainMessenger, address crossChainAccount, Call memory remoteCall)
-        internal
-        pure
-        returns (Call memory)
-    {
+    function encode(
+        address l1CrossDomainMessenger,
+        address crossChainAccount,
+        Call memory remoteCall
+    ) internal pure returns (Call memory) {
         return encode(l1CrossDomainMessenger, crossChainAccount, GAS_LIMIT, remoteCall);
     }
 
@@ -38,11 +38,12 @@ library L1CrossDomainMessengerEncoder {
     /// @param gasLimit Gas limit for the call.
     /// @param remoteCall Call to be run from the CrossChainAccount on the OP Stack chain.
     /// @return Proposal-ready call.
-    function encode(address l1CrossDomainMessenger, address crossChainAccount, uint32 gasLimit, Call memory remoteCall)
-        internal
-        pure
-        returns (Call memory)
-    {
+    function encode(
+        address l1CrossDomainMessenger,
+        address crossChainAccount,
+        uint32 gasLimit,
+        Call memory remoteCall
+    ) internal pure returns (Call memory) {
         if (remoteCall.value > 0) revert NonzeroCallValue();
 
         bytes memory crossChainAccountData =
@@ -52,7 +53,8 @@ library L1CrossDomainMessengerEncoder {
             target: l1CrossDomainMessenger,
             value: 0,
             data: abi.encodeCall(
-                IL1CrossDomainMessenger.sendMessage, (crossChainAccount, crossChainAccountData, gasLimit)
+                IL1CrossDomainMessenger.sendMessage,
+                (crossChainAccount, crossChainAccountData, gasLimit)
             )
         });
     }

@@ -25,7 +25,9 @@ interface IPoolManager {
     }
 
     // Events
-    event Approval(address indexed owner, address indexed spender, uint256 indexed id, uint256 amount);
+    event Approval(
+        address indexed owner, address indexed spender, uint256 indexed id, uint256 amount
+    );
     event Donate(bytes32 indexed id, address indexed sender, uint256 amount0, uint256 amount1);
     event Initialize(
         bytes32 indexed id,
@@ -59,7 +61,9 @@ interface IPoolManager {
         int24 tick,
         uint24 fee
     );
-    event Transfer(address caller, address indexed from, address indexed to, uint256 indexed id, uint256 amount);
+    event Transfer(
+        address caller, address indexed from, address indexed to, uint256 indexed id, uint256 amount
+    );
 
     // Errors
     error AlreadyUnlocked();
@@ -79,7 +83,10 @@ interface IPoolManager {
     error UnauthorizedDynamicLPFeeUpdate();
 
     // Functions
-    function allowance(address owner, address spender, uint256 id) external view returns (uint256 amount);
+    function allowance(address owner, address spender, uint256 id)
+        external
+        view
+        returns (uint256 amount);
     function approve(address spender, uint256 id, uint256 amount) external returns (bool);
     function balanceOf(address owner, uint256 id) external view returns (uint256 balance);
     function burn(address from, uint256 id, uint256 amount) external;
@@ -98,9 +105,11 @@ interface IPoolManager {
     function initialize(PoolKey memory key, uint160 sqrtPriceX96) external returns (int24 tick);
     function isOperator(address owner, address operator) external view returns (bool isOperator);
     function mint(address to, uint256 id, uint256 amount) external;
-    function modifyLiquidity(PoolKey memory key, ModifyLiquidityParams memory params, bytes memory hookData)
-        external
-        returns (int256 callerDelta, int256 feesAccrued);
+    function modifyLiquidity(
+        PoolKey memory key,
+        ModifyLiquidityParams memory params,
+        bytes memory hookData
+    ) external returns (int256 callerDelta, int256 feesAccrued);
     function owner() external view returns (address);
     function protocolFeeController() external view returns (address);
     function protocolFeesAccrued(address currency) external view returns (uint256 amount);
@@ -116,7 +125,9 @@ interface IPoolManager {
     function sync(address currency) external;
     function take(address currency, address to, uint256 amount) external;
     function transfer(address receiver, uint256 id, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address receiver, uint256 id, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address receiver, uint256 id, uint256 amount)
+        external
+        returns (bool);
     function transferOwnership(address newOwner) external;
     function unlock(bytes memory data) external returns (bytes memory result);
     function updateDynamicLPFee(PoolKey memory key, uint24 newDynamicLPFee) external;

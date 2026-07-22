@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {LibCall, Call} from "../../src/types/Call.sol";
-import {IWormholeSender} from "../../src/interfaces/bridges/IWormholeSender.sol";
 import {WormholeEncoder} from "../../src/bridges/WormholeEncoder.sol";
 import {ChainId} from "../../src/constants/ChainId.sol";
 import {WormholeChainId} from "../../src/constants/WormholeChainId.sol";
-import {EncoderHarness} from "../harness/EncoderHarness.sol";
+import {IWormholeSender} from "../../src/interfaces/bridges/IWormholeSender.sol";
+import {Call, LibCall} from "../../src/types/Call.sol";
 import {DecoderHarness} from "../harness/DecoderHarness.sol";
+import {EncoderHarness} from "../harness/EncoderHarness.sol";
 
-import {Test, console} from "forge-std/Test.sol";
-import {WormholeSenderMock} from "../mock/WormholeSenderMock.sol";
 import {WormholeEncoderHarness} from "../harness/WormholeEncoderHarness.sol";
+import {WormholeSenderMock} from "../mock/WormholeSenderMock.sol";
+import {Test, console} from "forge-std/Test.sol";
 
 contract WormholeEncoderTest is Test {
     EncoderHarness internal encoder;
@@ -29,7 +29,8 @@ contract WormholeEncoderTest is Test {
         address remoteReceiver = address(0x02);
         uint256 chainId = ChainId.BNBChain;
         uint256 value = 3;
-        Call[] memory remoteCalls = LibCall.newCalls([Call({target: address(0x04), value: 5, data: hex"aabbccdd"})]);
+        Call[] memory remoteCalls =
+            LibCall.newCalls([Call({target: address(0x04), value: 5, data: hex"aabbccdd"})]);
 
         Call memory encoded = WormholeEncoder.encode({
             sourceSender: sourceSender,
@@ -40,7 +41,8 @@ contract WormholeEncoderTest is Test {
         });
 
         vm.deal(address(this), encoded.value);
-        (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
+        (bool success, bytes memory returndata) =
+            encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
@@ -67,9 +69,12 @@ contract WormholeEncoderTest is Test {
         }
     }
 
-    function testFuzzEncode(address remoteReceiver, uint256 chainIdSeed, uint256 value, Call[] calldata remoteCalls)
-        external
-    {
+    function testFuzzEncode(
+        address remoteReceiver,
+        uint256 chainIdSeed,
+        uint256 value,
+        Call[] calldata remoteCalls
+    ) external {
         uint256 chainId = _knownChainId(chainIdSeed);
 
         Call memory encoded = WormholeEncoder.encode({
@@ -81,7 +86,8 @@ contract WormholeEncoderTest is Test {
         });
 
         vm.deal(address(this), encoded.value);
-        (bool success, bytes memory returndata) = encoded.target.call{value: encoded.value}(encoded.data);
+        (bool success, bytes memory returndata) =
+            encoded.target.call{value: encoded.value}(encoded.data);
 
         assertTrue(success);
 
@@ -118,7 +124,9 @@ contract WormholeEncoderTest is Test {
 
         WormholeEncoderHarness harness = new WormholeEncoderHarness();
 
-        vm.expectRevert(abi.encodeWithSelector(WormholeChainId.UnsupportedChainId.selector, chainId));
+        vm.expectRevert(
+            abi.encodeWithSelector(WormholeChainId.UnsupportedChainId.selector, chainId)
+        );
         harness.encode(sourceSender, remoteReceiver, chainId, value, remoteCalls);
     }
 
@@ -128,11 +136,7 @@ contract WormholeEncoderTest is Test {
         uint256 chainId = ChainId.BNBChain;
         uint256 value = 3;
         Call[] memory remoteCalls = new Call[](1);
-        remoteCalls[0] = Call({
-            target: address(0x03),
-            value: 5,
-            data: hex"05"
-        });
+        remoteCalls[0] = Call({target: address(0x03), value: 5, data: hex"05"});
 
         Call memory wormholeCall =
             encoder.encodeWormhole(sourceSender_, remoteReceiver, chainId, value, remoteCalls);

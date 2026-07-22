@@ -41,7 +41,10 @@ interface IInbox {
     // Functions
     function allowListEnabled() external view returns (bool);
     function bridge() external view returns (address);
-    function calculateRetryableSubmissionFee(uint256 dataLength, uint256 baseFee) external view returns (uint256);
+    function calculateRetryableSubmissionFee(uint256 dataLength, uint256 baseFee)
+        external
+        view
+        returns (uint256);
     function createRetryableTicket(
         address to,
         uint256 l2CallValue,
@@ -78,10 +81,12 @@ interface IInbox {
         uint256 value,
         bytes memory data
     ) external returns (uint256);
-    function sendL1FundedContractTransaction(uint256 gasLimit, uint256 maxFeePerGas, address to, bytes memory data)
-        external
-        payable
-        returns (uint256);
+    function sendL1FundedContractTransaction(
+        uint256 gasLimit,
+        uint256 maxFeePerGas,
+        address to,
+        bytes memory data
+    ) external payable returns (uint256);
     function sendL1FundedUnsignedTransaction(
         uint256 gasLimit,
         uint256 maxFeePerGas,

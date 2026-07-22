@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import {Script, VmSafe, console} from "forge-std/Script.sol";
 
-import {Recorder} from "../src/forge/Recorder.sol";
 import {ChainId} from "../src/constants/ChainId.sol";
+import {Recorder} from "../src/forge/Recorder.sol";
 
 // forge script script/RecorderExample.sol:RecorderExample
 

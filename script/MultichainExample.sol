@@ -3,19 +3,20 @@ pragma solidity ^0.8.0;
 
 import {Script} from "forge-std/Script.sol";
 
-import {ChainId} from "../src/constants/ChainId.sol";
-import {Proposal} from "../src/types/Proposal.sol";
-import {Call, LibCall} from "../src/types/Call.sol";
-import {GovernanceSeatbelt} from "../src/forge/GovernanceSeatbelt.sol";
-import {WormholeEncoder} from "../src/bridges/WormholeEncoder.sol";
 import {L1CrossDomainMessengerEncoder} from "../src/bridges/L1CrossDomainMessengerEncoder.sol";
+import {WormholeEncoder} from "../src/bridges/WormholeEncoder.sol";
+import {ChainId} from "../src/constants/ChainId.sol";
+import {GovernanceSeatbelt} from "../src/forge/GovernanceSeatbelt.sol";
+import {Call, LibCall} from "../src/types/Call.sol";
+import {Proposal} from "../src/types/Proposal.sol";
 import {Uniswap} from "../src/types/Uniswap.sol";
 
 import {IUniswapV2Factory} from "../src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "../src/interfaces/IUniswapV3Factory.sol";
 
 string constant description = "" "# Turn on Fees BNB Chain & Celo \n\n"
-    "Activates fee switch on BNB Chain & Celo by: \n\n" "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
+    "Activates fee switch on BNB Chain & Celo by: \n\n"
+    "- Setting V2Factory's `feeTo` on BNB Chain to TokenJar \n"
     "- Setting V3Factory's `owner` on BNB Chain to V3OpenFeeAdapter \n"
     "- Setting V2Factory's `feeTo` on Celo to TokenJar \n"
     "- Setting V3Factory's `owner` on Celo to V3OpenFeeAdapter \n\n"
@@ -40,12 +41,16 @@ contract MultichainExample is Script {
                     Call({
                         target: uniswap.bnbChain.v2Factory,
                         value: 0,
-                        data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.bnbChain.tokenJar))
+                        data: abi.encodeCall(
+                            IUniswapV2Factory.setFeeTo, (uniswap.bnbChain.tokenJar)
+                        )
                     }),
                     Call({
                         target: uniswap.bnbChain.v3Factory,
                         value: 0,
-                        data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.bnbChain.v3OpenFeeAdapter))
+                        data: abi.encodeCall(
+                            IUniswapV3Factory.setOwner, (uniswap.bnbChain.v3OpenFeeAdapter)
+                        )
                     })
                 ]
             )
@@ -77,14 +82,16 @@ contract MultichainExample is Script {
         // -----------------------------------------------------------------------------------------
         // Construct Proposal
         //
-        Proposal memory proposal =
-            Proposal({description: description, calls: LibCall.newCalls([bnbChainCall, celoCall0, celoCall1])});
+        Proposal memory proposal = Proposal({
+            description: description, calls: LibCall.newCalls([bnbChainCall, celoCall0, celoCall1])
+        });
 
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt
         //
-        string memory json =
-            GovernanceSeatbelt.toJson({proposal: proposal, governorBravo: uniswap.ethereum.governorBravo});
+        string memory json = GovernanceSeatbelt.toJson({
+            proposal: proposal, governorBravo: uniswap.ethereum.governorBravo
+        });
 
         vm.writeFile("./seatbelt-example.json", json);
     }

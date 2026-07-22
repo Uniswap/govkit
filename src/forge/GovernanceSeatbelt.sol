@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {vm} from "./Constants.sol";
 import {Proposal} from "../types/Proposal.sol";
+import {vm} from "./Constants.sol";
 
 /// @title Governance Seatbelt Exporter
 /// @dev Serializes a proposal to JSON, which can be parsed, simulated, &
@@ -14,7 +14,10 @@ library GovernanceSeatbelt {
     /// @param proposal Proposal to serialize.
     /// @param governorBravo GovernorBravo address (used in Seatbelt).
     /// @return Serialized JSON.
-    function toJson(Proposal memory proposal, address governorBravo) internal returns (string memory) {
+    function toJson(Proposal memory proposal, address governorBravo)
+        internal
+        returns (string memory)
+    {
         (
             address[] memory targets,
             uint256[] memory values,

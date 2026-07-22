@@ -2,17 +2,17 @@
 pragma solidity ^0.8.0;
 
 import {
-    Ethereum,
-    EthereumBridgeSender,
     Arbitrum,
     Avalanche,
+    BNBChain,
     Base,
     Blast,
-    BNBChain,
     Celo,
+    Ethereum,
+    EthereumBridgeSender,
     Ink,
-    MegaEth,
     Linea,
+    MegaEth,
     Monad,
     Optimism,
     Polygon,
@@ -20,8 +20,8 @@ import {
     Soneium,
     Tempo,
     UniChain,
-    XLayer,
     WorldChain,
+    XLayer,
     Zora
 } from "./Networks.sol";
 

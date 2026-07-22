@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPl-3.0-only
 pragma solidity ^0.8.0;
 
+import {IInbox} from "../../interfaces/bridges/IInbox.sol";
 import {Call} from "../../types/Call.sol";
 import {InboxEncoder} from "../InboxEncoder.sol";
-import {IInbox} from "../../interfaces/bridges/IInbox.sol";
 
 import {SelectorHandler} from "./SelectorHandler.sol";
 
@@ -21,15 +21,15 @@ library InboxDecoder {
     /// @return maxFeePerGas Max fee per gas.
     /// @return maxSubmissionCost Max submission cost.
     /// @return remoteCall Call to make on Arbitrum Orbit chain.
-    function decode(Call memory inboxCall) internal pure returns (
-        address,
-        address,
-        uint256,
-        uint256,
-        uint256,
-        Call memory
-    ) {
-        require(inboxCall.data.getSelector() == IInbox.createRetryableTicket.selector, SelectorMismatch());
+    function decode(Call memory inboxCall)
+        internal
+        pure
+        returns (address, address, uint256, uint256, uint256, Call memory)
+    {
+        require(
+            inboxCall.data.getSelector() == IInbox.createRetryableTicket.selector,
+            SelectorMismatch()
+        );
 
         (
             address to,
@@ -40,7 +40,10 @@ library InboxDecoder {
             uint256 gasLimit,
             uint256 maxFeePerGas,
             bytes memory data
-        ) = abi.decode(inboxCall.data.stripSelector(), (address, uint256, uint256, address, address, uint256, uint256, bytes));
+        ) = abi.decode(
+            inboxCall.data.stripSelector(),
+            (address, uint256, uint256, address, address, uint256, uint256, bytes)
+        );
 
         address timelock = InboxEncoder.arbitrumDeAlias(excessFeeRefundAddress);
 
@@ -52,11 +55,7 @@ library InboxDecoder {
             gasLimit,
             maxFeePerGas,
             maxSubmissionCost,
-            Call({
-                target: to,
-                value: l2CallValue,
-                data: data
-            })
+            Call({target: to, value: l2CallValue, data: data})
         );
     }
 }

@@ -28,7 +28,9 @@ interface IGovernorBravo {
     event ProposalExecuted(uint256 id);
     event ProposalQueued(uint256 id, uint256 eta);
     event ProposalThresholdSet(uint256 oldProposalThreshold, uint256 newProposalThreshold);
-    event VoteCast(address indexed voter, uint256 proposalId, uint8 support, uint256 votes, string reason);
+    event VoteCast(
+        address indexed voter, uint256 proposalId, uint8 support, uint256 votes, string reason
+    );
     event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay);
     event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
 
@@ -50,7 +52,8 @@ interface IGovernorBravo {
     function admin() external view returns (address);
     function cancel(uint256 proposalId) external;
     function castVote(uint256 proposalId, uint8 support) external;
-    function castVoteBySig(uint256 proposalId, uint8 support, uint8 v, bytes32 r, bytes32 s) external;
+    function castVoteBySig(uint256 proposalId, uint8 support, uint8 v, bytes32 r, bytes32 s)
+        external;
     function castVoteWithReason(uint256 proposalId, uint8 support, string memory reason) external;
     function execute(uint256 proposalId) external payable;
     function getActions(uint256 proposalId)

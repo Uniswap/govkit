@@ -43,7 +43,9 @@ interface IV3OpenFeeAdapter {
     function batchTriggerFeeUpdateByPool(address[] memory pools) external;
     function clearFeeTierDefault(uint24 feeTier) external;
     function clearPoolOverride(address pool) external;
-    function collect(CollectParams[] memory collectParams) external returns (Collected[] memory amountsCollected);
+    function collect(CollectParams[] memory collectParams)
+        external
+        returns (Collected[] memory amountsCollected);
     function defaultFee() external view returns (uint8);
     function defaultFees(uint24 feeTier) external view returns (uint8);
     function enableFeeAmount(uint24 fee, int24 tickSpacing) external;

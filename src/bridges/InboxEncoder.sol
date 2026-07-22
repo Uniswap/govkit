@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "../types/Call.sol";
 import {IInbox} from "../interfaces/bridges/IInbox.sol";
+import {Call} from "../types/Call.sol";
 
 /// @title Arbitrum Inbox Encoder
 /// @dev The Arbitrum Inbox system requires Uniswap Timelock to call Arbitrum's
@@ -27,7 +27,11 @@ library InboxEncoder {
     /// @param timelock Uniswap's Timelock contract on Ethereum.
     /// @param remoteCall Call to be run from the aliased Timelock address on Arbitrum.
     /// @return Proposal-ready call.
-    function encode(address inbox, address timelock, Call memory remoteCall) internal pure returns (Call memory) {
+    function encode(address inbox, address timelock, Call memory remoteCall)
+        internal
+        pure
+        returns (Call memory)
+    {
         return encode({
             inbox: inbox,
             timelock: timelock,

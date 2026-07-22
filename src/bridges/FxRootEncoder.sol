@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {Call} from "../types/Call.sol";
 import {IFxRoot} from "../interfaces/bridges/IFxRoot.sol";
+import {Call} from "../types/Call.sol";
 
 /// @title Polygon FxRoot Encoder
 /// @dev The Polygon FxRoot/FxChild system requires Uniswap Timelock to call
@@ -21,7 +21,11 @@ library FxRootEncoder {
     /// @param fxReceiver Uniswap's FxReceiver contract on Polygon.
     /// @param remoteCalls Call array to be run from the FxReceiver on Polygon.
     /// @return Proposal-ready call.
-    function encode(address fxRoot, address fxReceiver, Call[] memory remoteCalls) internal pure returns (Call memory) {
+    function encode(address fxRoot, address fxReceiver, Call[] memory remoteCalls)
+        internal
+        pure
+        returns (Call memory)
+    {
         address[] memory targets = new address[](remoteCalls.length);
         uint256[] memory values = new uint256[](remoteCalls.length);
         bytes[] memory datas = new bytes[](remoteCalls.length);
@@ -36,7 +40,9 @@ library FxRootEncoder {
         return Call({
             target: fxRoot,
             value: 0,
-            data: abi.encodeCall(IFxRoot.sendMessageToChild, (fxReceiver, abi.encode(targets, datas, values)))
+            data: abi.encodeCall(
+                IFxRoot.sendMessageToChild, (fxReceiver, abi.encode(targets, datas, values))
+            )
         });
     }
 }

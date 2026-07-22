@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import {vm} from "./Constants.sol";
-import {console} from "forge-std/console.sol";
 import {VmSafe} from "forge-std/Vm.sol";
+import {console} from "forge-std/console.sol";
 
 /// @dev Recorder Type
 struct Recorder {
@@ -45,7 +45,9 @@ library LibRecorder {
     /// @param recorder The recorder in the Script/Test contract's state.
     /// @param scriptName Name of the script in which the relevant contract is deployed.
     /// @param debugMode If true, uses excessive logging for debugging purposes.
-    function initialize(Recorder storage recorder, string memory scriptName, bool debugMode) internal {
+    function initialize(Recorder storage recorder, string memory scriptName, bool debugMode)
+        internal
+    {
         recorder.scriptName = scriptName;
         recorder.debugMode = debugMode;
 
@@ -75,7 +77,9 @@ library LibRecorder {
 
         if (!vm.isFile(filePath)) {
             if (recorder.debugMode) {
-                console.log("Recorder::Debug:", filePath, "does not exist; writing \"{}\" to ", filePath);
+                console.log(
+                    "Recorder::Debug:", filePath, "does not exist; writing \"{}\" to ", filePath
+                );
             }
 
             vm.writeJson("{}", filePath);
@@ -95,10 +99,12 @@ library LibRecorder {
     /// @param chainId Chain ID to record to.
     /// @param deploymentName Name of the contract to record.
     /// @param deployment Address to be recorded.
-    function write(Recorder storage recorder, uint256 chainId, string memory deploymentName, address deployment)
-        internal
-        returns (address)
-    {
+    function write(
+        Recorder storage recorder,
+        uint256 chainId,
+        string memory deploymentName,
+        address deployment
+    ) internal returns (address) {
         require(
             recorder.initialized,
             "Recorder::Error: Recorder not initialized. " "Has `recorder.initialize()` been called?"
@@ -116,11 +122,19 @@ library LibRecorder {
         string memory deploymentString = vm.toString(deployment);
         string memory filePath = recorder.path();
 
-        try vm.writeJson(deploymentString, filePath, string.concat(vm.toString(chainId), ".", deploymentName)) {
+        try vm.writeJson(
+            deploymentString, filePath, string.concat(vm.toString(chainId), ".", deploymentName)
+        ) {
             if (recorder.debugMode) {
                 console.log(
                     string.concat(
-                        "Recorder::Debug: ", filePath, ": wrote {\"", deploymentName, "\" : \"", deploymentString, "\"}"
+                        "Recorder::Debug: ",
+                        filePath,
+                        ": wrote {\"",
+                        deploymentName,
+                        "\" : \"",
+                        deploymentString,
+                        "\"}"
                     )
                 );
             }
@@ -174,7 +188,10 @@ library LibRecorder {
 
             return deployment;
         } catch (bytes memory revertData) {
-            console.log("Recorder::Error: vm.parseJsonAddress failed. This is likely " "because the JSON is malformed");
+            console.log(
+                "Recorder::Error: vm.parseJsonAddress failed. This is likely "
+                "because the JSON is malformed"
+            );
             revert(string.concat("Forge VM Error:", abi.decode(revertData, (string))));
         }
     }
@@ -260,8 +277,9 @@ library LibRecorder {
         catch (bytes memory revertData) {
             console.log(
                 string.concat(
-                    "Recorder::Error: vm.isDir smoke check failed. This is likely due " "to missing file permissions.\n"
-                    "Does `foundry.toml` contain: " "`fs_{ access = \"read-write\", path = \"",
+                    "Recorder::Error: vm.isDir smoke check failed. This is likely due "
+                    "to missing file permissions.\n" "Does `foundry.toml` contain: "
+                    "`fs_{ access = \"read-write\", path = \"",
                     directory,
                     "\"",
                     " }`?\n"

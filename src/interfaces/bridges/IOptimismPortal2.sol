@@ -21,10 +21,16 @@ interface IOptimismPortal2 {
 
     // Events
     event Initialized(uint8 version);
-    event TransactionDeposited(address indexed from, address indexed to, uint256 indexed version, bytes opaqueData);
+    event TransactionDeposited(
+        address indexed from, address indexed to, uint256 indexed version, bytes opaqueData
+    );
     event WithdrawalFinalized(bytes32 indexed withdrawalHash, bool success);
-    event WithdrawalProven(bytes32 indexed withdrawalHash, address indexed from, address indexed to);
-    event WithdrawalProvenExtension1(bytes32 indexed withdrawalHash, address indexed proofSubmitter);
+    event WithdrawalProven(
+        bytes32 indexed withdrawalHash, address indexed from, address indexed to
+    );
+    event WithdrawalProvenExtension1(
+        bytes32 indexed withdrawalHash, address indexed proofSubmitter
+    );
     event AdminChanged(address previousAdmin, address newAdmin);
     event Upgraded(address indexed implementation);
 
@@ -75,17 +81,23 @@ interface IOptimismPortal2 {
         bool _isCreation,
         bytes memory _data
     ) external;
-    function depositTransaction(address _to, uint256 _value, uint64 _gasLimit, bool _isCreation, bytes memory _data)
-        external
-        payable;
+    function depositTransaction(
+        address _to,
+        uint256 _value,
+        uint64 _gasLimit,
+        bool _isCreation,
+        bytes memory _data
+    ) external payable;
     function disputeGameBlacklist(address _disputeGame) external view returns (bool);
     function disputeGameFactory() external view returns (address);
     function disputeGameFinalityDelaySeconds() external view returns (uint256);
     function donateETH() external payable;
     function ethLockbox() external view returns (address);
     function finalizeWithdrawalTransaction(WithdrawalTransaction memory _tx) external;
-    function finalizeWithdrawalTransactionExternalProof(WithdrawalTransaction memory _tx, address _proofSubmitter)
-        external;
+    function finalizeWithdrawalTransactionExternalProof(
+        WithdrawalTransaction memory _tx,
+        address _proofSubmitter
+    ) external;
     function finalizedWithdrawals(bytes32) external view returns (bool);
     function guardian() external view returns (address);
     function initVersion() external view returns (uint8);
@@ -93,7 +105,10 @@ interface IOptimismPortal2 {
     function l2Sender() external view returns (address);
     function minimumGasLimit(uint64 _byteCount) external pure returns (uint64);
     function numProofSubmitters(bytes32 _withdrawalHash) external view returns (uint256);
-    function params() external view returns (uint128 prevBaseFee, uint64 prevBoughtGas, uint64 prevBlockNum);
+    function params()
+        external
+        view
+        returns (uint128 prevBaseFee, uint64 prevBoughtGas, uint64 prevBlockNum);
     function paused() external view returns (bool);
     function proofMaturityDelaySeconds() external view returns (uint256);
     function proofSubmitters(bytes32, uint256) external view returns (address);
@@ -103,7 +118,10 @@ interface IOptimismPortal2 {
         OutputRootProof memory _outputRootProof,
         bytes[] memory _withdrawalProof
     ) external;
-    function provenWithdrawals(bytes32, address) external view returns (address disputeGameProxy, uint64 timestamp);
+    function provenWithdrawals(bytes32, address)
+        external
+        view
+        returns (address disputeGameProxy, uint64 timestamp);
     function proxyAdmin() external view returns (address);
     function proxyAdminOwner() external view returns (address);
     function respectedGameType() external view returns (uint32);
@@ -115,5 +133,8 @@ interface IOptimismPortal2 {
     function changeAdmin(address _admin) external;
     function implementation() external returns (address);
     function upgradeTo(address _implementation) external;
-    function upgradeToAndCall(address _implementation, bytes memory _data) external payable returns (bytes memory);
+    function upgradeToAndCall(address _implementation, bytes memory _data)
+        external
+        payable
+        returns (bytes memory);
 }

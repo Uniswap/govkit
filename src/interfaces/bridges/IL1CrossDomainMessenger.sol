@@ -6,7 +6,13 @@ interface IL1CrossDomainMessenger {
     event FailedRelayedMessage(bytes32 indexed msgHash);
     event Initialized(uint8 version);
     event RelayedMessage(bytes32 indexed msgHash);
-    event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit);
+    event SentMessage(
+        address indexed target,
+        address sender,
+        bytes message,
+        uint256 messageNonce,
+        uint256 gasLimit
+    );
     event SentMessageExtension1(address indexed sender, uint256 value);
 
     // Functions
@@ -35,7 +41,9 @@ interface IL1CrossDomainMessenger {
         uint256 _minGasLimit,
         bytes memory _message
     ) external payable;
-    function sendMessage(address _target, bytes memory _message, uint32 _minGasLimit) external payable;
+    function sendMessage(address _target, bytes memory _message, uint32 _minGasLimit)
+        external
+        payable;
     function successfulMessages(bytes32) external view returns (bool);
     function superchainConfig() external view returns (address);
     function systemConfig() external view returns (address);

@@ -53,7 +53,10 @@ library WormholeEncoder {
         return Call({
             target: sourceSender,
             value: value,
-            data: abi.encodeCall(IWormholeSender.sendMessage, (targets, values, datas, remoteReceiver, wormholeChainId))
+            data: abi.encodeCall(
+                IWormholeSender.sendMessage,
+                (targets, values, datas, remoteReceiver, wormholeChainId)
+            )
         });
     }
 }

@@ -3,13 +3,13 @@ pragma solidity ^0.8.0;
 
 import {Script} from "forge-std/Script.sol";
 
-import {Proposal} from "../src/types/Proposal.sol";
-import {LibCall, Call} from "../src/types/Call.sol";
 import {GovernanceSeatbelt} from "../src/forge/GovernanceSeatbelt.sol";
-import {Uniswap} from "../src/types/Uniswap.sol";
+import {IGovernorBravo} from "../src/interfaces/IGovernorBravo.sol";
 import {IUniswapV2Factory} from "../src/interfaces/IUniswapV2Factory.sol";
 import {IUniswapV3Factory} from "../src/interfaces/IUniswapV3Factory.sol";
-import {IGovernorBravo} from "../src/interfaces/IGovernorBravo.sol";
+import {Call, LibCall} from "../src/types/Call.sol";
+import {Proposal} from "../src/types/Proposal.sol";
+import {Uniswap} from "../src/types/Uniswap.sol";
 
 string constant description = "# Example Description\n ...";
 
@@ -26,12 +26,16 @@ contract ProposalExample is Script {
                     Call({
                         target: uniswap.ethereum.v2Factory,
                         value: 0,
-                        data: abi.encodeCall(IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar))
+                        data: abi.encodeCall(
+                            IUniswapV2Factory.setFeeTo, (uniswap.ethereum.tokenJar)
+                        )
                     }),
                     Call({
                         target: uniswap.ethereum.v3Factory,
                         value: 0,
-                        data: abi.encodeCall(IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter))
+                        data: abi.encodeCall(
+                            IUniswapV3Factory.setOwner, (uniswap.ethereum.v3OpenFeeAdapter)
+                        )
                     })
                 ]
             )
@@ -40,8 +44,9 @@ contract ProposalExample is Script {
         // -----------------------------------------------------------------------------------------
         // Export proposal to Governance Seatbelt
         //
-        string memory json =
-            GovernanceSeatbelt.toJson({proposal: proposal, governorBravo: uniswap.ethereum.governorBravo});
+        string memory json = GovernanceSeatbelt.toJson({
+            proposal: proposal, governorBravo: uniswap.ethereum.governorBravo
+        });
 
         vm.writeFile("./seatbelt-example.json", json);
 
@@ -50,9 +55,14 @@ contract ProposalExample is Script {
         //
         if (true) return;
 
-        (address[] memory targets, uint256[] memory values, string[] memory signatures, bytes[] memory datas,) =
-            proposal.toGovernorBravoInputs();
+        (
+            address[] memory targets,
+            uint256[] memory values,
+            string[] memory signatures,
+            bytes[] memory datas,
+        ) = proposal.toGovernorBravoInputs();
 
-        IGovernorBravo(uniswap.ethereum.governorBravo).propose(targets, values, signatures, datas, description);
+        IGovernorBravo(uniswap.ethereum.governorBravo)
+            .propose(targets, values, signatures, datas, description);
     }
 }
