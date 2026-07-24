@@ -58,6 +58,8 @@ library InboxEncoder {
         uint256 maxSubmissionCost,
         Call memory remoteCall
     ) internal pure returns (Call memory) {
+        address refundAddress = arbitrumAlias(timelock);
+
         return Call({
             target: inbox,
             value: (gasLimit * maxFeePerGas) + maxSubmissionCost + remoteCall.value,
@@ -67,8 +69,8 @@ library InboxEncoder {
                     remoteCall.target,
                     remoteCall.value,
                     maxSubmissionCost,
-                    timelock,
-                    timelock,
+                    refundAddress,
+                    refundAddress,
                     gasLimit,
                     maxFeePerGas,
                     remoteCall.data

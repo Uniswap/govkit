@@ -37,7 +37,7 @@ contract InboxEncoderTest is Test {
 
         RetryableTicket memory ticket = abi.decode(returndata, (RetryableTicket));
 
-        address refund = timelock;
+        address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
         assertEq(
@@ -79,7 +79,7 @@ contract InboxEncoderTest is Test {
 
         RetryableTicket memory ticket = abi.decode(returndata, (RetryableTicket));
 
-        address refund = timelock;
+        address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
         assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_ + remoteCall.value);
@@ -94,6 +94,16 @@ contract InboxEncoderTest is Test {
     }
 
     function testFuzzEncode(address timelock, Call memory remoteCall) external {
+        // Keep `arbitrumAlias` from overflowing uint160.
+        timelock = address(
+            uint160(
+                bound(
+                    uint256(uint160(timelock)),
+                    0,
+                    uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET)
+                )
+            )
+        );
         // Keep the value computation from overflowing uint256.
         remoteCall.value = bound(
             remoteCall.value,
@@ -113,7 +123,7 @@ contract InboxEncoderTest is Test {
 
         RetryableTicket memory ticket = abi.decode(returndata, (RetryableTicket));
 
-        address refund = timelock;
+        address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
         assertEq(
@@ -138,6 +148,16 @@ contract InboxEncoderTest is Test {
         uint256 maxSubmissionCost_,
         Call memory remoteCall
     ) external {
+        // Keep `arbitrumAlias` from overflowing uint160 and the value computation from overflowing uint256.
+        timelock = address(
+            uint160(
+                bound(
+                    uint256(uint160(timelock)),
+                    0,
+                    uint256(type(uint160).max - InboxEncoder.ALIAS_OFFSET)
+                )
+            )
+        );
         gasLimit_ = bound(gasLimit_, 0, type(uint64).max);
         maxFeePerGas_ = bound(maxFeePerGas_, 0, type(uint64).max);
         maxSubmissionCost_ = bound(maxSubmissionCost_, 0, type(uint128).max);
@@ -160,7 +180,7 @@ contract InboxEncoderTest is Test {
 
         RetryableTicket memory ticket = abi.decode(returndata, (RetryableTicket));
 
-        address refund = timelock;
+        address refund = InboxEncoder.arbitrumAlias(timelock);
 
         assertEq(encoded.target, inbox);
         assertEq(encoded.value, (gasLimit_ * maxFeePerGas_) + maxSubmissionCost_ + remoteCall.value);

@@ -45,11 +45,13 @@ library InboxDecoder {
             (address, uint256, uint256, address, address, uint256, uint256, bytes)
         );
 
+        address timelock = InboxEncoder.arbitrumDeAlias(excessFeeRefundAddress);
+
         require(excessFeeRefundAddress == callValueRefundAddress, RefundAddressMismatch());
 
         return (
             inboxCall.target,
-            excessFeeRefundAddress,
+            timelock,
             gasLimit,
             maxFeePerGas,
             maxSubmissionCost,
