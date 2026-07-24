@@ -7,7 +7,7 @@ import {WormholeChainId} from "../../src/constants/WormholeChainId.sol";
 import {Test} from "forge-std/Test.sol";
 
 contract WormholeChainIdTest is Test {
-    function testChainIdToWormholeChainId() external {
+    function testChainIdToWormholeChainId() external pure {
         assertEq(
             WormholeChainId.chainIdToWormholeChainId(ChainId.Avalanche), WormholeChainId.Avalanche
         );
@@ -25,7 +25,7 @@ contract WormholeChainIdTest is Test {
         assertEq(WormholeChainId.chainIdToWormholeChainId(ChainId.Tempo), WormholeChainId.Tempo);
     }
 
-    function testWormholeChainIdToChainId() external {
+    function testWormholeChainIdToChainId() external pure {
         assertEq(
             WormholeChainId.wormholeChainIdToChainId(WormholeChainId.Avalanche), ChainId.Avalanche
         );
