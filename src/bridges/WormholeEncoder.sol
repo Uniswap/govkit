@@ -23,7 +23,15 @@ import {IWormholeSender} from "../interfaces/bridges/IWormholeSender.sol";
 ///      Etherscan-based explorers. This is notable because if anyone tries to
 ///      forward the message after this, they will get an error, making it seem
 ///      like the message failed when it in fact had already executed.
+/// @dev Wormhole identifies a contract on any chain by a 32-byte value so that
+///      one format covers EVM and non-EVM chains alike. An EVM address fills the
+///      low 20 bytes and the upper 12 are zero. NTT peer registrations and the
+///      transceiver peer table use this format, so `toWormholeFormat` and
+///      `fromWormholeFormat` live here alongside the call encoder.
 library WormholeEncoder {
+    /// @dev Thrown when a Wormhole-format value does not fit in an EVM address.
+    error NotAnEvmAddress(bytes32 whFormatAddress);
+
     /// @dev Encodes a Wormhole call.
     /// @param sourceSender Uniswap's WormholeSender contract on Ethereum.
     /// @param remoteReceiver Uniswap's WormholeReceiver contract on the remote chain.
@@ -58,5 +66,27 @@ library WormholeEncoder {
                 (targets, values, datas, remoteReceiver, wormholeChainId)
             )
         });
+    }
+
+    /// @dev Converts an EVM address to Wormhole's 32-byte address format.
+    /// @dev Mirrors `toWormholeFormat` in Wormhole's Solidity SDK.
+    /// @param addr EVM address.
+    /// @return Wormhole-format address.
+    function toWormholeFormat(address addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(addr)));
+    }
+
+    /// @dev Converts a Wormhole-format address to an EVM address.
+    /// @dev Mirrors `fromWormholeFormat` in Wormhole's Solidity SDK, including
+    ///      the revert, so a non-EVM or corrupted value cannot truncate into a
+    ///      plausible address.
+    /// @param whFormatAddress Wormhole-format address.
+    /// @return EVM address.
+    function fromWormholeFormat(bytes32 whFormatAddress) internal pure returns (address) {
+        if (uint256(whFormatAddress) >> 160 != 0) {
+            revert NotAnEvmAddress(whFormatAddress);
+        }
+
+        return address(uint160(uint256(whFormatAddress)));
     }
 }
