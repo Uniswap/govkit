@@ -11,6 +11,8 @@ struct Ethereum {
     address v3OpenFeeAdapter;
     address tokenJar;
     address releaser;
+    address nttManager;
+    address wormholeTransceiver;
     EthereumBridgeSender bridge;
 }
 
@@ -82,6 +84,8 @@ struct BNBChain {
     address tokenJar;
     address releaser;
     address releaserUni;
+    address nttManager;
+    address wormholeTransceiver;
     address wormholeCore;
     address wormholeReceiver;
 }
@@ -146,6 +150,9 @@ struct Polygon {
     address tokenJar;
     address releaser;
     address releaserUni;
+    address nttManager;
+    address wormholeTransceiver;
+    address wormholeCore;
     address fxReceiver;
 }
 

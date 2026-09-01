@@ -80,6 +80,8 @@ library LibUniswap {
             v3OpenFeeAdapter: 0xf2371551Fe3937Db7c750f4DfABe5c2fFFdcBf5A,
             tokenJar: 0xf38521f130fcCF29dB1961597bc5d2B60F995f85,
             releaser: 0x0D5Cd355e2aBEB8fb1552F56c965B867346d6721,
+            nttManager: 0x6569925Aac77D6B8Bb085F31F9828ff80D5a0c44,
+            wormholeTransceiver: 0x7597C40Fd3df66b750C14ad4D90524e247499011,
             bridge: EthereumBridgeSender({
                 arbitrum: 0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f,
                 avalanche: 0xf5F4496219F31CDCBa6130B5402873624585615a,
@@ -164,6 +166,8 @@ library LibUniswap {
             tokenJar: 0xc6Ae6373CEcc9e595A6C8b9fe581925a8c84f70A,
             releaser: 0xa59FfbB55D91Fc32b44A06F0b9cc6036a4afbcE2,
             releaserUni: 0x06e8bdE95BE4ce5cB1134BD47aD18a79fFB35822,
+            nttManager: 0x9226AEb835487dD2ed6700A967A8AD25BEE1Dc0E,
+            wormholeTransceiver: 0xB89780a55d15CAcA4F5c8828b5B5cf95442C2716,
             wormholeCore: 0x98f3c9e6E3fAce36bAAd05FE09d375Ef1464288B,
             wormholeReceiver: 0x341c1511141022cf8eE20824Ae0fFA3491F1302b
         });
@@ -249,6 +253,9 @@ library LibUniswap {
             tokenJar: 0xc6Ae6373CEcc9e595A6C8b9fe581925a8c84f70A,
             releaser: 0xa59FfbB55D91Fc32b44A06F0b9cc6036a4afbcE2,
             releaserUni: 0x06e8bdE95BE4ce5cB1134BD47aD18a79fFB35822,
+            nttManager: 0x9226AEb835487dD2ed6700A967A8AD25BEE1Dc0E,
+            wormholeTransceiver: 0xB89780a55d15CAcA4F5c8828b5B5cf95442C2716,
+            wormholeCore: 0x7A4B5a56256163F07b2C80A7cA55aBE66c4ec4d7,
             fxReceiver: 0x8a1B966aC46F42275860f905dbC75EfBfDC12374
         });
 
