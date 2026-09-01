@@ -25,6 +25,7 @@ library ChainId {
     uint256 internal constant Monad = 143;
     uint256 internal constant Optimism = 10;
     uint256 internal constant Polygon = 137;
+    uint256 internal constant Robinhood = 4663;
     uint256 internal constant RootStock = 30;
     uint256 internal constant Soneium = 1868;
     uint256 internal constant Tempo = 4217;

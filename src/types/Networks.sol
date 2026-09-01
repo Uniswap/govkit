@@ -27,6 +27,7 @@ struct EthereumBridgeSender {
     address monad;
     address optimism;
     address polygon;
+    address robinhood;
     address rootStock;
     address soneium;
     address tempo;
@@ -146,6 +147,17 @@ struct Polygon {
     address releaser;
     address releaserUni;
     address fxReceiver;
+}
+
+struct Robinhood {
+    address v2Factory;
+    address v3Factory;
+    address poolManager;
+    address v3OpenFeeAdapter;
+    address tokenJar;
+    address releaser;
+    address releaserUni;
+    address l2GatewayRouter;
 }
 
 struct RootStock {

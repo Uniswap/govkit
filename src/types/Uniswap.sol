@@ -16,6 +16,7 @@ import {
     Monad,
     Optimism,
     Polygon,
+    Robinhood,
     RootStock,
     Soneium,
     Tempo,
@@ -43,6 +44,7 @@ struct Uniswap {
     Monad monad;
     Optimism optimism;
     Polygon polygon;
+    Robinhood robinhood;
     RootStock rootStock;
     Soneium soneium;
     Tempo tempo;
@@ -91,6 +93,7 @@ library LibUniswap {
                 monad: 0xf5F4496219F31CDCBa6130B5402873624585615a,
                 optimism: 0x25ace71c97B33Cc4729CF772ae268934F7ab5fA1,
                 polygon: 0xfe5e5D361b2ad62c541bAb87C45a0B9B018389a2,
+                robinhood: 0x1A07cc4BD17E0118BdB54D70990D2158AbAD7a2D,
                 rootStock: 0xf5F4496219F31CDCBa6130B5402873624585615a,
                 soneium: 0x9CF951E3F74B644e621b36Ca9cea147a78D4c39f,
                 tempo: 0xf5F4496219F31CDCBa6130B5402873624585615a,
@@ -247,6 +250,20 @@ library LibUniswap {
             releaser: 0xa59FfbB55D91Fc32b44A06F0b9cc6036a4afbcE2,
             releaserUni: 0x06e8bdE95BE4ce5cB1134BD47aD18a79fFB35822,
             fxReceiver: 0x8a1B966aC46F42275860f905dbC75EfBfDC12374
+        });
+
+        // -----------------------------------------------------------------------------------------
+        // Robinhood
+        //
+        uniswap.robinhood = Robinhood({
+            v2Factory: 0x8bcEaA40B9AcdfAedF85AdF4FF01F5Ad6517937f,
+            v3Factory: 0x1f7d7550B1b028f7571E69A784071F0205FD2EfA,
+            poolManager: 0x8366a39CC670B4001A1121B8F6A443A643e40951,
+            v3OpenFeeAdapter: 0x05C420bC4823e039AA4dA645eDde743486dAAA25,
+            tokenJar: 0x2aC03e14Cfe755426DaAEe0a4994184Ce81482F8,
+            releaser: 0x7a8f74C2585F84c781F951B7f2FF21337D5b630b,
+            releaserUni: 0xF177d86a28b520e3E396E4F3B96cd8e72D7dabd8,
+            l2GatewayRouter: 0x1E324B9316138CA9a73F960213621AD1aaf01B89
         });
 
         // -----------------------------------------------------------------------------------------
