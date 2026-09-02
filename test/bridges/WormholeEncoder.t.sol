@@ -193,6 +193,45 @@ contract WormholeEncoderTest is Test {
         }
     }
 
+    /// @dev The BNB Chain NttManager as the Ethereum NttManager records it in
+    ///      `getPeer(4)`, so the vector comes from a live Wormhole peer table.
+    function testToWormholeFormat() external pure {
+        assertEq(
+            WormholeEncoder.toWormholeFormat(0x9226AEb835487dD2ed6700A967A8AD25BEE1Dc0E),
+            0x0000000000000000000000009226aeb835487dd2ed6700a967a8ad25bee1dc0e
+        );
+    }
+
+    function testFromWormholeFormat() external pure {
+        assertEq(
+            WormholeEncoder.fromWormholeFormat(
+                0x0000000000000000000000009226aeb835487dd2ed6700a967a8ad25bee1dc0e
+            ),
+            0x9226AEb835487dD2ed6700A967A8AD25BEE1Dc0E
+        );
+    }
+
+    function testFuzzWormholeFormatRoundTrip(address addr) external pure {
+        bytes32 whFormatAddress = WormholeEncoder.toWormholeFormat(addr);
+
+        assertEq(uint256(whFormatAddress) >> 160, 0);
+        assertEq(WormholeEncoder.fromWormholeFormat(whFormatAddress), addr);
+    }
+
+    function testFuzzFromWormholeFormatRevertsOnNonEvmAddress(bytes32 whFormatAddress) external {
+        vm.assume(uint256(whFormatAddress) >> 160 != 0);
+
+        vm.expectRevert(
+            abi.encodeWithSelector(WormholeEncoder.NotAnEvmAddress.selector, whFormatAddress)
+        );
+        this.fromWormholeFormat(whFormatAddress);
+    }
+
+    /// @dev External entry point so `expectRevert` has a call to observe.
+    function fromWormholeFormat(bytes32 whFormatAddress) external pure returns (address) {
+        return WormholeEncoder.fromWormholeFormat(whFormatAddress);
+    }
+
     function _knownChainIds() internal pure returns (uint256[] memory ids) {
         ids = new uint256[](7);
         ids[0] = ChainId.Avalanche;
